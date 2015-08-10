@@ -1,0 +1,32 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+      xmlns:app="http://schemas.android.com/apk/res-auto"
+      android:id="@+id/MainMenu">
+  <item android:id="@+id/PhotoButton"
+        android:icon="@drawable/ic_camera"
+        app:showAsAction="always"
+        android:orderInCategory="0"
+        android:title="photo">
+  </item>
+  <item android:id="@+id/CatchButton"
+      android:icon="@drawable/ic_catch"
+      app:showAsAction="always"
+      android:orderInCategory="1"
+      android:title="catch">
+  </item>
+  <item android:id="@+id/SettingsBtn"
+    android:icon="@drawable/ic_settings"
+    app:showAsAction="never"
+    android:orderInCategory="10"
+    android:title="settings">
+  </item>
+  <item android:id="@+id/AboutBtn"
+      app:showAsAction="never"
+      android:orderInCategory="20"
+      android:title="about PhotoToss">
+  </item>
+
+
+
+</menu>

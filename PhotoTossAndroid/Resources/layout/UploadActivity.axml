@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:minWidth="25px"
+    android:minHeight="25px"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:id="@+id/scrollView1">
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/PT_dark_teal">
+        <ImageView
+            android:src="@android:drawable/ic_menu_gallery"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/imageView"
+            android:layout_margin="16dp" />
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/captionText"
+            android:layout_marginLeft="16dp"
+            android:layout_marginRight="16dp"
+            android:hint="enter a caption" />
+        <TextView
+            android:text="Here are your tags"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/tagsField"
+            android:layout_margin="16dp" />
+        <LinearLayout
+            android:orientation="horizontal"
+            android:minWidth="25px"
+            android:minHeight="25px"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/linearLayout1">
+            <EditText
+                android:layout_width="0dip"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:id="@+id/NewTagText"
+                android:layout_marginLeft="16dp"
+                android:layout_marginRight="8dp" />
+            <Button
+                android:text="Add Tag"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:id="@+id/AddTagBtn"
+                android:layout_marginRight="16dp"
+                android:background="@color/PT_light_orange" />
+        </LinearLayout>
+        <Button
+            android:text="Upload"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/UploadBtn"
+            android:layout_margin="16dp"
+            android:background="@color/PT_light_orange" />
+    </LinearLayout>
+</ScrollView>

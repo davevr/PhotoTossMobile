@@ -1,0 +1,9 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<resources>
+  <color name="PT_light_orange">#e78c0b</color>
+  <color name="PT_dark_orange">#d55802</color>
+  <color name="PT_light_teal">#09aba1</color>
+  <color name="PT_dark_teal">#017c70</color>
+  <color name="PT_white">#FFFFFF</color>
+  <color name="PT_black">#000000</color>
+</resources>
