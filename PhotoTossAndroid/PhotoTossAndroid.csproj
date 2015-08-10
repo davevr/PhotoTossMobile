@@ -1,0 +1,304 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectTypeGuids>{EFBA0AD7-5A72-4C68-AF49-83D382785DCF};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
+    <ProjectGuid>{E4E4A228-DB1A-4B4E-8C8D-EE356F19112C}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <RootNamespace>PhotoToss.AndroidApp</RootNamespace>
+    <MonoAndroidAssetsPrefix>Assets</MonoAndroidAssetsPrefix>
+    <MonoAndroidResourcePrefix>Resources</MonoAndroidResourcePrefix>
+    <AndroidManifest>Properties\AndroidManifest.xml</AndroidManifest>
+    <AndroidResgenClass>Resource</AndroidResgenClass>
+    <AndroidResgenFile>Resources\Resource.designer.cs</AndroidResgenFile>
+    <AndroidApplication>True</AndroidApplication>
+    <AndroidUseLatestPlatformSdk>False</AndroidUseLatestPlatformSdk>
+    <AssemblyName>PhotoTossAndroid</AssemblyName>
+    <TargetFrameworkVersion>v4.4</TargetFrameworkVersion>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug</OutputPath>
+    <DefineConstants>DEBUG;</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <AndroidLinkMode>None</AndroidLinkMode>
+    <ConsolePause>false</ConsolePause>
+    <JavaMaximumHeapSize>1G</JavaMaximumHeapSize>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>full</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release</OutputPath>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <AndroidUseSharedRuntime>false</AndroidUseSharedRuntime>
+    <ConsolePause>false</ConsolePause>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="System.Xml" />
+    <Reference Include="System.Core" />
+    <Reference Include="Mono.Android" />
+    <Reference Include="Xamarin.GooglePlayServices.Base">
+      <HintPath>..\packages\Xamarin.GooglePlayServices.Base.25.0.0.0\lib\MonoAndroid41\Xamarin.GooglePlayServices.Base.dll</HintPath>
+    </Reference>
+    <Reference Include="Xamarin.GooglePlayServices.Ads">
+      <HintPath>..\packages\Xamarin.GooglePlayServices.Ads.25.0.0.0\lib\MonoAndroid41\Xamarin.GooglePlayServices.Ads.dll</HintPath>
+    </Reference>
+    <Reference Include="Xamarin.GooglePlayServices.Analytics">
+      <HintPath>..\packages\Xamarin.GooglePlayServices.Analytics.25.0.0.0\lib\MonoAndroid41\Xamarin.GooglePlayServices.Analytics.dll</HintPath>
+    </Reference>
+    <Reference Include="Xamarin.GooglePlayServices.AppIndexing">
+      <HintPath>..\packages\Xamarin.GooglePlayServices.AppIndexing.25.0.0.0\lib\MonoAndroid41\Xamarin.GooglePlayServices.AppIndexing.dll</HintPath>
+    </Reference>
+    <Reference Include="Xamarin.GooglePlayServices.AppInvite">
+      <HintPath>..\packages\Xamarin.GooglePlayServices.AppInvite.25.0.0.0\lib\MonoAndroid41\Xamarin.GooglePlayServices.AppInvite.dll</HintPath>
+    </Reference>
+    <Reference Include="Xamarin.GooglePlayServices.AppState">
+      <HintPath>..\packages\Xamarin.GooglePlayServices.AppState.25.0.0.0\lib\MonoAndroid41\Xamarin.GooglePlayServices.AppState.dll</HintPath>
+    </Reference>
+    <Reference Include="Xamarin.GooglePlayServices.Cast">
+      <HintPath>..\packages\Xamarin.GooglePlayServices.Cast.25.0.0.0\lib\MonoAndroid42\Xamarin.GooglePlayServices.Cast.dll</HintPath>
+    </Reference>
+    <Reference Include="Xamarin.GooglePlayServices.Drive">
+      <HintPath>..\packages\Xamarin.GooglePlayServices.Drive.25.0.0.0\lib\MonoAndroid41\Xamarin.GooglePlayServices.Drive.dll</HintPath>
+    </Reference>
+    <Reference Include="Xamarin.GooglePlayServices.Maps">
+      <HintPath>..\packages\Xamarin.GooglePlayServices.Maps.25.0.0.0\lib\MonoAndroid41\Xamarin.GooglePlayServices.Maps.dll</HintPath>
+    </Reference>
+    <Reference Include="Xamarin.GooglePlayServices.Location">
+      <HintPath>..\packages\Xamarin.GooglePlayServices.Location.25.0.0.0\lib\MonoAndroid41\Xamarin.GooglePlayServices.Location.dll</HintPath>
+    </Reference>
+    <Reference Include="Xamarin.GooglePlayServices.Fitness">
+      <HintPath>..\packages\Xamarin.GooglePlayServices.Fitness.25.0.0.0\lib\MonoAndroid41\Xamarin.GooglePlayServices.Fitness.dll</HintPath>
+    </Reference>
+    <Reference Include="Xamarin.GooglePlayServices.Games">
+      <HintPath>..\packages\Xamarin.GooglePlayServices.Games.25.0.0.0\lib\MonoAndroid41\Xamarin.GooglePlayServices.Games.dll</HintPath>
+    </Reference>
+    <Reference Include="Xamarin.GooglePlayServices.Gcm">
+      <HintPath>..\packages\Xamarin.GooglePlayServices.Gcm.25.0.0.0\lib\MonoAndroid41\Xamarin.GooglePlayServices.Gcm.dll</HintPath>
+    </Reference>
+    <Reference Include="Xamarin.GooglePlayServices.Identity">
+      <HintPath>..\packages\Xamarin.GooglePlayServices.Identity.25.0.0.0\lib\MonoAndroid41\Xamarin.GooglePlayServices.Identity.dll</HintPath>
+    </Reference>
+    <Reference Include="Xamarin.GooglePlayServices.Nearby">
+      <HintPath>..\packages\Xamarin.GooglePlayServices.Nearby.25.0.0.0\lib\MonoAndroid41\Xamarin.GooglePlayServices.Nearby.dll</HintPath>
+    </Reference>
+    <Reference Include="Xamarin.GooglePlayServices.Panorama">
+      <HintPath>..\packages\Xamarin.GooglePlayServices.Panorama.25.0.0.0\lib\MonoAndroid41\Xamarin.GooglePlayServices.Panorama.dll</HintPath>
+    </Reference>
+    <Reference Include="Xamarin.GooglePlayServices.Plus">
+      <HintPath>..\packages\Xamarin.GooglePlayServices.Plus.25.0.0.0\lib\MonoAndroid41\Xamarin.GooglePlayServices.Plus.dll</HintPath>
+    </Reference>
+    <Reference Include="Xamarin.GooglePlayServices.SafetyNet">
+      <HintPath>..\packages\Xamarin.GooglePlayServices.SafetyNet.25.0.0.0\lib\MonoAndroid41\Xamarin.GooglePlayServices.SafetyNet.dll</HintPath>
+    </Reference>
+    <Reference Include="Xamarin.GooglePlayServices.Wallet">
+      <HintPath>..\packages\Xamarin.GooglePlayServices.Wallet.25.0.0.0\lib\MonoAndroid41\Xamarin.GooglePlayServices.Wallet.dll</HintPath>
+    </Reference>
+    <Reference Include="Xamarin.GooglePlayServices.Wearable">
+      <HintPath>..\packages\Xamarin.GooglePlayServices.Wearable.25.0.0.0\lib\MonoAndroid41\Xamarin.GooglePlayServices.Wearable.dll</HintPath>
+    </Reference>
+    <Reference Include="GooglePlayServicesLib">
+      <HintPath>..\packages\Xamarin.GooglePlayServices.25.0.0.0\lib\MonoAndroid41\GooglePlayServicesLib.dll</HintPath>
+    </Reference>
+    <Reference Include="Xamarin.Android.Support.v4">
+      <HintPath>..\packages\Xamarin.Android.Support.v4.22.2.1.0\lib\MonoAndroid403\Xamarin.Android.Support.v4.dll</HintPath>
+    </Reference>
+    <Reference Include="Xamarin.Android.Support.v7.AppCompat">
+      <HintPath>..\packages\Xamarin.Android.Support.v7.AppCompat.22.2.1.0\lib\MonoAndroid403\Xamarin.Android.Support.v7.AppCompat.dll</HintPath>
+    </Reference>
+    <Reference Include="Xamarin.Android.Support.v7.MediaRouter">
+      <HintPath>..\packages\Xamarin.Android.Support.v7.MediaRouter.22.2.1.0\lib\MonoAndroid403\Xamarin.Android.Support.v7.MediaRouter.dll</HintPath>
+    </Reference>
+    <Reference Include="RestSharp.MonoDroid">
+      <HintPath>..\Components\restsharp-105.0.1.0\lib\android\RestSharp.MonoDroid.dll</HintPath>
+    </Reference>
+    <Reference Include="ServiceStack.Text.XamarinAndrod">
+      <HintPath>..\Components\servicestacktext-3.9.61.3\lib\android\ServiceStack.Text.XamarinAndrod.dll</HintPath>
+    </Reference>
+    <Reference Include="UrlImageViewHelper">
+      <HintPath>..\Components\urlimageviewhelper-1.0.4\lib\android\UrlImageViewHelper.dll</HintPath>
+    </Reference>
+    <Reference Include="ZXing.Net.Mobile">
+      <HintPath>..\Components\zxing.net.mobile-1.4.7.2\lib\android\ZXing.Net.Mobile.dll</HintPath>
+    </Reference>
+    <Reference Include="zxing.monoandroid">
+      <HintPath>..\Components\zxing.net.mobile-1.4.7.2\lib\android\zxing.monoandroid.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.WindowsAzure.Messaging.Android">
+      <HintPath>..\Components\azure-messaging-1.1.5.6\lib\android\Microsoft.WindowsAzure.Messaging.Android.dll</HintPath>
+    </Reference>
+    <Reference Include="GCM.Client">
+      <HintPath>..\Components\GCMClient-1.0\lib\android\GCM.Client.dll</HintPath>
+    </Reference>
+    <Reference Include="ByteSmith.WindowsAzure.Messaging.Android">
+      <HintPath>_external\ByteSmith.WindowsAzure.Messaging.Android.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Runtime.Serialization" />
+    <Reference Include="System.Xml.Linq" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Activities\BrowseFragment.cs" />
+    <Compile Include="Activities\CatchFragment.cs" />
+    <Compile Include="Activities\FirstRunActivity.cs" />
+    <Compile Include="Activities\HomeFragment.cs" />
+    <Compile Include="Activities\ImageFragment.cs" />
+    <Compile Include="Activities\ProfileFragment.cs" />
+    <Compile Include="Activities\SignInFragment.cs" />
+    <Compile Include="Activities\StatsFragment.cs" />
+    <Compile Include="Activities\TossActivity.cs" />
+    <Compile Include="Activities\UploadActivity.cs" />
+    <Compile Include="HelperClasses\BitmapHelper.cs" />
+    <Compile Include="HelperClasses\MyGCMBootReceiver.cs" />
+    <Compile Include="HelperClasses\MyGCMBroadcastReceiver.cs" />
+    <Compile Include="HelperClasses\RemoteNotificationService.cs" />
+    <Compile Include="HelperClasses\StreamHelper.cs" />
+    <Compile Include="..\PhotoTossCore\GoogleAnalytics.cs">
+      <Link>PhotoTossCore\GoogleAnalytics.cs</Link>
+    </Compile>
+    <Compile Include="..\PhotoTossCore\IsolatedStorageSettings.cs">
+      <Link>PhotoTossCore\IsolatedStorageSettings.cs</Link>
+    </Compile>
+    <Compile Include="..\PhotoTossCore\PhotoRecord.cs">
+      <Link>PhotoTossCore\PhotoRecord.cs</Link>
+    </Compile>
+    <Compile Include="..\PhotoTossCore\PhotoTossRest.cs">
+      <Link>PhotoTossCore\PhotoTossRest.cs</Link>
+    </Compile>
+    <Compile Include="..\PhotoTossCore\TossRecord.cs">
+      <Link>PhotoTossCore\TossRecord.cs</Link>
+    </Compile>
+    <Compile Include="..\PhotoTossCore\User.cs">
+      <Link>PhotoTossCore\User.cs</Link>
+    </Compile>
+    <Compile Include="..\PhotoTossCore\Utilities.cs">
+      <Link>PhotoTossCore\Utilities.cs</Link>
+    </Compile>
+    <Compile Include="Views\CircleDrawable.cs" />
+    <Compile Include="Views\NonSwipeViewPager.cs" />
+    <Compile Include="Views\ScaleImageView.cs" />
+    <Compile Include="MainActivity.cs" />
+    <Compile Include="Resources\Resource.designer.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\AboutResources.txt" />
+    <None Include="Properties\AndroidManifest.xml" />
+    <None Include="Assets\AboutAssets.txt" />
+    <None Include="packages.config" />
+    <None Include="_external\ByteSmith.WindowsAzure.Messaging.Android.dll" />
+  </ItemGroup>
+  <ItemGroup>
+    <AndroidResource Include="Resources\values\Strings.xml" />
+    <AndroidResource Include="Resources\drawable\circleframe.xml" />
+    <AndroidResource Include="Resources\drawable\ic_notify_color.png" />
+    <AndroidResource Include="Resources\drawable\ic_notify_white.png" />
+    <AndroidResource Include="Resources\drawable\iconNoBorder.png" />
+    <AndroidResource Include="Resources\drawable\iconNoBorder_crop.png" />
+    <AndroidResource Include="Resources\drawable\tosstopus.png" />
+    <AndroidResource Include="Resources\layout\BrowseFragment.axml" />
+    <AndroidResource Include="Resources\layout\CatchFragment.axml" />
+    <AndroidResource Include="Resources\layout\DrawerListItem.axml" />
+    <AndroidResource Include="Resources\layout\HomeFragment.axml" />
+    <AndroidResource Include="Resources\layout\ImageFragment.axml" />
+    <AndroidResource Include="Resources\layout\photoGridCell.axml" />
+    <AndroidResource Include="Resources\layout\ProfileFragment.axml" />
+    <AndroidResource Include="Resources\layout\SignInLayout.axml" />
+    <AndroidResource Include="Resources\layout\StatsFragment.axml" />
+    <AndroidResource Include="Resources\layout\TossFragment.axml" />
+    <AndroidResource Include="Resources\layout\UploadActivity.axml" />
+    <AndroidResource Include="Resources\layout\ViewPager.axml" />
+    <AndroidResource Include="Resources\layout\ZxingOverlay.axml" />
+    <AndroidResource Include="Resources\drawable-hdpi\ic_announcement_black_48dp.png" />
+    <AndroidResource Include="Resources\drawable-hdpi\ic_camera.png" />
+    <AndroidResource Include="Resources\drawable-hdpi\ic_catch.png" />
+    <AndroidResource Include="Resources\drawable-hdpi\ic_delete_black_48dp.png" />
+    <AndroidResource Include="Resources\drawable-hdpi\ic_help.png" />
+    <AndroidResource Include="Resources\drawable-hdpi\ic_notify_white.png" />
+    <AndroidResource Include="Resources\drawable-hdpi\ic_restore_black_48dp.png" />
+    <AndroidResource Include="Resources\drawable-hdpi\ic_room_black_48dp.png" />
+    <AndroidResource Include="Resources\drawable-hdpi\ic_settings.png" />
+    <AndroidResource Include="Resources\drawable-hdpi\ic_star_rate_black_48dp.png" />
+    <AndroidResource Include="Resources\drawable-hdpi\ic_supervisor_account_black_48dp.png" />
+    <AndroidResource Include="Resources\drawable-hdpi\ic_toss.png" />
+    <AndroidResource Include="Resources\drawable-hdpi\unknown_octopus.png" />
+    <AndroidResource Include="Resources\drawable-xhdpi\ic_notify_white.png" />
+    <AndroidResource Include="Resources\drawable-xhdpi\unknown_octopus.png" />
+    <AndroidResource Include="Resources\drawable-xxhdpi\ic_notify_white.png" />
+    <AndroidResource Include="Resources\drawable-xxhdpi\unknown_octopus.png" />
+    <AndroidResource Include="Resources\drawable-xxxhdpi\ic_notify_white.png" />
+    <AndroidResource Include="Resources\drawable-xxxhdpi\unknown_octopus.png" />
+    <AndroidResource Include="Resources\values\colors.xml" />
+    <AndroidResource Include="Resources\menu\MainMenu.xml" />
+    <AndroidResource Include="Resources\layout\Main.axml" />
+  </ItemGroup>
+  <Import Project="$(MSBuildExtensionsPath)\Novell\Novell.MonoDroid.CSharp.targets" />
+  <ItemGroup>
+    <XamarinComponentReference Include="xamandroidsupportv4-18">
+      <Version>22.2.0.0</Version>
+      <Visible>False</Visible>
+    </XamarinComponentReference>
+    <XamarinComponentReference Include="xamandroidsupportv7appcompat">
+      <Version>22.2.0.0</Version>
+      <Visible>False</Visible>
+    </XamarinComponentReference>
+    <XamarinComponentReference Include="restsharp">
+      <Version>105.0.1.0</Version>
+      <Visible>False</Visible>
+    </XamarinComponentReference>
+    <XamarinComponentReference Include="servicestacktext">
+      <Version>3.9.61.3</Version>
+      <Visible>False</Visible>
+    </XamarinComponentReference>
+    <XamarinComponentReference Include="urlimageviewhelper">
+      <Version>1.0.4</Version>
+      <Visible>False</Visible>
+    </XamarinComponentReference>
+    <XamarinComponentReference Include="zxing.net.mobile">
+      <Version>1.4.7.2</Version>
+      <Visible>False</Visible>
+    </XamarinComponentReference>
+    <XamarinComponentReference Include="azure-messaging">
+      <Version>1.1.5.6</Version>
+      <Visible>False</Visible>
+    </XamarinComponentReference>
+    <XamarinComponentReference Include="googleplayservices">
+      <Version>25.0.0.0</Version>
+      <Visible>False</Visible>
+    </XamarinComponentReference>
+    <XamarinComponentReference Include="GCMClient">
+      <Version>1.0</Version>
+      <Visible>False</Visible>
+    </XamarinComponentReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Activities\" />
+    <Folder Include="Assets\fonts\" />
+    <Folder Include="HelperClasses\" />
+    <Folder Include="PhotoTossCore\" />
+    <Folder Include="Resources\drawable\" />
+    <Folder Include="Resources\drawable-hdpi\" />
+    <Folder Include="Resources\drawable-xhdpi\" />
+    <Folder Include="Resources\drawable-xxhdpi\" />
+    <Folder Include="Resources\drawable-xxxhdpi\" />
+    <Folder Include="_external\" />
+    <Folder Include="Resources\menu\" />
+    <Folder Include="Views\" />
+    <Folder Include="Resources\drawable-mdpi\" />
+  </ItemGroup>
+  <ItemGroup>
+    <AndroidAsset Include="Assets\fonts\RammettoOne-Regular.ttf" />
+    <AndroidAsset Include="Assets\fonts\SourceCodePro-Black.ttf" />
+    <AndroidAsset Include="Assets\fonts\SourceCodePro-Bold.ttf" />
+    <AndroidAsset Include="Assets\fonts\SourceCodePro-ExtraLight.ttf" />
+    <AndroidAsset Include="Assets\fonts\SourceCodePro-Light.ttf" />
+    <AndroidAsset Include="Assets\fonts\SourceCodePro-Medium.ttf" />
+    <AndroidAsset Include="Assets\fonts\SourceCodePro-Regular.ttf" />
+    <AndroidAsset Include="Assets\fonts\SourceCodePro-Semibold.ttf" />
+  </ItemGroup>
+</Project>
