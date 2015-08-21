@@ -110,7 +110,7 @@ namespace System.IO.IsolatedStorage
                 if (site_settings == null)
                 {
                     site_settings = new IsolatedStorageSettings(
-#if WP8
+#if WINDOWS_UWP
                         IsolatedStorageFile.GetUserStoreForApplication());
 #else
 IsolatedStorageFile.GetUserStoreForSite());
