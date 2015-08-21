@@ -7,7 +7,7 @@ using CoreGraphics;
 using Foundation;
 
 
-namespace PhotoTossIOS
+namespace PhotoToss.iOSApp
 {
 	public partial class ViewController : UIViewController
 	{
@@ -71,7 +71,7 @@ namespace PhotoTossIOS
 
 			// If you have been logged into the app before, ask for the your profile name
 			if (AccessToken.CurrentAccessToken != null) {
-				var request = new GraphRequest ("/me?fields=name", null, AccessToken.CurrentAccessToken.TokenString, null, "GET");
+				var request = new GraphRequest ("/me?fields=name,id", null, AccessToken.CurrentAccessToken.TokenString, null, "GET");
 				request.Start ((connection, result, error) => {
 					// Handle if something went wrong with the request
 					if (error != null) {
@@ -82,6 +82,8 @@ namespace PhotoTossIOS
 					// Get your profile name
 					var userInfo = result as NSDictionary;
 					nameLabel.Text = userInfo ["name"].ToString ();
+					string uniqueId = userInfo["id"].ToString();
+					DoSignin(uniqueId, AccessToken.CurrentAccessToken.TokenString);
 				});
 			}
 
@@ -95,6 +97,14 @@ namespace PhotoTossIOS
 		{
 			base.DidReceiveMemoryWarning ();
 			// Release any cached data, images, etc that aren't in use.
+		}
+
+		public void DoSignin(string userId, string accessToken)
+		{
+			PhotoToss.Core.PhotoTossRest.Instance.FacebookLogin (userId, accessToken, (theUser) => {
+
+
+			});
 		}
 
 

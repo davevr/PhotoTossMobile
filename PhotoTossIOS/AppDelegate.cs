@@ -1,8 +1,11 @@
 ﻿using Foundation;
 using UIKit;
 using Facebook.CoreKit;
+using PhotoToss.Core;
+using System.IO.IsolatedStorage;
+using System;
 
-namespace PhotoTossIOS
+namespace PhotoToss.iOSApp
 {
 	// The UIApplicationDelegate for the application. This class is responsible for launching the
 	// User Interface of the application, as well as listening (and optionally responding) to application events from iOS.
@@ -18,9 +21,13 @@ namespace PhotoTossIOS
 
 		string appId = "439651239569547";
 		string appName = "PhotoToss";
+		string flurryID = "KTC993B58WKMR9WK66G3";
+		public static GoogleAnalytics   analytics = null;
 
 		public override bool FinishedLaunching (UIApplication app, NSDictionary options)
 		{
+			Flurry.Analytics.FlurryAgent.StartSession(flurryID);
+			InitAnalytics ();
 			// This is false by default,
 			// If you set true, you can handle the user profile info once is logged into FB with the Profile.Notifications.ObserveDidChange notification,
 			// If you set false, you need to get the user Profile info by hand with a GraphRequest
@@ -35,6 +42,31 @@ namespace PhotoTossIOS
 
 			// This method verifies if you have been logged into the app before, and keep you logged in after you reopen or kill your app.
 			return ApplicationDelegate.SharedInstance.FinishedLaunching (app, options);
+		}
+
+		private void InitAnalytics()
+		{
+			string uniqueId;
+
+			IsolatedStorageSettings settings = IsolatedStorageSettings.ApplicationSettings;
+			if (settings.Contains("uniqueId"))
+				uniqueId = settings["uniqueId"].ToString();
+			else
+			{
+				uniqueId = Guid.NewGuid().ToString();
+				settings.Add("uniqueId", uniqueId);
+				settings.Save();
+
+			}
+
+			string maker = "Apple";
+			string model = UIDevice.CurrentDevice.Model;
+			string version = NSBundle.MainBundle.InfoDictionary["CFBundleVersion"].ToString();
+			string platform = "IOS";
+			string userAgent = "Mozilla/5.0 (IOS; Apple; Mobile) ";
+
+			analytics = new GoogleAnalytics(userAgent, maker, model, version, platform, uniqueId);
+			analytics.StartSession();
 		}
 
 		public override bool OpenUrl (UIApplication application, NSUrl url, string sourceApplication, NSObject annotation)

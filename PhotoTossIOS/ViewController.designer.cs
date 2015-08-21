@@ -5,7 +5,7 @@
 //
 using Foundation;
 
-namespace PhotoTossIOS
+namespace PhotoToss.iOSApp
 {
 	[Register ("ViewController")]
 	partial class ViewController

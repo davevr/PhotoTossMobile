@@ -67,6 +67,7 @@ namespace PhotoToss.AndroidApp
 		public const string SENDER_ID = "865065760693";
 		public const string ConnectionString = "Endpoint=sb://phototossnotify-ns.servicebus.windows.net/;SharedAccessKeyName=DefaultListenSharedAccessSignature;SharedAccessKey=FwWsviEIwwCK5vSg0kNiKcJs9GKuz70mXxYBGDYIvIU=";
 		public const string NotificationHubPath = "phototossnotify";
+		private const string flurryId = "YS7CWBRTNVQN3HV7Y3N5";
 
 		public static GoogleAnalytics analytics = null;
 		MobileBarcodeScanner scanner;
@@ -171,6 +172,7 @@ namespace PhotoToss.AndroidApp
 			Window.SetFlags (WindowManagerFlags.Fullscreen, WindowManagerFlags.Fullscreen);
 			base.OnCreate(bundle);
 			InitAnalytics();
+			Flurry.Analytics.FlurryAgent.Init(this, flurryId);
 
 			// Set our view from the "main" layout resource
 			SetContentView(Resource.Layout.Main);

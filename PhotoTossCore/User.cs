@@ -9,6 +9,7 @@ namespace PhotoToss.Core
     {
         public long id { get; set; }
         public string username { get; set; }
+		public string nickname {get; set;}
         public string imageurl { get; set; }
         public DateTime lastActiveDate { get; set; }
         public bool signedon { get; set; }

@@ -6,7 +6,7 @@
     <ProjectTypeGuids>{FEACFBD2-3405-455C-9665-78FE426C6842};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
     <ProjectGuid>{FCC58F9E-704C-473A-B561-980026ACAAF2}</ProjectGuid>
     <OutputType>Exe</OutputType>
-    <RootNamespace>PhotoTossIOS</RootNamespace>
+    <RootNamespace>PhotoToss.iOSApp</RootNamespace>
     <IPhoneResourcePrefix>Resources</IPhoneResourcePrefix>
     <AssemblyName>PhotoTossIOS</AssemblyName>
   </PropertyGroup>
@@ -20,9 +20,11 @@
     <WarningLevel>4</WarningLevel>
     <ConsolePause>false</ConsolePause>
     <MtouchArch>i386</MtouchArch>
-    <MtouchLink>None</MtouchLink>
     <MtouchDebug>true</MtouchDebug>
     <MtouchProfiling>true</MtouchProfiling>
+    <MtouchUseRefCounting>true</MtouchUseRefCounting>
+    <MtouchI18n>
+    </MtouchI18n>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|iPhone' ">
     <DebugType>full</DebugType>
@@ -71,12 +73,6 @@
     <Reference Include="Facebook">
       <HintPath>..\packages\Xamarin.Facebook.iOS.4.5.1.0\lib\Xamarin.iOS10\Facebook.dll</HintPath>
     </Reference>
-    <Reference Include="ZXingNetMobile">
-      <HintPath>..\Components\zxing.net.mobile-1.5.1.0\lib\ios-unified\ZXingNetMobile.dll</HintPath>
-    </Reference>
-    <Reference Include="zxing.portable">
-      <HintPath>..\Components\zxing.net.mobile-1.5.1.0\lib\ios-unified\zxing.portable.dll</HintPath>
-    </Reference>
     <Reference Include="ServiceStack.Text.XamarinIOS">
       <HintPath>..\Components\servicestacktext-3.9.61.3\lib\ios-unified\ServiceStack.Text.XamarinIOS.dll</HintPath>
     </Reference>
@@ -88,6 +84,15 @@
     </Reference>
     <Reference Include="System.Runtime.Serialization" />
     <Reference Include="System.Net.Http" />
+    <Reference Include="ZXingNetMobile">
+      <HintPath>..\Components\zxing.net.mobile-1.5.1.0\lib\ios-unified\ZXingNetMobile.dll</HintPath>
+    </Reference>
+    <Reference Include="zxing.portable">
+      <HintPath>..\Components\zxing.net.mobile-1.5.1.0\lib\ios-unified\zxing.portable.dll</HintPath>
+    </Reference>
+    <Reference Include="Flurry.Analytics.iOS">
+      <HintPath>..\packages\Flurry.Analytics.1.2.1\lib\Xamarin.iOS10\Flurry.Analytics.iOS.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <ImageAsset Include="Resources\Images.xcassets\AppIcons.appiconset\Contents.json">

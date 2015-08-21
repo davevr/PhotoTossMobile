@@ -21,7 +21,7 @@ namespace PhotoToss.Core
     {
         private RestClient apiClient;
         private static PhotoTossRest _singleton = null;
-        private string apiPath = "http://phototoss-server-01.appspot.com/api/";  //"http://localhost:8080/api/";  //"http://phototoss-server-01.appspot.com/api/";//"http://127.0.0.1:8080/api/"; //"http://phototoss-server-01.appspot.com/api/";//"http://www.photostore.com/api/";
+		private string apiPath = "http://localhost:8080/api/";  //"http://localhost:8080/api/";  //"http://phototoss-server-01.appspot.com/api/";//"http://127.0.0.1:8080/api/"; //"http://phototoss-server-01.appspot.com/api/";//"http://www.photostore.com/api/";
         //private Random rndBase = new Random();
         private string _uploadURL;
 		private string _catchURL;
@@ -142,6 +142,29 @@ namespace PhotoToss.Core
 				});
         }
 
+		public void FacebookLogin(string userId, string token, User_callback callback)
+		{
+			string fullURL = "user/facebooklogin";
+
+			RestRequest request = new RestRequest(fullURL, METHODPOST);
+			request.AddParameter ("id", userId);
+			request.AddParameter ("token", token);
+
+			apiClient.Execute<User>(request).ContinueWith((theTask) =>
+				{
+					var response = theTask.Result;
+					User newUser = response.Data;
+
+					if (newUser != null)
+					{
+						_currentUser = newUser;
+						callback(newUser);
+					}
+					else
+						callback(null);
+				});
+		}
+
 		public void CreateAccount(string username, string password, User_callback callback)
 		{
 			string fullURL = "user/create";
@@ -220,6 +243,11 @@ namespace PhotoToss.Core
 		}
 
 	
+		public string GetImageForUser(String_callback callback)
+		{
+			Facebook.CoreKit.GraphRequest.
+
+		}
 			
 
 		public void GetImage(String_callback callback)

@@ -1,6 +1,6 @@
 ﻿using UIKit;
 
-namespace PhotoTossIOS
+namespace PhotoToss.iOSApp
 {
 	public class Application
 	{
