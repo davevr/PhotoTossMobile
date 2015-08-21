@@ -1,5 +1,6 @@
 ﻿using Foundation;
 using UIKit;
+using Facebook.CoreKit;
 
 namespace PhotoTossIOS
 {
@@ -15,18 +16,34 @@ namespace PhotoTossIOS
 			set;
 		}
 
-		public override bool FinishedLaunching (UIApplication application, NSDictionary launchOptions)
-		{
-			// Override point for customization after application launch.
-			// If not required for your application you can safely delete this method
+		string appId = "439651239569547";
+		string appName = "PhotoToss";
 
+		public override bool FinishedLaunching (UIApplication app, NSDictionary options)
+		{
+			// This is false by default,
+			// If you set true, you can handle the user profile info once is logged into FB with the Profile.Notifications.ObserveDidChange notification,
+			// If you set false, you need to get the user Profile info by hand with a GraphRequest
+			Profile.EnableUpdatesOnAccessTokenChange (true);
+			Settings.AppID = appId;
+			Settings.DisplayName = appName;
+			//
 			// Code to start the Xamarin Test Cloud Agent
 			#if ENABLE_TEST_CLOUD
 			Xamarin.Calabash.Start();
 			#endif
 
-			return true;
+			// This method verifies if you have been logged into the app before, and keep you logged in after you reopen or kill your app.
+			return ApplicationDelegate.SharedInstance.FinishedLaunching (app, options);
 		}
+
+		public override bool OpenUrl (UIApplication application, NSUrl url, string sourceApplication, NSObject annotation)
+		{
+			// We need to handle URLs by passing them to their own OpenUrl in order to make the SSO authentication works.
+			return ApplicationDelegate.SharedInstance.OpenUrl (application, url, sourceApplication, annotation);
+		}
+
+
 
 		public override void OnResignActivation (UIApplication application)
 		{
@@ -52,6 +69,7 @@ namespace PhotoTossIOS
 		{
 			// Restart any tasks that were paused (or not yet started) while the application was inactive. 
 			// If the application was previously in the background, optionally refresh the user interface.
+			Facebook.CoreKit.AppEvents.ActivateApp();
 		}
 
 		public override void WillTerminate (UIApplication application)

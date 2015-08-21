@@ -66,8 +66,28 @@
     <Reference Include="System.Core" />
     <Reference Include="Xamarin.iOS" />
     <Reference Include="Calabash">
-      <HintPath>..\packages\Xamarin.TestCloud.Agent.0.13.0\lib\Xamarin.iOS10\Calabash.dll</HintPath>
+      <HintPath>..\packages\Xamarin.TestCloud.Agent.0.14.1\lib\Xamarin.iOS10\Calabash.dll</HintPath>
     </Reference>
+    <Reference Include="Facebook">
+      <HintPath>..\packages\Xamarin.Facebook.iOS.4.5.1.0\lib\Xamarin.iOS10\Facebook.dll</HintPath>
+    </Reference>
+    <Reference Include="ZXingNetMobile">
+      <HintPath>..\Components\zxing.net.mobile-1.5.1.0\lib\ios-unified\ZXingNetMobile.dll</HintPath>
+    </Reference>
+    <Reference Include="zxing.portable">
+      <HintPath>..\Components\zxing.net.mobile-1.5.1.0\lib\ios-unified\zxing.portable.dll</HintPath>
+    </Reference>
+    <Reference Include="ServiceStack.Text.XamarinIOS">
+      <HintPath>..\Components\servicestacktext-3.9.61.3\lib\ios-unified\ServiceStack.Text.XamarinIOS.dll</HintPath>
+    </Reference>
+    <Reference Include="Newtonsoft.Json">
+      <HintPath>..\packages\Newtonsoft.Json.7.0.1\lib\portable-net40+sl5+wp80+win8+wpa81\Newtonsoft.Json.dll</HintPath>
+    </Reference>
+    <Reference Include="RestSharp.Portable">
+      <HintPath>..\packages\FubarCoder.RestSharp.Portable.2.4.4\lib\Xamarin.iOS10\RestSharp.Portable.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Runtime.Serialization" />
+    <Reference Include="System.Net.Http" />
   </ItemGroup>
   <ItemGroup>
     <ImageAsset Include="Resources\Images.xcassets\AppIcons.appiconset\Contents.json">
@@ -90,6 +110,44 @@
     <Compile Include="ViewController.designer.cs">
       <DependentUpon>ViewController.cs</DependentUpon>
     </Compile>
+    <Compile Include="..\PhotoTossCore\GoogleAnalytics.cs">
+      <Link>PhotoTossCore\GoogleAnalytics.cs</Link>
+    </Compile>
+    <Compile Include="..\PhotoTossCore\IsolatedStorageSettings.cs">
+      <Link>PhotoTossCore\IsolatedStorageSettings.cs</Link>
+    </Compile>
+    <Compile Include="..\PhotoTossCore\PhotoRecord.cs">
+      <Link>PhotoTossCore\PhotoRecord.cs</Link>
+    </Compile>
+    <Compile Include="..\PhotoTossCore\PhotoTossRest.cs">
+      <Link>PhotoTossCore\PhotoTossRest.cs</Link>
+    </Compile>
+    <Compile Include="..\PhotoTossCore\TossRecord.cs">
+      <Link>PhotoTossCore\TossRecord.cs</Link>
+    </Compile>
+    <Compile Include="..\PhotoTossCore\User.cs">
+      <Link>PhotoTossCore\User.cs</Link>
+    </Compile>
+    <Compile Include="..\PhotoTossCore\Utilities.cs">
+      <Link>PhotoTossCore\Utilities.cs</Link>
+    </Compile>
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\iOS\Xamarin.iOS.CSharp.targets" />
+  <ItemGroup>
+    <XamarinComponentReference Include="facebookios">
+      <Version>4.5.1</Version>
+      <Visible>False</Visible>
+    </XamarinComponentReference>
+    <XamarinComponentReference Include="zxing.net.mobile">
+      <Version>1.5.1.0</Version>
+      <Visible>False</Visible>
+    </XamarinComponentReference>
+    <XamarinComponentReference Include="servicestacktext">
+      <Version>3.9.61.3</Version>
+      <Visible>False</Visible>
+    </XamarinComponentReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="PhotoTossCore\" />
+  </ItemGroup>
 </Project>
