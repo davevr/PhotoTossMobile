@@ -14,6 +14,7 @@ using ZXing;
 using ZXing.Rendering;
 using PhotoToss.Core;
 
+
 //using SatelliteMenu;
 
 
@@ -102,20 +103,22 @@ namespace PhotoToss.AndroidApp
 		private void PresentTossResult(TossRecord theToss)
 		{
 			RunOnUiThread (() => {
-				BarcodeWriter writer = new BarcodeWriter();
-				writer.Format = BarcodeFormat.AZTEC;
-				writer.Renderer = new BitmapRenderer();
-
-				//var widthInDp = ConvertPixelsToDp(metrics.WidthPixels);
-				//var heightInDp = ConvertPixelsToDp(metrics.HeightPixels);
+                var writer = new ZXing.Mobile.BarcodeWriter
+                {
+                    Format = ZXing.BarcodeFormat.AZTEC,
+                    Options = new ZXing.Common.EncodingOptions
+                    {
+                        Width = 240,
+                        Height = 240,
+                        Margin = 1
+                    }
+                };
+                
 				string baseURL = "http://phototoss.com/share/";
 				string guid = theToss.id.ToString();
 				string url = baseURL + guid;
 				url = "http://phototoss.com/toss/" + guid;
 
-				writer.Options.Height = 240;
-				writer.Options.Width = 240;
-				writer.Options.Margin = 1;
 
 				var bitMap = writer.Write(url);
 

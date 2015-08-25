@@ -44,6 +44,10 @@
     <Reference Include="System.Xml" />
     <Reference Include="System.Core" />
     <Reference Include="Mono.Android" />
+    <Reference Include="System.Runtime" />
+    <Reference Include="System.Globalization" />
+    <Reference Include="System.ObjectModel" />
+    <Reference Include="System.Net.Primitives" />
     <Reference Include="Xamarin.GooglePlayServices.Base">
       <HintPath>..\packages\Xamarin.GooglePlayServices.Base.25.0.0.0\lib\MonoAndroid41\Xamarin.GooglePlayServices.Base.dll</HintPath>
     </Reference>
@@ -122,12 +126,6 @@
     <Reference Include="UrlImageViewHelper">
       <HintPath>..\Components\urlimageviewhelper-1.0.4\lib\android\UrlImageViewHelper.dll</HintPath>
     </Reference>
-    <Reference Include="ZXing.Net.Mobile">
-      <HintPath>..\Components\zxing.net.mobile-1.4.7.2\lib\android\ZXing.Net.Mobile.dll</HintPath>
-    </Reference>
-    <Reference Include="zxing.monoandroid">
-      <HintPath>..\Components\zxing.net.mobile-1.4.7.2\lib\android\zxing.monoandroid.dll</HintPath>
-    </Reference>
     <Reference Include="Microsoft.WindowsAzure.Messaging.Android">
       <HintPath>..\Components\azure-messaging-1.1.5.6\lib\android\Microsoft.WindowsAzure.Messaging.Android.dll</HintPath>
     </Reference>
@@ -150,6 +148,12 @@
     </Reference>
     <Reference Include="Xamarin.Facebook">
       <HintPath>..\packages\Xamarin.Facebook.Android.4.5.1.0\lib\MonoAndroid403\Xamarin.Facebook.dll</HintPath>
+    </Reference>
+    <Reference Include="zxing.portable">
+      <HintPath>..\Components\zxing.net.mobile-1.5.1.0\lib\android\zxing.portable.dll</HintPath>
+    </Reference>
+    <Reference Include="ZXingNetMobile">
+      <HintPath>..\Components\zxing.net.mobile-1.5.1.0\lib\android\ZXingNetMobile.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
@@ -201,6 +205,7 @@
     <None Include="Properties\AndroidManifest.xml" />
     <None Include="Assets\AboutAssets.txt" />
     <None Include="packages.config" />
+    <AndroidResource Include="Resources\layout\Main.axml" />
     <None Include="_external\ByteSmith.WindowsAzure.Messaging.Android.dll" />
   </ItemGroup>
   <ItemGroup>
@@ -245,9 +250,6 @@
     <AndroidResource Include="Resources\drawable-xxxhdpi\unknown_octopus.png" />
     <AndroidResource Include="Resources\values\colors.xml" />
     <AndroidResource Include="Resources\menu\MainMenu.xml" />
-    <AndroidResource Include="Resources\layout\Main.axml">
-      <DependentUpon>HomeFragment.axml</DependentUpon>
-    </AndroidResource>
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Novell\Novell.MonoDroid.CSharp.targets" />
   <ItemGroup>
@@ -267,10 +269,6 @@
       <Version>1.0.4</Version>
       <Visible>False</Visible>
     </XamarinComponentReference>
-    <XamarinComponentReference Include="zxing.net.mobile">
-      <Version>1.4.7.2</Version>
-      <Visible>False</Visible>
-    </XamarinComponentReference>
     <XamarinComponentReference Include="azure-messaging">
       <Version>1.1.5.6</Version>
       <Visible>False</Visible>
@@ -286,6 +284,10 @@
     <XamarinComponentReference Include="facebookandroid">
       <Version>4.5.1.0</Version>
       <Visible>False</Visible>
+    </XamarinComponentReference>
+    <XamarinComponentReference Include="zxing.net.mobile">
+      <Visible>False</Visible>
+      <Version>1.5.1.0</Version>
     </XamarinComponentReference>
   </ItemGroup>
   <ItemGroup>

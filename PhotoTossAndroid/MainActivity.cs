@@ -239,6 +239,15 @@ namespace PhotoToss.AndroidApp
 				}
 			};
 
+            Android.Content.PM.PackageInfo siglist = this.PackageManager.GetPackageInfo("com.eweware.phototoss", Android.Content.PM.PackageInfoFlags.Signatures);
+
+            foreach (Android.Content.PM.Signature curSig in siglist.Signatures)
+            {
+                Java.Security.MessageDigest md = Java.Security.MessageDigest.GetInstance("SHA");
+                md.Update(curSig.ToByteArray());
+                string something = Base64.EncodeToString(md.Digest(), Base64Flags.Default);
+                System.Console.WriteLine(something);
+            }
 
 		}
 
@@ -561,8 +570,8 @@ namespace PhotoToss.AndroidApp
 			Button flashButton;
 			View zxingOverlay;
 
-			if (scanner == null)
-				scanner = new MobileBarcodeScanner(this);
+            if (scanner == null)
+                scanner = new MobileBarcodeScanner();
 			//Tell our scanner we want to use a custom overlay instead of the default
 			scanner.UseCustomOverlay = true;
 
