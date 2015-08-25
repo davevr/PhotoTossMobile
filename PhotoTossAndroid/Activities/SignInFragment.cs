@@ -13,217 +13,142 @@ using Android.Widget;
 using Android.Graphics;
 using PhotoToss.Core;
 using Android.Support.V4.App;
+using Xamarin.Facebook;
+using Xamarin.Facebook.Login;
+using Xamarin.Facebook.Login.Widget;
+using Xamarin.Facebook.AppEvents;
+using Android.Content.PM;
 
 namespace PhotoToss.AndroidApp
 {
     public class SignInFragment : Android.Support.V4.App.Fragment
     {
-        private EditText usernameField;
-        private EditText passwordField;
-        private EditText confirmPassword;
-        private EditText emailField;
-        private Button signInBtn;
-        private Button createAccountBtn;
-        private TextView prepSignIn;
-        private TextView emailPrompt;
         private ProgressDialog progressDlg;
-
+		ICallbackManager callbackManager;
+		ProfilePictureView profilePictureView;
 
         public override View OnCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
         {
             base.OnCreateView(inflater, container, savedInstanceState);
 
             var view = inflater.Inflate(Resource.Layout.SignInLayout, container, false);
-
-            progressDlg = new ProgressDialog(this.Activity);
-            progressDlg.SetProgressStyle(ProgressDialogStyle.Spinner);
+			FacebookSdk.SdkInitialize (this.Activity.ApplicationContext);
+			callbackManager = CallbackManagerFactory.Create ();
 
             view.FindViewById<TextView>(Resource.Id.textView1).SetTypeface(MainActivity.bodyFace, TypefaceStyle.Normal);
-            usernameField = view.FindViewById<EditText>(Resource.Id.usernameField);
-            usernameField.SetTypeface(MainActivity.bodyFace, TypefaceStyle.Normal);
-            usernameField.AfterTextChanged += HandleTextValueChanged;
-
-            passwordField = view.FindViewById<EditText>(Resource.Id.password);
-            passwordField.SetTypeface(MainActivity.bodyFace, TypefaceStyle.Normal);
-            passwordField.AfterTextChanged += HandleTextValueChanged;
-
-            confirmPassword = view.FindViewById<EditText>(Resource.Id.password2);
-            confirmPassword.SetTypeface(MainActivity.bodyFace, TypefaceStyle.Normal);
-            confirmPassword.AfterTextChanged += HandleTextValueChanged;
-
-            emailPrompt = view.FindViewById<TextView>(Resource.Id.emailPrompt);
-            emailPrompt.SetTypeface(MainActivity.bodyFace, TypefaceStyle.Normal);
-
-            emailField = view.FindViewById<EditText>(Resource.Id.emailAddrField);
-            emailField.SetTypeface(MainActivity.bodyFace, TypefaceStyle.Normal);
-
-            createAccountBtn = view.FindViewById<Button>(Resource.Id.createBtn);
-            createAccountBtn.SetTypeface(MainActivity.bodyFace, TypefaceStyle.Normal);
-
-            createAccountBtn.Click += (snder, e) =>
-            {
-                progressDlg.SetMessage("signing in...");
-                progressDlg.Show();
-                string userName = usernameField.Text.Trim();
-                string password = passwordField.Text;
-                signInBtn.Enabled = false;
-                createAccountBtn.Enabled = false;
+			profilePictureView = view.FindViewById <ProfilePictureView> (Resource.Id.profilePicture);
+           
+			var loginCallback = new FacebookCallback<LoginResult> {
+				HandleSuccess = loginResult => {
+					UpdateUI ();
+				},
+				HandleCancel = () => {
+						ShowAlert (
+							GetString (Resource.String.cancelled),
+							GetString (Resource.String.permission_not_granted));
 
 
-                // sign in
-                PhotoTossRest.Instance.CreateAccount(userName, password, CreateAccountResultCallback);
+					UpdateUI ();                        
+				},
+				HandleError = loginError => {
+					if (loginError is FacebookAuthorizationException) {
+						ShowAlert (
+							GetString (Resource.String.cancelled),
+							GetString (Resource.String.permission_not_granted));
+					}
+					UpdateUI ();
+				}
+			};
 
-            };
-
-            prepSignIn = view.FindViewById<TextView>(Resource.Id.prepSignIn);
-            prepSignIn.SetTypeface(MainActivity.bodyFace, TypefaceStyle.Normal);
-
-            prepSignIn.Click += (object sender, EventArgs e) =>
-            {
-                PrepForSignIn();
-
-
-            };
-
-            signInBtn = view.FindViewById<Button>(Resource.Id.signInBtn);
-            signInBtn.SetTypeface(MainActivity.bodyFace, TypefaceStyle.Normal);
-            signInBtn.Visibility = ViewStates.Gone;
-
-            signInBtn.Click += (object sender, EventArgs e) =>
-            {
-                progressDlg.SetMessage("signing in...");
-                progressDlg.Show();
-                string userName = usernameField.Text.Trim();
-                string password = passwordField.Text;
-                signInBtn.Enabled = false;
-                createAccountBtn.Enabled = false;
-
-                // sign in
-                PhotoTossRest.Instance.Login(userName, password, SiginInResultCallback);
-            };
-
-            createAccountBtn.Enabled = false;
-            signInBtn.Enabled = false;
+			LoginManager.Instance.RegisterCallback (callbackManager, loginCallback);
+			UpdateUI ();
 
             return view;
 
         }
 
-        void HandleTextValueChanged(object sender, Android.Text.AfterTextChangedEventArgs e)
-        {
-            string usernameText = usernameField.Text;
-            string passwordText = passwordField.Text;
-            string confirmText = confirmPassword.Text;
-            string emailText = emailField.Text;
+		private void UpdateUI ()
+		{
+			var enableButtons = AccessToken.CurrentAccessToken != null;
 
-            if (String.IsNullOrEmpty(usernameText) || String.IsNullOrEmpty(passwordText) ||
-                (usernameText.Length < 3) || (passwordText.Length < 3))
-            {
-                signInBtn.Enabled = false;
-                createAccountBtn.Enabled = false;
 
-            }
-            else
-            {
-                signInBtn.Enabled = true;
+			var profile = Profile.CurrentProfile;
 
-                if (passwordText == confirmText)
-                    createAccountBtn.Enabled = true;
-                else
-                    createAccountBtn.Enabled = false;
-            }
-        }
+			if (enableButtons && profile != null) {
+				profilePictureView.ProfileId = profile.Id;
+				//((FirstRunActivity)Activity).FinishSignin();
+			} else {
+				profilePictureView.ProfileId = null;
+			}
 
-        private void SiginInResultCallback(User result)
-        {
+		
+		}
+       
+		public override void OnResume()
+		{
+			base.OnResume();
+			AppEventsLogger.ActivateApp (this.Activity);
+		}
 
-            if (result != null)
-            {
-                MainActivity.analytics.PostLogin();
-                Activity.RunOnUiThread(() =>
-                {
-                    progressDlg.Hide();
-                    ((FirstRunActivity)Activity).FinishSignin();
-                });
-            }
-            else
-            {
-                MainActivity.analytics.PostSessionError("signinfailed");
+		public override void OnPause()
+		{
+			base.OnPause();
+			AppEventsLogger.DeactivateApp (this.Activity);
+		}
 
-                MainActivity.DisplayAlert(this.Activity, "Sign in Failed", "Unable to sign in.  Check username and password");
-                Activity.RunOnUiThread(() =>
-                {
-                    progressDlg.Hide();
-                    signInBtn.Enabled = true;
-                    createAccountBtn.Enabled = true;
-                    HandleTextValueChanged(null, null);
-                });
-            }
+		void ShowAlert (string title, string msg, string buttonText = null)
+		{
+			new AlertDialog.Builder (this.Activity)
+				.SetTitle (title)
+				.SetMessage (msg)
+				.SetPositiveButton (buttonText, (s2, e2) => { })
+				.Show ();
+		}
 
-        }
 
-        private void CreateAccountResultCallback(User result)
-        {
-            if (result != null)
-            {
-                MainActivity.analytics.PostRegisterUser();
-                Activity.RunOnUiThread(() =>
-                {
-                    progressDlg.Hide();
-                    string emailAddress = emailField.Text.Trim();
-
-                    if (!String.IsNullOrEmpty(emailAddress))
-                    {
-                        PhotoTossRest.Instance.SetRecoveryEmail(emailAddress, (resultStr) =>
-                        {
-                            Activity.RunOnUiThread(() =>
-                            {
-                                ((FirstRunActivity)Activity).FinishCreateAccount();
-                            });
-                        });
-
-                    }
-                    else
-                    {
-                        ((FirstRunActivity)Activity).FinishCreateAccount();
-                    }
-
-                });
-            }
-            else
-            {
-                MainActivity.analytics.PostSessionError("registerfailed-");
-
-                MainActivity.DisplayAlert(this.Activity, "Create Account Failed", "Unable to create account.  Check username");
-                Activity.RunOnUiThread(() =>
-                {
-                    progressDlg.Hide();
-                    signInBtn.Enabled = true;
-                    createAccountBtn.Enabled = true;
-                    HandleTextValueChanged(null, null);
-                });
-            }
-        }
 
        
-
-        void PrepForSignIn()
-        {
-            signInBtn.Visibility = ViewStates.Visible;
-            confirmPassword.Visibility = ViewStates.Gone;
-            emailPrompt.Visibility = ViewStates.Gone;
-            emailField.Visibility = ViewStates.Gone;
-            prepSignIn.Visibility = ViewStates.Gone;
-            createAccountBtn.Visibility = ViewStates.Gone;
-        }
-
-       
-
         public override void OnStop()
         {
-            progressDlg.Dismiss();
+			if (progressDlg != null)
+				progressDlg.Dismiss();
             base.OnStop();
         }
+
+		public override void OnActivityResult (int requestCode, int resultCode, Intent data)
+		{
+			base.OnActivityResult (requestCode, resultCode, data);
+		}
+
+
+
+		class FacebookCallback<TResult> : Java.Lang.Object, IFacebookCallback where TResult : Java.Lang.Object
+		{
+			public Action HandleCancel { get; set; }
+			public Action<FacebookException> HandleError { get; set; }
+			public Action<TResult> HandleSuccess { get; set; }
+
+			public void OnCancel ()
+			{
+				var c = HandleCancel;
+				if (c != null)
+					c ();
+			}
+
+			public void OnError (FacebookException error)
+			{
+				var c = HandleError;
+				if (c != null)
+					c (error);
+			}
+
+			public void OnSuccess (Java.Lang.Object result)
+			{
+				var c = HandleSuccess;
+				if (c != null)
+					c (result.JavaCast<TResult> ());
+			}
+		}
 
     }
 }

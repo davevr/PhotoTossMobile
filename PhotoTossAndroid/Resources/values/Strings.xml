@@ -4,4 +4,10 @@
     <string name="ApplicationName">PhotoToss</string>
     <string name="drawer_open">Open navigation drawer</string>
     <string name="drawer_close">Close navigation drawer</string>
+    <string name="app_name">PhotoToss</string>
+    <string name="facebook_app_name">PhotoToss</string>
+    <string name="app_id">439651239569547</string>
+        <string name="cancelled">Cancelled</string>
+    <string name="permission_not_granted">Unable to perform selected action because permissions were not granted.</string>
+
 </resources>

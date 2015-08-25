@@ -245,7 +245,8 @@ namespace PhotoToss.Core
 	
 		public string GetImageForUser(String_callback callback)
 		{
-			Facebook.CoreKit.GraphRequest.
+			//Facebook.CoreKit.GraphRequest.
+			return "";
 
 		}
 			

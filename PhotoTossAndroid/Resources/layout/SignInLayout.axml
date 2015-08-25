@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:facebook="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
@@ -25,79 +26,26 @@
             android:layout_marginBottom="16dp"
             android:layout_gravity="center_horizontal" />
         <TextView
-            android:text="Welcome!  Get started with an account:"
+            android:text="Welcome!  Sign in with Facebook to get started."
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:id="@+id/textView1"
             android:textColor="@color/PT_white"
             android:typeface="normal"
             android:textSize="18dp" />
-        <EditText
-            android:layout_width="match_parent"
+        <com.facebook.login.widget.LoginButton
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:id="@+id/usernameField"
-            android:textColor="@color/PT_white"
-            android:hint="username" />
-        <EditText
-            android:inputType="textPassword"
-            android:layout_width="match_parent"
+            android:layout_marginTop="5dp"
+            android:layout_gravity="center_horizontal"
+            facebook:com_facebook_confirm_logout="false"
+            facebook:com_facebook_tooltip_mode="never_display" />
+        <com.facebook.login.widget.ProfilePictureView
+            android:id="@+id/profilePicture"
             android:layout_height="wrap_content"
-            android:textColor="@color/PT_white"
-            android:id="@+id/password"
-            android:hint="password" />
-        <Button
-            android:text="Sign In"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:id="@+id/signInBtn"
-            android:layout_marginLeft="32dp"
-            android:layout_marginRight="32dp"
-            android:layout_marginTop="16dp"
-            android:background="@color/PT_light_orange"
-            android:layout_marginBottom="16dp" />
-        <EditText
-            android:inputType="textPassword"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:id="@+id/password2"
-            android:textColor="@color/PT_white"
-            android:hint="confirm password" />
-        <TextView
-            android:text="give us an email if you ever want to recover your account"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:textColor="@color/PT_white"
-            android:id="@+id/emailPrompt"
-            android:layout_marginTop="16dp"
-            android:typeface="normal"
-            android:textSize="14dp" />
-        <EditText
-            android:inputType="textEmailAddress"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:id="@+id/emailAddrField"
-            android:textColor="@color/PT_white"
-            android:hint="email (optional)" />
-        <Button
-            android:text="Create Account"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:id="@+id/createBtn"
-            android:layout_marginLeft="32dp"
-            android:layout_marginRight="32dp"
-            android:layout_marginTop="16dp"
-            android:background="@color/PT_light_orange"
-            android:layout_marginBottom="16dp" />
-        <TextView
-            android:text="already have an account?"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:id="@+id/prepSignIn"
-            android:layout_marginLeft="32dp"
-            android:layout_marginRight="32dp"
-            android:gravity="center"
-            android:textColor="@color/PT_dark_orange"
-            android:textSize="18dp"
-            android:textStyle="bold" />
+            android:layout_width="wrap_content"
+            android:gravity="center_horizontal"
+            android:layout_marginBottom="10dp"
+            facebook:com_facebook_preset_size="normal" />
     </LinearLayout>
 </ScrollView>

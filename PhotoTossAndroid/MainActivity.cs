@@ -40,10 +40,14 @@ using Gcm.Client;
 using Environment = Android.OS.Environment;
 using Uri = Android.Net.Uri;
 using Debug = System.Diagnostics.Debug;
-
+using Xamarin.Facebook;
+using Xamarin.Facebook.AppEvents;
+using Xamarin.Facebook.Login;
+using Xamarin.Facebook.Login.Widget;
 
 using File = Java.IO.File;
-
+[assembly:MetaData ("com.facebook.sdk.ApplicationId", Value ="@string/app_id")]
+[assembly:MetaData ("com.facebook.sdk.ApplicationName", Value ="@string/app_name")]
 namespace PhotoToss.AndroidApp
 {
 	[Activity(Label = "PhotoToss", MainLauncher = true, Icon = "@drawable/iconnoborder", Theme = "@style/Theme.AppCompat.Light", ScreenOrientation=Android.Content.PM.ScreenOrientation.Portrait )]
@@ -68,12 +72,15 @@ namespace PhotoToss.AndroidApp
 		public const string ConnectionString = "Endpoint=sb://phototossnotify-ns.servicebus.windows.net/;SharedAccessKeyName=DefaultListenSharedAccessSignature;SharedAccessKey=FwWsviEIwwCK5vSg0kNiKcJs9GKuz70mXxYBGDYIvIU=";
 		public const string NotificationHubPath = "phototossnotify";
 		private const string flurryId = "YS7CWBRTNVQN3HV7Y3N5";
+		public static LinearLayout loginView = null;
+		ProfileTracker profileTracker;
 
 		public static GoogleAnalytics analytics = null;
 		MobileBarcodeScanner scanner;
 
 		public static Location	_lastLocation = new Location("passive");
 		private LocationManager _locationManager;
+		ICallbackManager callbackManager;
 
 		public event Action PulledToRefresh;
 
@@ -173,6 +180,7 @@ namespace PhotoToss.AndroidApp
 			base.OnCreate(bundle);
 			InitAnalytics();
 			Flurry.Analytics.FlurryAgent.Init(this, flurryId);
+			FacebookSdk.SdkInitialize (this.ApplicationContext);
 
 			// Set our view from the "main" layout resource
 			SetContentView(Resource.Layout.Main);
@@ -199,9 +207,73 @@ namespace PhotoToss.AndroidApp
 
 			selectItem(0);
 
-			FinishLoad ();
+			callbackManager = CallbackManagerFactory.Create ();
+
+			var loginCallback = new FacebookCallback<LoginResult> {
+				HandleSuccess = loginResult => {
+					UpdateUI ();
+				},
+				HandleCancel = () => {
+					ShowAlert (
+						GetString (Resource.String.cancelled),
+						GetString (Resource.String.permission_not_granted));
 
 
+					UpdateUI ();                        
+				},
+				HandleError = loginError => {
+					if (loginError is FacebookAuthorizationException) {
+						ShowAlert (
+							GetString (Resource.String.cancelled),
+							GetString (Resource.String.permission_not_granted));
+					}
+					UpdateUI ();
+				}
+			};
+
+			LoginManager.Instance.RegisterCallback (callbackManager, loginCallback);
+
+			profileTracker = new CustomProfileTracker {
+				HandleCurrentProfileChanged = (oldProfile, currentProfile) => {
+					UpdateUI ();
+				}
+			};
+
+
+		}
+
+		protected override void OnDestroy ()
+		{
+			base.OnDestroy ();
+
+			profileTracker.StopTracking ();
+		}
+
+		private void UpdateUI ()
+		{
+			var enableButtons = AccessToken.CurrentAccessToken != null;
+
+
+			var profile = Profile.CurrentProfile;
+			ProfilePictureView pic = loginView.FindViewById<ProfilePictureView> (Resource.Id.profilePicture);
+
+			if (enableButtons && profile != null) {
+				pic.ProfileId = profile.Id;
+			} else {
+				pic.ProfileId = null;
+			}
+
+
+		}
+
+
+		void ShowAlert (string title, string msg, string buttonText = null)
+		{
+			new Android.Support.V7.App.AlertDialog.Builder (this)
+				.SetTitle (title)
+				.SetMessage (msg)
+				.SetPositiveButton (buttonText, (s2, e2) => { })
+				.Show ();
 		}
 
 		void InitLocation()
@@ -244,12 +316,27 @@ namespace PhotoToss.AndroidApp
 		protected override void OnResume()
 		{
 			base.OnResume();
+			AppEventsLogger.ActivateApp (this);
 			InitLocation ();
+			UpdateFB ();
+		}
+
+		protected void UpdateFB()
+		{
+			if (AccessToken.CurrentAccessToken == null) {
+				// better sign in
+				//Intent	promptTask = new Intent (this, typeof(FirstRunActivity));
+				//StartActivityForResult (promptTask, Utilities.SIGNIN_INTENT);
+
+			} else {
+				// already signed in
+			}
 		}
 
 		protected override void OnPause()
 		{
 			base.OnPause();
+			AppEventsLogger.DeactivateApp (this);
 			_locationManager.RemoveUpdates(this);
 		}
 
@@ -257,50 +344,13 @@ namespace PhotoToss.AndroidApp
 		{
 			MenuInflater.Inflate(Resource.Menu.MainMenu, menu);
 
-			/*
-			if (_lastLocation != null) 
-			{
-				menu.FindItem(Resource.Id.CatchButton).SetEnabled(true);
-				menu.FindItem(Resource.Id.PhotoButton).SetEnabled (true);
-			} 
-			else 
-			{
-				menu.FindItem(Resource.Id.CatchButton).SetEnabled(false);
-				menu.FindItem(Resource.Id.PhotoButton).SetEnabled (false);
-			}
-			*/
+
 			return true;
 
 		}
 
-		private void FinishLoad()
-		{
-			string username = (string)Utilities.SafeLoadSetting (Utilities.USERNAME, null);
-			string password = (string)Utilities.SafeLoadSetting (Utilities.PASSWORD, null);
 
-			if ((!String.IsNullOrEmpty (username)) && (!String.IsNullOrEmpty (password))) {
-				PhotoTossRest.Instance.Login (username, password, (theUser) => {
-					if (theUser == null)
-						PromptForSignIn (username);
-					else
-						InitForSignIn ();
-				});
-			} else
-				PromptForSignIn (username);
-		}
-
-		public void PromptForSignIn(string username = "")
-		{
-			// to do - add the user name
-			Intent	promptTask = new Intent (this, typeof(FirstRunActivity));
-			StartActivityForResult (promptTask, Utilities.SIGNIN_INTENT);
-		}
-
-		public void InitForSignIn()
-		{
-			Debug.Assert (PhotoTossRest.Instance.CurrentUser != null);
-			StartRefresh ();
-		}
+			
 
 		public override bool OnMenuOpened(int featureId, IMenu menu)
 		{
@@ -669,13 +719,11 @@ namespace PhotoToss.AndroidApp
 						});
 					break;
 
-				case Utilities.SIGNIN_INTENT:
-					// Complete the signin
-					InitForSignIn ();
-					break;
+				
 
 				default:
 					base.OnActivityResult (requestCode, resultCode, data);
+					callbackManager.OnActivityResult (requestCode, (int)resultCode, data);
 					break;
 				}
 			}
@@ -739,4 +787,48 @@ namespace PhotoToss.AndroidApp
 
 
 	}
+
+	class FacebookCallback<TResult> : Java.Lang.Object, IFacebookCallback where TResult : Java.Lang.Object
+	{
+		public Action HandleCancel { get; set; }
+		public Action<FacebookException> HandleError { get; set; }
+		public Action<TResult> HandleSuccess { get; set; }
+
+		public void OnCancel ()
+		{
+			var c = HandleCancel;
+			if (c != null)
+				c ();
+		}
+
+		public void OnError (FacebookException error)
+		{
+			var c = HandleError;
+			if (c != null)
+				c (error);
+		}
+
+		public void OnSuccess (Java.Lang.Object result)
+		{
+			var c = HandleSuccess;
+			if (c != null)
+				c (result.JavaCast<TResult> ());
+		}
+	}
+
+	class CustomProfileTracker : ProfileTracker
+	{
+		public delegate void CurrentProfileChangedDelegate (Profile oldProfile, Profile currentProfile);
+
+		public CurrentProfileChangedDelegate HandleCurrentProfileChanged { get; set; }
+
+		protected override void OnCurrentProfileChanged (Profile oldProfile, Profile currentProfile)
+		{
+			var p = HandleCurrentProfileChanged;
+			if (p != null)
+				p (oldProfile, currentProfile);
+		}
+	}
+
+
 }

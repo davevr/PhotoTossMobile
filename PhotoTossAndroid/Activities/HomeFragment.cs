@@ -42,6 +42,8 @@ namespace PhotoToss.AndroidApp
             imageGrid.StretchMode = StretchMode.StretchColumnWidth;
             imageGrid.ItemClick += imageGrid_ItemClick;
 
+			MainActivity.loginView = view.FindViewById<LinearLayout> (Resource.Id.loginView);
+
 
 
            

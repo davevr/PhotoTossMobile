@@ -1,7 +1,10 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android" android:versionCode="1" android:versionName="1.0" package="com.eweware.phototoss">
 	<uses-sdk android:minSdkVersion="19" android:targetSdkVersion="21" />
-	<application android:label="PhotoToss" android:theme="@android:style/Theme.Holo.Light.DarkActionBar" android:icon="@drawable/iconnoborder_crop"></application>
+	<application android:label="PhotoToss" android:theme="@android:style/Theme.Holo.Light.DarkActionBar" android:icon="@drawable/iconnoborder_crop">
+			<activity android:name="com.facebook.FacebookActivity" android:configChanges="keyboard|keyboardHidden|screenLayout|screenSize|orientation" android:theme="@android:style/Theme.Translucent.NoTitleBar" android:label="@string/app_name" />
+
+	</application>
 	<uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
 	<uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
 	<uses-permission android:name="android.permission.ACCESS_MOCK_LOCATION" />
@@ -15,6 +18,7 @@
 	<uses-permission android:name="android.permission.READ_FRAME_BUFFER" />
 	<uses-permission android:name="android.permission.GET_ACCOUNTS" />
 	<uses-permission android:name="android.permission.WAKE_LOCK" />
+	<uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
 	<permission android:name="com.eweware.phototoss.permission.C2D_MESSAGE" android:protectionLevel="signature" />
 	<uses-permission android:name="com.eweware.phototoss.permission.C2D_MESSAGE" />
 </manifest>
