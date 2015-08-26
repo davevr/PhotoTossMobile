@@ -72,8 +72,9 @@ namespace PhotoToss.AndroidApp
 		public const string ConnectionString = "Endpoint=sb://phototossnotify-ns.servicebus.windows.net/;SharedAccessKeyName=DefaultListenSharedAccessSignature;SharedAccessKey=FwWsviEIwwCK5vSg0kNiKcJs9GKuz70mXxYBGDYIvIU=";
 		public const string NotificationHubPath = "phototossnotify";
 		private const string flurryId = "YS7CWBRTNVQN3HV7Y3N5";
-		public static LinearLayout loginView = null;
+		public LinearLayout loginView = null;
 		ProfileTracker profileTracker;
+        private TextView promptText, actionPrompt;
 
 		public static GoogleAnalytics analytics = null;
 		MobileBarcodeScanner scanner;
@@ -203,7 +204,10 @@ namespace PhotoToss.AndroidApp
 			SupportActionBar.SetHomeButtonEnabled(true);
 			SupportActionBar.SetBackgroundDrawable(new Android.Graphics.Drawables.ColorDrawable( Resources.GetColor(Resource.Color.PT_light_teal)));
 
-			CreateDirectoryForPictures();
+            loginView = FindViewById<LinearLayout>(Resource.Id.loginView);
+            promptText = FindViewById<TextView>(Resource.Id.promptText);
+            actionPrompt = FindViewById<TextView>(Resource.Id.actionPrompt);
+            CreateDirectoryForPictures();
 
 			selectItem(0);
 
@@ -249,6 +253,10 @@ namespace PhotoToss.AndroidApp
                 System.Console.WriteLine(something);
             }
 
+            
+
+            UpdateUI();
+
 		}
 
 		protected override void OnDestroy ()
@@ -268,9 +276,31 @@ namespace PhotoToss.AndroidApp
 
 			if (enableButtons && profile != null) {
 				pic.ProfileId = profile.Id;
+                SupportActionBar.Show();
+                actionPrompt.Visibility = ViewStates.Invisible;
+                promptText.Visibility = ViewStates.Visible;
+                PhotoTossRest.Instance.FacebookLogin(profile.Id, AccessToken.CurrentAccessToken.Token, (newUser) =>
+                {
+                    if (newUser != null)
+                    {
+                        RunOnUiThread(() =>
+                        {
+                            loginView.Visibility = ViewStates.Gone;
+                            selectItem(0);
+                        });
+
+                    }
+                });
+                
 			} else {
 				pic.ProfileId = null;
-			}
+                SupportActionBar.Hide();
+                loginView.Visibility = ViewStates.Visible;
+                actionPrompt.Visibility = ViewStates.Visible;
+                promptText.Visibility = ViewStates.Invisible;
+                if (PhotoTossRest.Instance.CurrentUser != null)
+                    PhotoTossRest.Instance.Logout();
+            }
 
 
 		}
@@ -680,55 +710,6 @@ namespace PhotoToss.AndroidApp
 						// to do - some error
 					}
 					break;
-
-				case Utilities.PROFILEIMAGE_CAPTURE_EVENT:
-					ProgressDialog progressDlg = new ProgressDialog(this);
-					RunOnUiThread(() =>
-						{
-							progressDlg.SetProgressStyle(ProgressDialogStyle.Spinner);
-							progressDlg.SetMessage("uploading image...");
-							progressDlg.Show();
-						});
-
-					PhotoTossRest.Instance.GetUserImageUploadURL((theURL) =>
-						{
-							using (System.IO.MemoryStream photoStream = new System.IO.MemoryStream())
-							{
-								int MAX_PROFILE_IMAGE_SIZE = 512;
-								Bitmap scaledBitmap;
-								scaledBitmap = BitmapHelper.LoadAndCropBitmap(MainActivity._file.AbsolutePath, MAX_PROFILE_IMAGE_SIZE);
-
-								scaledBitmap.Compress(Bitmap.CompressFormat.Jpeg, 90, photoStream);
-								photoStream.Flush();
-
-								PhotoTossRest.Instance.UploadUserImage(photoStream, (newRec) =>
-									{
-										if (newRec != null)
-										{
-											PhotoTossRest.Instance.CurrentUser.imageurl = newRec;
-											RunOnUiThread(() =>
-												{
-													progressDlg.Hide();
-													if ((profilePage != null) && (oldPage == profilePage))
-														profilePage.UpdateUserImage();
-
-												});
-										}
-										else
-										{
-											RunOnUiThread(() =>
-												{
-													progressDlg.Hide();
-													Toast.MakeText(this, "Image upload failed, please try again", ToastLength.Long).Show();
-												});
-										}
-									});
-							}
-
-						});
-					break;
-
-				
 
 				default:
 					base.OnActivityResult (requestCode, resultCode, data);

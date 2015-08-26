@@ -7,7 +7,6 @@ namespace PhotoToss.Core
 		public const string USERNAME = "username";
 		public const string PASSWORD = "password";
 		public const int SIGNIN_INTENT = 0x111;
-        public const int PROFILEIMAGE_CAPTURE_EVENT = 0x444;
 		public const int PHOTO_CATCH_EVENT = 0x555;
 		public const int PHOTO_UPLOAD_SUCCESS = 0x666;
 		public const int PHOTO_CAPTURE_EVENT = 0x777;

@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:facebook="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
@@ -11,44 +12,27 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/textView1" />
-    <ImageView
-        android:src="@drawable/unknown_octopus"
-        android:layout_width="128dp"
-        android:layout_height="128dp"
-        android:id="@+id/img_profileImage"
-        android:layout_gravity="center"
-        android:layout_margin="8dp" />
-    <Button
-        android:text="Set Profile Image"
+    <com.facebook.login.widget.ProfilePictureView
+        android:id="@+id/profilePicture"
+        android:layout_height="wrap_content"
+        android:layout_width="wrap_content"
+        android:gravity="center_horizontal"
+        android:layout_marginBottom="10dp"
+        facebook:com_facebook_preset_size="normal" />
+    <com.facebook.login.widget.LoginButton
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="5dp"
+        android:layout_gravity="center_horizontal"
+        facebook:com_facebook_confirm_logout="false"
+        facebook:com_facebook_tooltip_mode="never_display" />
+    <TextView
+        android:text="nickname"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:id="@+id/txt_nickname"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/btn_profileimage" />
-    <LinearLayout
-        android:orientation="horizontal"
-        android:minWidth="25px"
-        android:minHeight="25px"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/linearLayout1"
-        android:padding="4dp">
-        <TextView
-            android:text="nickname"
-            android:textAppearance="?android:attr/textAppearanceMedium"
-            android:id="@+id/txt_nickname"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:gravity="center" />
-        <EditText
-            android:id="@+id/field_nickname"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:layout_weight="1" />
-    </LinearLayout>
-    <Button
-        android:text="Start Tossing!"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/btn_finish" />
+        android:gravity="center_horizontal" />
     <Button
         android:text="Register for Push"
         android:layout_width="match_parent"
