@@ -4,6 +4,8 @@ using Facebook.CoreKit;
 using PhotoToss.Core;
 using System.IO.IsolatedStorage;
 using System;
+using System.Collections.Generic;
+using JVMenuPopover;
 
 namespace PhotoToss.iOSApp
 {
@@ -23,6 +25,7 @@ namespace PhotoToss.iOSApp
 		string appName = "PhotoToss";
 		string flurryID = "KTC993B58WKMR9WK66G3";
 		public static GoogleAnalytics   analytics = null;
+		public UINavigationController NavigationController {get; set;}
 
 		public override bool FinishedLaunching (UIApplication app, NSDictionary options)
 		{
@@ -40,8 +43,71 @@ namespace PhotoToss.iOSApp
 			Xamarin.Calabash.Start();
 			#endif
 
+			ConfigNavMenu ();
+
 			// This method verifies if you have been logged into the app before, and keep you logged in after you reopen or kill your app.
 			return ApplicationDelegate.SharedInstance.FinishedLaunching (app, options);
+		}
+
+		private void ConfigNavMenu()
+		{
+			UIStoryboard board = UIStoryboard.FromName ("Main", null);
+
+			//create the initial view controller
+			var rootController = (UIViewController)board.InstantiateViewController ("HomeViewController");
+
+
+
+			//build the shared menu
+			JVMenuPopoverConfig.SharedInstance.MenuItems = new List<JVMenuItem>()
+			{
+				new JVMenuViewControllerItem()
+				{
+					//View exisiting view controller, will be reused everytime the item is selected
+					Icon = UIImage.FromBundle(@"home-48"),
+					Title = @"Home",
+					ViewController = rootController,
+				},
+				new JVMenuViewControllerItem()
+				{
+					//New view controller, will be reused everytime the item is selected
+					Icon = UIImage.FromBundle(@"business_contact-48"),
+					Title = @"Leaderboards",
+					ViewController = (UIViewController)board.InstantiateViewController ("LeaderboardViewController")
+				},
+				new JVMenuViewControllerItem()
+				{
+					//New view controller, will be reused everytime the item is selected
+					Icon = UIImage.FromBundle(@"ask_question-48"),
+					Title = @"Profile",
+					ViewController = (UIViewController)board.InstantiateViewController ("ProfileViewController")
+				},
+				new JVMenuViewControllerItem()
+				{
+					//New view controller, will be reused everytime the item is selected
+					Icon = UIImage.FromBundle(@"settings-48"),
+					Title = @"Settings",
+					ViewController = (UIViewController)board.InstantiateViewController ("SettingsViewController")
+				},
+				new JVMenuViewControllerItem()
+				{
+					Icon = UIImage.FromBundle(@"about-48"),
+					Title = @"About PhotoToss",
+					ViewController = (UIViewController)board.InstantiateViewController ("AboutViewController")
+				},
+			};
+
+			//create a Nav controller an set the root controller
+			NavigationController = new UINavigationController(rootController);
+
+			//setup the window
+			Window = new UIWindow(UIScreen.MainScreen.Bounds);
+			Window.RootViewController = NavigationController;
+			Window.ContentMode = UIViewContentMode.ScaleAspectFill;
+			Window.BackgroundColor = UIColor.FromPatternImage(JVMenuHelper.ImageWithImage(UIImage.FromBundle("app_bg1.jpg"),this.Window.Frame.Width));
+			Window.Add(NavigationController.View);
+			Window.MakeKeyAndVisible();
+
 		}
 
 		private void InitAnalytics()

@@ -93,11 +93,30 @@
     <Reference Include="Flurry.Analytics.iOS">
       <HintPath>..\packages\Flurry.Analytics.1.2.1\lib\Xamarin.iOS10\Flurry.Analytics.iOS.dll</HintPath>
     </Reference>
+    <Reference Include="JVMenuPopover">
+      <HintPath>..\Components\jvmenupopover-1.1\lib\ios-unified\JVMenuPopover.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <ImageAsset Include="Resources\Images.xcassets\AppIcons.appiconset\Contents.json">
       <InProject>false</InProject>
     </ImageAsset>
+    <ImageAsset Include="Resources\Images.xcassets\AppIcons.appiconset\appicon-29.png" />
+    <ImageAsset Include="Resources\Images.xcassets\AppIcons.appiconset\appicon-58.png" />
+    <ImageAsset Include="Resources\Images.xcassets\AppIcons.appiconset\appicon-87.png" />
+    <ImageAsset Include="Resources\Images.xcassets\AppIcons.appiconset\appicon-80.png" />
+    <ImageAsset Include="Resources\Images.xcassets\AppIcons.appiconset\appicon-120.png" />
+    <ImageAsset Include="Resources\Images.xcassets\AppIcons.appiconset\appicon-57.png" />
+    <ImageAsset Include="Resources\Images.xcassets\AppIcons.appiconset\appicon-114.png" />
+    <ImageAsset Include="Resources\Images.xcassets\AppIcons.appiconset\appicon-180.png" />
+    <ImageAsset Include="Resources\Images.xcassets\CameraIcon.imageset\Contents.json" />
+    <ImageAsset Include="Resources\Images.xcassets\CatchIcon.imageset\Contents.json" />
+    <ImageAsset Include="Resources\Images.xcassets\CameraIcon.imageset\cameraIcon-25.png" />
+    <ImageAsset Include="Resources\Images.xcassets\CameraIcon.imageset\cameraIcon-50.png" />
+    <ImageAsset Include="Resources\Images.xcassets\CameraIcon.imageset\cameraIcon-75.png" />
+    <ImageAsset Include="Resources\Images.xcassets\CatchIcon.imageset\catchIcon-25.png" />
+    <ImageAsset Include="Resources\Images.xcassets\CatchIcon.imageset\catchIcon-50.png" />
+    <ImageAsset Include="Resources\Images.xcassets\CatchIcon.imageset\catchIcon-75.png" />
   </ItemGroup>
   <ItemGroup>
     <InterfaceDefinition Include="Resources\LaunchScreen.xib" />
@@ -111,10 +130,6 @@
   <ItemGroup>
     <Compile Include="Main.cs" />
     <Compile Include="AppDelegate.cs" />
-    <Compile Include="ViewController.cs" />
-    <Compile Include="ViewController.designer.cs">
-      <DependentUpon>ViewController.cs</DependentUpon>
-    </Compile>
     <Compile Include="..\PhotoTossCore\GoogleAnalytics.cs">
       <Link>PhotoTossCore\GoogleAnalytics.cs</Link>
     </Compile>
@@ -136,6 +151,30 @@
     <Compile Include="..\PhotoTossCore\Utilities.cs">
       <Link>PhotoTossCore\Utilities.cs</Link>
     </Compile>
+    <Compile Include="Views\TossCollectionView.cs" />
+    <Compile Include="Views\TossCollectionView.designer.cs">
+      <DependentUpon>TossCollectionView.cs</DependentUpon>
+    </Compile>
+    <Compile Include="ViewControllers\HomeViewController.cs" />
+    <Compile Include="ViewControllers\HomeViewController.designer.cs">
+      <DependentUpon>HomeViewController.cs</DependentUpon>
+    </Compile>
+    <Compile Include="ViewControllers\ProfileViewController.cs" />
+    <Compile Include="ViewControllers\ProfileViewController.designer.cs">
+      <DependentUpon>ProfileViewController.cs</DependentUpon>
+    </Compile>
+    <Compile Include="ViewControllers\SettingsViewController.cs" />
+    <Compile Include="ViewControllers\SettingsViewController.designer.cs">
+      <DependentUpon>SettingsViewController.cs</DependentUpon>
+    </Compile>
+    <Compile Include="ViewControllers\LeaderboardViewController.cs" />
+    <Compile Include="ViewControllers\LeaderboardViewController.designer.cs">
+      <DependentUpon>LeaderboardViewController.cs</DependentUpon>
+    </Compile>
+    <Compile Include="ViewControllers\AboutViewController.cs" />
+    <Compile Include="ViewControllers\AboutViewController.designer.cs">
+      <DependentUpon>AboutViewController.cs</DependentUpon>
+    </Compile>
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\iOS\Xamarin.iOS.CSharp.targets" />
   <ItemGroup>
@@ -152,12 +191,27 @@
       <Visible>False</Visible>
     </XamarinComponentReference>
     <XamarinComponentReference Include="jvmenupopover">
-      <InstallationInProgress>True</InstallationInProgress>
       <Version>1.1</Version>
       <Visible>False</Visible>
     </XamarinComponentReference>
   </ItemGroup>
   <ItemGroup>
     <Folder Include="PhotoTossCore\" />
+    <Folder Include="ViewControllers\" />
+    <Folder Include="Views\" />
+  </ItemGroup>
+  <ItemGroup>
+    <BundleResource Include="Resources\about-48%402x.png" />
+    <BundleResource Include="Resources\ask_question-48%402x.png" />
+    <BundleResource Include="Resources\business_contact-48%402x.png" />
+    <BundleResource Include="Resources\cancel_filled-50%402x.png" />
+    <BundleResource Include="Resources\cancel-48%402x.png" />
+    <BundleResource Include="Resources\delete_sign-48%402x.png" />
+    <BundleResource Include="Resources\home-48%402x.png" />
+    <BundleResource Include="Resources\menu_black-48%402x.png" />
+    <BundleResource Include="Resources\menu-48%402x.png" />
+    <BundleResource Include="Resources\settings-48%402x.png" />
+    <BundleResource Include="Resources\backgroundImage.png" />
+    <BundleResource Include="Resources\app_bg1%402x.jpg" />
   </ItemGroup>
 </Project>

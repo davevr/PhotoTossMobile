@@ -5,11 +5,12 @@ using Facebook.LoginKit;
 using Facebook.CoreKit;
 using CoreGraphics;
 using Foundation;
+using JVMenuPopover;
 
 
 namespace PhotoToss.iOSApp
 {
-	public partial class ViewController : UIViewController
+	public partial class HomeViewController : JVMenuViewController
 	{
 
 		List<string> readPermissions = new List<string> { "public_profile" };
@@ -17,7 +18,11 @@ namespace PhotoToss.iOSApp
 		LoginButton loginButton;
 		ProfilePictureView pictureView;
 		UILabel nameLabel;
-		public ViewController (IntPtr handle) : base (handle)
+		public HomeViewController () : base ()
+		{
+		}
+
+		public HomeViewController (IntPtr point) : base ()
 		{
 		}
 
