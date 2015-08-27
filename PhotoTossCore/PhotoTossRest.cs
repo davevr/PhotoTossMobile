@@ -21,7 +21,8 @@ namespace PhotoToss.Core
     {
         private RestClient apiClient;
         private static PhotoTossRest _singleton = null;
-		private string apiPath = "http://phototoss-server-01.appspot.com/api/";  //"http://localhost:8080/api/";  //"http://phototoss-server-01.appspot.com/api/";//"http://127.0.0.1:8080/api/"; //"http://phototoss-server-01.appspot.com/api/";//"http://www.photostore.com/api/";
+		private string serverURL = "10.0.3.2";
+		private string apiPath = "http://10.0.3.2:8080/api/";  //"http://localhost:8080/api/";  //"http://phototoss-server-01.appspot.com/api/";//"http://127.0.0.1:8080/api/"; //"http://phototoss-server-01.appspot.com/api/";//"http://www.photostore.com/api/";
         //private Random rndBase = new Random();
         private string _uploadURL;
 		private string _catchURL;
@@ -222,11 +223,12 @@ namespace PhotoToss.Core
 
             RestRequest request = new RestRequest(fullURL, METHODGET);
 
-            
-            apiClient.Execute<string>(request).ContinueWith(theTask =>
+            apiClient.Execute(request).ContinueWith(theTask =>
                 {
                     var resp = theTask.Result;
-                    _uploadURL = resp.Data;
+					_uploadURL = System.Text.Encoding.UTF8.GetString(resp.RawBytes);
+					if (_uploadURL.Contains("localhost"))
+						_uploadURL = _uploadURL.Replace("localhost", serverURL);
                     callback(_uploadURL);
                 });
 
@@ -349,7 +351,7 @@ namespace PhotoToss.Core
 
 
 
-        public void UploadImage(Stream photoStream, string caption, string tags, double longitude, double latitude, PhotoRecord_callback callback)
+        public void UploadImage(Stream photoStream, string caption, double longitude, double latitude, PhotoRecord_callback callback)
         {
 			RestClient onetimeClient = new RestClient(_uploadURL);
 			onetimeClient.CookieContainer = apiClient.CookieContainer;
@@ -357,18 +359,19 @@ namespace PhotoToss.Core
             var request = new RestRequest("", METHODPOST);
             request.AddHeader("Accept", "*/*");
             //request.AlwaysMultipartFormData = true;
-            request.AddParameter("caption", caption);
-            request.AddParameter("tags", tags);
+			if (!String.IsNullOrEmpty(caption))
+				request.AddParameter("caption", caption);
 			request.AddParameter("long", longitude);
 			request.AddParameter("lat", latitude);
             request.AddFile("file", ReadToEnd(photoStream), "file", new System.Net.Http.Headers.MediaTypeHeaderValue("image/jpeg"));
 
-            onetimeClient.Execute<string>(request).ContinueWith((theTask) =>
+            onetimeClient.Execute(request).ContinueWith((theTask) =>
             {
-                var response = theTask.Result;
+				IRestResponse response = theTask.Result;
                 if (response.StatusCode == HttpStatusCode.OK)
                 {
-                    PhotoRecord newRec = response.Data.FromJson<PhotoRecord>();
+						string theData = System.Text.Encoding.UTF8.GetString(response.RawBytes);
+						PhotoRecord newRec = theData.FromJson<PhotoRecord>();
                     callback(newRec);
                 }
                 else
@@ -391,12 +394,12 @@ namespace PhotoToss.Core
             request.AddParameter("imageid", imageId);
             request.AddFile("file", ReadToEnd(photoStream), "file", new System.Net.Http.Headers.MediaTypeHeaderValue("image/jpeg"));
 
-            onetimeClient.Execute<string>(request).ContinueWith((theTask) =>
+            onetimeClient.Execute(request).ContinueWith((theTask) =>
             {
-                var response = theTask.Result;
+					IRestResponse response = theTask.Result;
                 if (response.StatusCode == HttpStatusCode.OK)
                 {
-                    callback(response.Data);
+						callback(System.Text.Encoding.UTF8.GetString(response.RawBytes));
                 }
                 else
                 {

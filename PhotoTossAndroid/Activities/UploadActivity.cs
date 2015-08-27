@@ -74,12 +74,11 @@ namespace PhotoToss.AndroidApp
 				photoStream.Flush ();
 
 				string caption = captionText.Text;
-				string tags = tagField.Text;
 				double longitude = MainActivity._lastLocation.Longitude;
 				double latitude = MainActivity._lastLocation.Latitude;
 
 
-				PhotoTossRest.Instance.UploadImage (photoStream, caption, tags, longitude, latitude, (newRec) => {
+				PhotoTossRest.Instance.UploadImage (photoStream, caption, longitude, latitude, (newRec) => {
 
 					if (newRec != null) {
                         // now we upload a thumbnail immediately
