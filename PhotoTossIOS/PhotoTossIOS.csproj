@@ -151,6 +151,11 @@
       <Version>3.9.61.3</Version>
       <Visible>False</Visible>
     </XamarinComponentReference>
+    <XamarinComponentReference Include="jvmenupopover">
+      <InstallationInProgress>True</InstallationInProgress>
+      <Version>1.1</Version>
+      <Visible>False</Visible>
+    </XamarinComponentReference>
   </ItemGroup>
   <ItemGroup>
     <Folder Include="PhotoTossCore\" />

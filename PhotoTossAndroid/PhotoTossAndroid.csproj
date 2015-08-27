@@ -286,8 +286,8 @@
       <Visible>False</Visible>
     </XamarinComponentReference>
     <XamarinComponentReference Include="zxing.net.mobile">
-      <Visible>False</Visible>
       <Version>1.5.1.0</Version>
+      <Visible>False</Visible>
     </XamarinComponentReference>
   </ItemGroup>
   <ItemGroup>
