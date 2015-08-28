@@ -13,10 +13,10 @@ namespace PhotoToss.iOSApp
 	partial class HomeViewController
 	{
 		[Outlet]
-		UIKit.UITabBarItem CameraBtn { get; set; }
+		UIKit.UIBarButtonItem CameraBtn { get; set; }
 
 		[Outlet]
-		UIKit.UITabBarItem CatchBtn { get; set; }
+		UIKit.UIBarButtonItem CatchBtn { get; set; }
 
 		[Outlet]
 		UIKit.UICollectionView TossedImageCollectionView { get; set; }
