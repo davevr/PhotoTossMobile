@@ -1,15 +1,32 @@
-using Foundation;
+﻿
 using System;
-using System.CodeDom.Compiler;
+
+using Foundation;
 using UIKit;
 using JVMenuPopover;
 
 namespace PhotoToss.iOSApp
 {
-	partial class AboutViewController : JVMenuViewController
+	public partial class AboutViewController : JVMenuViewController
 	{
-		public AboutViewController (IntPtr point) : base ()
+		public AboutViewController () : base ()
 		{
+		}
+
+		public override void DidReceiveMemoryWarning ()
+		{
+			// Releases the view if it doesn't have a superview.
+			base.DidReceiveMemoryWarning ();
+			
+			// Release any cached data, images, etc that aren't in use.
+		}
+
+		public override void ViewDidLoad ()
+		{
+			base.ViewDidLoad ();
+			
+			// Perform any additional setup after loading the view, typically from a nib.
 		}
 	}
 }
+

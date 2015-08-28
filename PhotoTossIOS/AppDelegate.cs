@@ -54,8 +54,8 @@ namespace PhotoToss.iOSApp
 			UIStoryboard board = UIStoryboard.FromName ("Main", null);
 
 			//create the initial view controller
-			var rootController = (UIViewController)board.InstantiateViewController ("HomeViewController");
-
+			//var rootController = (UIViewController)board.InstantiateViewController ("HomeViewController");
+			var rootController = new HomeViewController();
 
 
 			//build the shared menu
@@ -73,27 +73,27 @@ namespace PhotoToss.iOSApp
 					//New view controller, will be reused everytime the item is selected
 					Icon = UIImage.FromBundle(@"business_contact-48"),
 					Title = @"Leaderboards",
-					ViewController = (UIViewController)board.InstantiateViewController ("LeaderboardViewController")
+					ViewController = new LeaderboardViewController()
 				},
 				new JVMenuViewControllerItem()
 				{
 					//New view controller, will be reused everytime the item is selected
 					Icon = UIImage.FromBundle(@"ask_question-48"),
 					Title = @"Profile",
-					ViewController = (UIViewController)board.InstantiateViewController ("ProfileViewController")
+					ViewController = new ProfileViewController()
 				},
 				new JVMenuViewControllerItem()
 				{
 					//New view controller, will be reused everytime the item is selected
 					Icon = UIImage.FromBundle(@"settings-48"),
 					Title = @"Settings",
-					ViewController = (UIViewController)board.InstantiateViewController ("SettingsViewController")
+					ViewController = new SettingsViewController()
 				},
 				new JVMenuViewControllerItem()
 				{
 					Icon = UIImage.FromBundle(@"about-48"),
 					Title = @"About PhotoToss",
-					ViewController = (UIViewController)board.InstantiateViewController ("AboutViewController")
+					ViewController = new AboutViewController()
 				},
 			};
 

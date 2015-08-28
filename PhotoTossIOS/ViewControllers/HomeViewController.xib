@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="7706" systemVersion="14F27" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES">
+    <dependencies>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="7703"/>
+    </dependencies>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="HomeViewController">
+            <connections>
+                <outlet property="CameraBtn" destination="bjQ-IK-FVb" id="v0a-iM-Yf2"/>
+                <outlet property="CatchBtn" destination="diD-rF-Ley" id="23P-fe-4Gj"/>
+                <outlet property="TossedImageCollectionView" destination="T9D-bN-5qV" id="xv1-IV-Xaz"/>
+                <outlet property="view" destination="iN0-l3-epB" id="kCW-yf-GMq"/>
+            </connections>
+        </placeholder>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <view contentMode="scaleToFill" id="iN0-l3-epB">
+            <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
+            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+            <subviews>
+                <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="backgroundImage.png" translatesAutoresizingMaskIntoConstraints="NO" id="asF-cu-g0e">
+                    <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
+                </imageView>
+                <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" alpha="0.0" contentMode="scaleToFill" showsHorizontalScrollIndicator="NO" dataMode="none" translatesAutoresizingMaskIntoConstraints="NO" id="T9D-bN-5qV">
+                    <rect key="frame" x="0.0" y="0.0" width="320" height="519"/>
+                    <collectionViewFlowLayout key="collectionViewLayout" minimumLineSpacing="10" minimumInteritemSpacing="10" id="o9W-zZ-NWD">
+                        <size key="itemSize" width="128" height="128"/>
+                        <size key="headerReferenceSize" width="0.0" height="0.0"/>
+                        <size key="footerReferenceSize" width="0.0" height="0.0"/>
+                        <inset key="sectionInset" minX="12" minY="12" maxX="12" maxY="0.0"/>
+                    </collectionViewFlowLayout>
+                </collectionView>
+                <tabBar contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="IV2-GN-fxv">
+                    <rect key="frame" x="0.0" y="519" width="320" height="49"/>
+                    <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                    <items>
+                        <tabBarItem title="Camera" image="CameraIcon" id="bjQ-IK-FVb"/>
+                        <tabBarItem tag="1" title="Catch" image="CatchIcon" id="diD-rF-Ley"/>
+                    </items>
+                </tabBar>
+            </subviews>
+            <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
+            <constraints>
+                <constraint firstAttribute="bottom" secondItem="IV2-GN-fxv" secondAttribute="bottom" id="J10-nN-JQe"/>
+                <constraint firstAttribute="trailing" secondItem="IV2-GN-fxv" secondAttribute="trailing" id="JTq-kc-a1Z"/>
+                <constraint firstItem="asF-cu-g0e" firstAttribute="leading" secondItem="iN0-l3-epB" secondAttribute="leading" id="QbQ-Ux-HpW"/>
+                <constraint firstAttribute="trailing" secondItem="T9D-bN-5qV" secondAttribute="trailing" id="UfB-1Z-TzP"/>
+                <constraint firstAttribute="trailing" secondItem="asF-cu-g0e" secondAttribute="trailing" id="WrB-yK-DnV"/>
+                <constraint firstItem="IV2-GN-fxv" firstAttribute="leading" secondItem="iN0-l3-epB" secondAttribute="leading" id="Xot-za-0P7"/>
+                <constraint firstItem="IV2-GN-fxv" firstAttribute="top" secondItem="T9D-bN-5qV" secondAttribute="bottom" id="j7K-NN-Tre"/>
+                <constraint firstItem="T9D-bN-5qV" firstAttribute="top" secondItem="iN0-l3-epB" secondAttribute="top" id="pah-wK-FCy"/>
+                <constraint firstItem="T9D-bN-5qV" firstAttribute="leading" secondItem="iN0-l3-epB" secondAttribute="leading" id="tjl-en-GFK"/>
+                <constraint firstAttribute="bottom" secondItem="asF-cu-g0e" secondAttribute="bottom" id="uTQ-IQ-Bm3"/>
+                <constraint firstItem="asF-cu-g0e" firstAttribute="top" secondItem="iN0-l3-epB" secondAttribute="top" id="y8N-l9-EK4"/>
+            </constraints>
+        </view>
+    </objects>
+    <resources>
+        <image name="CameraIcon" width="25" height="25"/>
+        <image name="CatchIcon" width="25" height="25"/>
+        <image name="backgroundImage.png" width="512" height="512"/>
+    </resources>
+    <simulatedMetricsContainer key="defaultSimulatedMetrics">
+        <simulatedStatusBarMetrics key="statusBar"/>
+        <simulatedOrientationMetrics key="orientation"/>
+        <simulatedScreenMetrics key="destination" type="retina4"/>
+    </simulatedMetricsContainer>
+</document>

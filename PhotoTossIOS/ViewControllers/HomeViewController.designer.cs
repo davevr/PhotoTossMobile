@@ -1,13 +1,11 @@
 // WARNING
 //
-// This file has been generated automatically by Xamarin Studio from the outlets and
-// actions declared in your storyboard file.
-// Manual changes to this file will not be maintained.
+// This file has been generated automatically by Xamarin Studio to store outlets and
+// actions made in the UI designer. If it is removed, they will be lost.
+// Manual changes to this file may not be handled correctly.
 //
 using Foundation;
-using System;
 using System.CodeDom.Compiler;
-using UIKit;
 
 namespace PhotoToss.iOSApp
 {
@@ -15,14 +13,29 @@ namespace PhotoToss.iOSApp
 	partial class HomeViewController
 	{
 		[Outlet]
-		[GeneratedCode ("iOS Designer", "1.0")]
-		TossCollectionView TossCollectionView { get; set; }
+		UIKit.UITabBarItem CameraBtn { get; set; }
 
+		[Outlet]
+		UIKit.UITabBarItem CatchBtn { get; set; }
+
+		[Outlet]
+		UIKit.UICollectionView TossedImageCollectionView { get; set; }
+		
 		void ReleaseDesignerOutlets ()
 		{
-			if (TossCollectionView != null) {
-				TossCollectionView.Dispose ();
-				TossCollectionView = null;
+			if (TossedImageCollectionView != null) {
+				TossedImageCollectionView.Dispose ();
+				TossedImageCollectionView = null;
+			}
+
+			if (CameraBtn != null) {
+				CameraBtn.Dispose ();
+				CameraBtn = null;
+			}
+
+			if (CatchBtn != null) {
+				CatchBtn.Dispose ();
+				CatchBtn = null;
 			}
 		}
 	}

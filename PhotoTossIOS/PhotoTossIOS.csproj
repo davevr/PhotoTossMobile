@@ -121,6 +121,11 @@
   <ItemGroup>
     <InterfaceDefinition Include="Resources\LaunchScreen.xib" />
     <InterfaceDefinition Include="Main.storyboard" />
+    <InterfaceDefinition Include="ViewControllers\HomeViewController.xib" />
+    <InterfaceDefinition Include="ViewControllers\LeaderboardViewController.xib" />
+    <InterfaceDefinition Include="ViewControllers\ProfileViewController.xib" />
+    <InterfaceDefinition Include="ViewControllers\SettingsViewController.xib" />
+    <InterfaceDefinition Include="ViewControllers\AboutViewController.xib" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Info.plist" />
@@ -155,9 +160,17 @@
     <Compile Include="Views\TossCollectionView.designer.cs">
       <DependentUpon>TossCollectionView.cs</DependentUpon>
     </Compile>
+    <Compile Include="ViewControllers\OldHomeViewController.cs" />
+    <Compile Include="ViewControllers\OldHomeViewController.designer.cs">
+      <DependentUpon>OldHomeViewController.cs</DependentUpon>
+    </Compile>
     <Compile Include="ViewControllers\HomeViewController.cs" />
     <Compile Include="ViewControllers\HomeViewController.designer.cs">
       <DependentUpon>HomeViewController.cs</DependentUpon>
+    </Compile>
+    <Compile Include="ViewControllers\LeaderboardViewController.cs" />
+    <Compile Include="ViewControllers\LeaderboardViewController.designer.cs">
+      <DependentUpon>LeaderboardViewController.cs</DependentUpon>
     </Compile>
     <Compile Include="ViewControllers\ProfileViewController.cs" />
     <Compile Include="ViewControllers\ProfileViewController.designer.cs">
@@ -166,10 +179,6 @@
     <Compile Include="ViewControllers\SettingsViewController.cs" />
     <Compile Include="ViewControllers\SettingsViewController.designer.cs">
       <DependentUpon>SettingsViewController.cs</DependentUpon>
-    </Compile>
-    <Compile Include="ViewControllers\LeaderboardViewController.cs" />
-    <Compile Include="ViewControllers\LeaderboardViewController.designer.cs">
-      <DependentUpon>LeaderboardViewController.cs</DependentUpon>
     </Compile>
     <Compile Include="ViewControllers\AboutViewController.cs" />
     <Compile Include="ViewControllers\AboutViewController.designer.cs">
