@@ -191,6 +191,8 @@
       <DependentUpon>AboutViewController.cs</DependentUpon>
     </Compile>
     <Compile Include="Views\LoadingOverlay.cs" />
+    <Compile Include="Helpers\UIImageHelper.cs" />
+    <Compile Include="Helpers\LocationHelper.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\iOS\Xamarin.iOS.CSharp.targets" />
   <ItemGroup>
@@ -215,6 +217,7 @@
     <Folder Include="PhotoTossCore\" />
     <Folder Include="ViewControllers\" />
     <Folder Include="Views\" />
+    <Folder Include="Helpers\" />
   </ItemGroup>
   <ItemGroup>
     <BundleResource Include="Resources\about-48%402x.png" />

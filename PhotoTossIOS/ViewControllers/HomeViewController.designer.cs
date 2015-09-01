@@ -23,11 +23,6 @@ namespace PhotoToss.iOSApp
 		
 		void ReleaseDesignerOutlets ()
 		{
-			if (TossedImageCollectionView != null) {
-				TossedImageCollectionView.Dispose ();
-				TossedImageCollectionView = null;
-			}
-
 			if (CameraBtn != null) {
 				CameraBtn.Dispose ();
 				CameraBtn = null;
@@ -36,6 +31,11 @@ namespace PhotoToss.iOSApp
 			if (CatchBtn != null) {
 				CatchBtn.Dispose ();
 				CatchBtn = null;
+			}
+
+			if (TossedImageCollectionView != null) {
+				TossedImageCollectionView.Dispose ();
+				TossedImageCollectionView = null;
 			}
 		}
 	}

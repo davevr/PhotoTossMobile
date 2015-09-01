@@ -22,13 +22,14 @@ namespace PhotoToss.Core
         private RestClient apiClient;
         private static PhotoTossRest _singleton = null;
 		private string serverURL = "10.0.3.2";
-		private string apiPath = "http://10.0.3.2:8080/api/";  //"http://localhost:8080/api/";  //"http://phototoss-server-01.appspot.com/api/";//"http://127.0.0.1:8080/api/"; //"http://phototoss-server-01.appspot.com/api/";//"http://www.photostore.com/api/";
+		private string apiPath = "http://phototoss-server-01.appspot.com/api/"; //"http://10.0.3.2:8080/api/";  //"http://localhost:8080/api/";  //"http://phototoss-server-01.appspot.com/api/";//"http://127.0.0.1:8080/api/"; //"http://phototoss-server-01.appspot.com/api/";//"http://www.photostore.com/api/";
         //private Random rndBase = new Random();
         private string _uploadURL;
 		private string _catchURL;
         private string _userImageURL;
 		private User _currentUser = null;
 		public PhotoRecord CurrentImage { get; set; }
+		private bool runningLocal = false;
    
         private System.Net.Http.HttpMethod METHODPOST = System.Net.Http.HttpMethod.Post;
         private System.Net.Http.HttpMethod METHODGET = System.Net.Http.HttpMethod.Get;
@@ -227,27 +228,13 @@ namespace PhotoToss.Core
                 {
                     var resp = theTask.Result;
 					_uploadURL = System.Text.Encoding.UTF8.GetString(resp.RawBytes);
-					if (_uploadURL.Contains("localhost"))
+					if (_uploadURL.Contains("localhost") && !runningLocal)
 						_uploadURL = _uploadURL.Replace("localhost", serverURL);
                     callback(_uploadURL);
                 });
 
         }
 
-        public void GetUserImageUploadURL(String_callback callback)
-        {
-            string fullURL = "user/image";
-
-            RestRequest request = new RestRequest(fullURL, METHODGET);
-
-            apiClient.Execute<string>(request).ContinueWith(theTask =>
-            {
-                var resp = theTask.Result;
-                _userImageURL = resp.Data;
-                callback(_userImageURL);
-            });
-
-        }
 
 		public void GetCatchURL(String_callback callback)
 		{
@@ -264,14 +251,6 @@ namespace PhotoToss.Core
 
 		}
 
-	
-		public string GetImageForUser(String_callback callback)
-		{
-			//Facebook.CoreKit.GraphRequest.
-			return "";
-
-		}
-			
 
 		public void GetImage(String_callback callback)
 		{
@@ -367,18 +346,22 @@ namespace PhotoToss.Core
 
             onetimeClient.Execute(request).ContinueWith((theTask) =>
             {
-				IRestResponse response = theTask.Result;
-                if (response.StatusCode == HttpStatusCode.OK)
-                {
-						string theData = System.Text.Encoding.UTF8.GetString(response.RawBytes);
-						PhotoRecord newRec = theData.FromJson<PhotoRecord>();
-                    callback(newRec);
-                }
-                else
-                {
-                    //error ocured during upload
-                    callback(null);
-                }
+				if (theTask.Status == System.Threading.Tasks.TaskStatus.Faulted)
+					callback(null);
+					else {
+						IRestResponse response = theTask.Result;
+		                if (response.StatusCode == HttpStatusCode.OK)
+		                {
+							string theData = System.Text.Encoding.UTF8.GetString(response.RawBytes);
+							PhotoRecord newRec = theData.FromJson<PhotoRecord>();
+		                    callback(newRec);
+		                }
+		                else
+		                {
+		                    //error ocured during upload
+		                    callback(null);
+		                }
+					}
             });
         }
 

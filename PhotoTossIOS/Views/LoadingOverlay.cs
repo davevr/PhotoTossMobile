@@ -54,6 +54,16 @@ namespace PhotoToss.iOSApp
 
 		}
 
+		public string Prompt 
+		{
+			get {
+				return loadingLabel.Text;
+			}
+			set {
+				loadingLabel.Text = value;
+			}
+		}
+
 		/// <summary>
 		/// Fades out the control and then removes it from the super view
 		/// </summary>

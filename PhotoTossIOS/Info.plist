@@ -50,5 +50,7 @@
 			</array>
 		</dict>
 	</array>
+	<key>NSLocationWhenInUseUsageDescription</key>
+	<string>true</string>
 </dict>
 </plist>
