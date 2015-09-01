@@ -14,7 +14,6 @@ using Android.Widget;
 using Android.Graphics;
 using ServiceStack.Text;
 
-
 using PhotoToss.Core;
 
 namespace PhotoToss.AndroidApp
@@ -174,25 +173,20 @@ namespace PhotoToss.AndroidApp
 				long tosserId = curRec.tosserid;
 				if ((tosserId != 0) && (tosserId != PhotoTossRest.Instance.CurrentUser.id))
 				{
-					PhotoTossRest.Instance.GetUserProfileImage (curRec.tosserid, (imageUrl) => 
-						{
-							if (String.IsNullOrEmpty (imageUrl))
-								imageUrl = "https://s3-us-west-2.amazonaws.com/app.goheard.com/images/unknown-user.png";
-							else
-								imageUrl += "=s128-c";
+                    string imageUrl = PhotoTossRest.Instance.GetUserProfileImage(curRec.tossername);
 
-		                    BitmapHelper.GetImageBitmapFromUrlAsync(imageUrl, (theBitmap) =>
+
+		            BitmapHelper.GetImageBitmapFromUrlAsync(imageUrl, (theBitmap) =>
+		                {
+		                    ((Activity)context).RunOnUiThread(() =>
 		                        {
-		                            ((Activity)context).RunOnUiThread(() =>
-		                                {
-		                                    userView.Visibility = ViewStates.Visible;
-		                                    Bitmap userBitMap = BitmapHelper.GetImageBitmapFromUrl(imageUrl);
-		                                    CircleDrawable myCircle = new CircleDrawable(userBitMap);
-		                                    userView.SetImageDrawable(myCircle);
-		                                });
-
+		                            userView.Visibility = ViewStates.Visible;
+		                            Bitmap userBitMap = BitmapHelper.GetImageBitmapFromUrl(imageUrl);
+		                            CircleDrawable myCircle = new CircleDrawable(userBitMap);
+		                            userView.SetImageDrawable(myCircle);
 		                        });
-						});
+
+		                });
 				}
                 captionText.Text = curRec.caption;
 				Koush.UrlImageViewHelper.SetUrlDrawable (imageView, curRec.imageUrl + "=s" + itemWidth.ToString(), Resource.Drawable.ic_camera);

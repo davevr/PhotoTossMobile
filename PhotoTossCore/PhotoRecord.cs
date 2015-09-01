@@ -30,6 +30,7 @@ namespace PhotoToss.Core
 		public string receivedcaption { get; set; }
 		public DateTime received { get; set; }
 		public long tosserid { get; set; }
+        public string tossername { get; set; }
 
 
 		// updated after a toss

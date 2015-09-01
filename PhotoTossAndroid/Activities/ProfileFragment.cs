@@ -15,6 +15,7 @@ using Android.Provider;
 using Android.Graphics;
 using Xamarin.Facebook.Login.Widget;
 using PhotoToss.Core;
+using Xamarin.Facebook;
 
 using Java.IO;
 using File = Java.IO.File;
@@ -27,6 +28,9 @@ namespace PhotoToss.AndroidApp
         public bool IsInitialSignIn = false;
 
         public MainActivity MainPage { get; set; }
+        private ProfilePictureView profileImage;
+        private TextView nicknameText;
+
         public override View OnCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
         {
             base.OnCreateView(inflater, container, savedInstanceState);
@@ -34,8 +38,8 @@ namespace PhotoToss.AndroidApp
             var view = inflater.Inflate(Resource.Layout.ProfileFragment, container, false);
 			var registerButton = view.FindViewById<Button> (Resource.Id.registerButton);
 			var unregisterButton = view.FindViewById<Button> (Resource.Id.unregisterButton);
-            var nicknameText = view.FindViewById<TextView>(Resource.Id.txt_nickname);
-            var profileImage = view.FindViewById<ProfilePictureView>(Resource.Id.profilePicture);
+            nicknameText = view.FindViewById<TextView>(Resource.Id.txt_nickname);
+            profileImage = view.FindViewById<ProfilePictureView>(Resource.Id.profilePicture);
 
             registerButton.Click += delegate {
 				const string senders = "865065760693";
@@ -54,13 +58,31 @@ namespace PhotoToss.AndroidApp
 				MainPage.StartService(intent);
 			};
 
+            Refresh();
 
             return view;
         }
 
         public void Refresh()
         {
+            if (Profile.CurrentProfile != null)
+            {
+                profileImage.ProfileId = Profile.CurrentProfile.Id;
+                nicknameText.Text = Profile.CurrentProfile.Name;
+            }
+            else
+            {
+                profileImage.ProfileId = null;
+                nicknameText.Text = "";
+            }
 
+        }
+
+        public override void OnHiddenChanged(bool hidden)
+        {
+            base.OnHiddenChanged(hidden);
+            if (!hidden)
+                Refresh();
         }
     }
 }

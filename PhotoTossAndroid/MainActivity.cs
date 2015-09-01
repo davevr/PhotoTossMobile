@@ -75,8 +75,10 @@ namespace PhotoToss.AndroidApp
 		public LinearLayout loginView = null;
 		ProfileTracker profileTracker;
         private TextView promptText, actionPrompt;
+        private ProgressDialog progressDlg;
+        private int MAX_IMAGE_SIZE = 2048;
 
-		public static GoogleAnalytics analytics = null;
+        public static GoogleAnalytics analytics = null;
 		MobileBarcodeScanner scanner;
 
 		public static Location	_lastLocation = new Location("passive");
@@ -253,7 +255,9 @@ namespace PhotoToss.AndroidApp
                 System.Console.WriteLine(something);
             }
 
-            
+
+            progressDlg = new ProgressDialog(this);
+            progressDlg.SetProgressStyle(ProgressDialogStyle.Spinner);
 
             UpdateUI();
 
@@ -287,6 +291,7 @@ namespace PhotoToss.AndroidApp
                         {
                             loginView.Visibility = ViewStates.Gone;
                             selectItem(0);
+                            homePage.Refresh();
                         });
 
                     }
@@ -352,7 +357,13 @@ namespace PhotoToss.AndroidApp
 
 		}
 
-		protected override void OnResume()
+        protected override void OnStop()
+        {
+            progressDlg.Dismiss();
+            base.OnStop();
+        }
+
+        protected override void OnResume()
 		{
 			base.OnResume();
 			AppEventsLogger.ActivateApp (this);
@@ -695,21 +706,10 @@ namespace PhotoToss.AndroidApp
 			{
 				switch (requestCode) {
 				case Utilities.PHOTO_CAPTURE_EVENT:
-					PhotoTossRest.Instance.GetUploadURL ((theURL) => {
-						Intent upload = new Intent (this, typeof(UploadActivity));
-
-						StartActivityForResult (upload, Utilities.PHOTO_UPLOAD_SUCCESS);
-					});
+                        DoPhotoUpload();
 					break;
 
-				case Utilities.PHOTO_UPLOAD_SUCCESS:
-					if (_uploadPhotoRecord != null) {
-						homePage.AddImage (_uploadPhotoRecord);
-						_uploadPhotoRecord = null;
-					} else {
-						// to do - some error
-					}
-					break;
+				
 
 				default:
 					base.OnActivityResult (requestCode, resultCode, data);
@@ -720,6 +720,78 @@ namespace PhotoToss.AndroidApp
 			else
 				base.OnActivityResult(requestCode, resultCode, data);
 		}
+
+        private void DoPhotoUpload()
+        {
+            RunOnUiThread(() =>
+            {
+                progressDlg.SetMessage("uploading image...");
+                progressDlg.Show();
+            });
+
+            PhotoTossRest.Instance.GetUploadURL((theURL) => {
+                using (System.IO.MemoryStream photoStream = new System.IO.MemoryStream())
+                {
+                    Bitmap scaledBitmap = scaledBitmap = BitmapHelper.LoadAndResizeBitmap(MainActivity._file.AbsolutePath, MAX_IMAGE_SIZE);
+                    scaledBitmap.Compress(Bitmap.CompressFormat.Jpeg, 90, photoStream);
+                    photoStream.Flush();
+
+                    double longitude = MainActivity._lastLocation.Longitude;
+                    double latitude = MainActivity._lastLocation.Latitude;
+
+                    PhotoTossRest.Instance.UploadImage(photoStream, longitude, latitude, (newRec) => {
+
+                        if (newRec != null)
+                        {
+                            // now we upload a thumbnail immediately
+                            PhotoTossRest.Instance.GetUploadURL((uploadStr) =>
+                            {
+                                Bitmap thumbnail = ThumbnailUtils.ExtractThumbnail(scaledBitmap, 64, 64);
+
+                                using (System.IO.MemoryStream thumbStream = new System.IO.MemoryStream())
+                                {
+                                    thumbnail.Compress(Bitmap.CompressFormat.Png, 100, thumbStream);
+                                    thumbStream.Flush();
+
+                                    PhotoTossRest.Instance.UploadImageThumb(thumbStream, newRec.id, (theStr) =>
+                                    {
+                                        if (!String.IsNullOrEmpty(theStr))
+                                            newRec.thumbnailurl = theStr;
+                                        MainActivity._file.Delete();
+                                        MainActivity._uploadPhotoRecord = newRec;
+                                        FinishPhotoUpload();
+                                    });
+                                }
+                            });
+                        }
+                        else
+                        {
+                            RunOnUiThread(() => {
+                                progressDlg.Hide();
+                                Toast.MakeText(this, "Image upload failed, please try again", ToastLength.Long).Show();
+                            });
+                        }
+                    });
+                }
+            });
+        }
+
+        private void FinishPhotoUpload()
+        {
+            RunOnUiThread(() => {
+                progressDlg.Hide();
+            });
+            if (_uploadPhotoRecord != null)
+            {
+                homePage.AddImage(_uploadPhotoRecord);
+                _uploadPhotoRecord = null;
+            }
+            else
+            {
+                // to do - some error
+            }
+        }
+
 
 		private void InitAnalytics()
 		{

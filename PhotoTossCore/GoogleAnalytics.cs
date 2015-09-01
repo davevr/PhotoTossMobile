@@ -2,9 +2,9 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using RestSharp;
 using System.Net;
-using RestSharp.Portable;
-
+using System.IO;
 
 namespace PhotoToss.Core
 {
@@ -18,10 +18,6 @@ namespace PhotoToss.Core
         //private bool sessionStarted = false;
         private string userAgentStr;
         private int counter = 1;
-
-        private System.Net.Http.HttpMethod METHODPOST = System.Net.Http.HttpMethod.Post;
-
-
 
         public GoogleAnalytics(string userAgent, string maker, string model, string version, string platform, string uniqueId)
         {
@@ -39,11 +35,12 @@ namespace PhotoToss.Core
             */
             userAgentStr = string.Format("{0}; {1}; {2};  AppVersion {3})", userAgent, maker, model, version);
 
+            restClient.UserAgent = userAgentStr;
         }
 
         public void PostPageView(string pageURL)
         {
-            RestRequest request = new RestRequest("collect", METHODPOST);
+            RestRequest request = new RestRequest("collect", Method.POST);
             //request.AddHeader("Accept", "*/*");
             request.AddHeader("User-Agent", userAgentStr);
             request.AddParameter("v", version);
@@ -54,15 +51,6 @@ namespace PhotoToss.Core
             request.AddParameter("dl", "auto");
             request.AddParameter("_s", counter++);
 
-            restClient.Execute(request).ContinueWith((theTask) =>
-            {
-                var response = theTask.Result;
-                if (response.StatusCode == HttpStatusCode.Accepted)
-                {
-                    System.Diagnostics.Debug.WriteLine("OK.");
-                }
-            });
-            /*
             restClient.ExecuteAsync(request, (response) =>
             {
                 if (response.StatusCode == HttpStatusCode.Accepted)
@@ -70,12 +58,11 @@ namespace PhotoToss.Core
                     System.Console.WriteLine("OK.");
                 }
             });
-            */
         }
 
         public void PostEvent(string eventCategory, string eventAction, string eventLabel = null, int eventValue = 0)
         {
-            RestRequest request = new RestRequest("collect", METHODPOST);
+            RestRequest request = new RestRequest("collect", Method.POST);
             //request.AddHeader("Accept", "*/*");
             request.AddHeader("User-Agent", userAgentStr);
             request.AddParameter("v", version);
@@ -91,12 +78,11 @@ namespace PhotoToss.Core
             request.AddParameter("dl", "https://app.goheard.com/");
             request.AddParameter("_s", counter++);
 
-            restClient.Execute(request).ContinueWith((theTask) =>
+            restClient.ExecuteAsync(request, (response) =>
             {
-                var response = theTask.Result;
                 if (response.StatusCode == HttpStatusCode.Accepted)
                 {
-                    System.Diagnostics.Debug.WriteLine("OK.");
+                    System.Console.WriteLine("OK.");
                 }
             });
         }
@@ -104,7 +90,7 @@ namespace PhotoToss.Core
         public void StartSession()
         {
             counter = 1;
-            RestRequest request = new RestRequest("collect", METHODPOST);
+            RestRequest request = new RestRequest("collect", Method.POST);
             //request.AddHeader("Accept", "*/*");
             request.AddHeader("User-Agent", userAgentStr);
             request.AddParameter("v", version);
@@ -115,19 +101,18 @@ namespace PhotoToss.Core
             request.AddParameter("dl", "https://app.goheard.com/");
             request.AddParameter("_s", counter++);
 
-            restClient.Execute(request).ContinueWith((theTask) =>
+            restClient.ExecuteAsync(request, (response) =>
             {
-                var response = theTask.Result;
                 if (response.StatusCode == HttpStatusCode.Accepted)
                 {
-                    System.Diagnostics.Debug.WriteLine("OK.");
+                    System.Console.WriteLine("OK.");
                 }
             });
         }
 
         public void EndSession()
         {
-            RestRequest request = new RestRequest("collect", METHODPOST);
+            RestRequest request = new RestRequest("collect", Method.POST);
             //request.AddHeader("Accept", "*/*");
             request.AddHeader("User-Agent", userAgentStr);
             request.AddParameter("v", version);
@@ -138,12 +123,11 @@ namespace PhotoToss.Core
             request.AddParameter("dl", "https://app.goheard.com/");
             request.AddParameter("_s", counter++);
 
-            restClient.Execute(request).ContinueWith((theTask) =>
+            restClient.ExecuteAsync(request, (response) =>
             {
-                var response = theTask.Result;
                 if (response.StatusCode == HttpStatusCode.Accepted)
                 {
-                    System.Diagnostics.Debug.WriteLine("OK.");
+                    System.Console.WriteLine("OK.");
                 }
             });
         }
@@ -158,7 +142,7 @@ namespace PhotoToss.Core
             PostEvent("sessionerror", infoString);
         }
 
-    
+
         public void PostFormatError(string infoString)
         {
             PostEvent("formaterror", infoString);

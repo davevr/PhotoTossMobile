@@ -78,7 +78,7 @@ namespace PhotoToss.AndroidApp
 				double latitude = MainActivity._lastLocation.Latitude;
 
 
-				PhotoTossRest.Instance.UploadImage (photoStream, caption, longitude, latitude, (newRec) => {
+				PhotoTossRest.Instance.UploadImage (photoStream, longitude, latitude, (newRec) => {
 
 					if (newRec != null) {
                         // now we upload a thumbnail immediately

@@ -69,6 +69,9 @@
     </MtouchI18n>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="JVMenuPopover">
+      <HintPath>..\Components\jvmenupopover-1.1\lib\ios-unified\JVMenuPopover.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Xml" />
     <Reference Include="System.Core" />
@@ -99,30 +102,59 @@
     <Reference Include="Flurry.Analytics.iOS">
       <HintPath>..\packages\Flurry.Analytics.1.2.1\lib\Xamarin.iOS10\Flurry.Analytics.iOS.dll</HintPath>
     </Reference>
-    <Reference Include="JVMenuPopover">
-      <HintPath>..\Components\jvmenupopover-1.1\lib\ios-unified\JVMenuPopover.dll</HintPath>
-    </Reference>
   </ItemGroup>
   <ItemGroup>
     <ImageAsset Include="Resources\Images.xcassets\AppIcons.appiconset\Contents.json">
       <InProject>false</InProject>
     </ImageAsset>
-    <ImageAsset Include="Resources\Images.xcassets\AppIcons.appiconset\appicon-29.png" />
-    <ImageAsset Include="Resources\Images.xcassets\AppIcons.appiconset\appicon-58.png" />
-    <ImageAsset Include="Resources\Images.xcassets\AppIcons.appiconset\appicon-87.png" />
-    <ImageAsset Include="Resources\Images.xcassets\AppIcons.appiconset\appicon-80.png" />
-    <ImageAsset Include="Resources\Images.xcassets\AppIcons.appiconset\appicon-120.png" />
-    <ImageAsset Include="Resources\Images.xcassets\AppIcons.appiconset\appicon-57.png" />
-    <ImageAsset Include="Resources\Images.xcassets\AppIcons.appiconset\appicon-114.png" />
-    <ImageAsset Include="Resources\Images.xcassets\AppIcons.appiconset\appicon-180.png" />
-    <ImageAsset Include="Resources\Images.xcassets\CameraIcon.imageset\Contents.json" />
-    <ImageAsset Include="Resources\Images.xcassets\CatchIcon.imageset\Contents.json" />
-    <ImageAsset Include="Resources\Images.xcassets\CameraIcon.imageset\cameraIcon-25.png" />
-    <ImageAsset Include="Resources\Images.xcassets\CameraIcon.imageset\cameraIcon-50.png" />
-    <ImageAsset Include="Resources\Images.xcassets\CameraIcon.imageset\cameraIcon-75.png" />
-    <ImageAsset Include="Resources\Images.xcassets\CatchIcon.imageset\catchIcon-25.png" />
-    <ImageAsset Include="Resources\Images.xcassets\CatchIcon.imageset\catchIcon-50.png" />
-    <ImageAsset Include="Resources\Images.xcassets\CatchIcon.imageset\catchIcon-75.png" />
+    <ImageAsset Include="Resources\Images.xcassets\AppIcons.appiconset\appicon-29.png">
+      <InProject>false</InProject>
+    </ImageAsset>
+    <ImageAsset Include="Resources\Images.xcassets\AppIcons.appiconset\appicon-58.png">
+      <InProject>false</InProject>
+    </ImageAsset>
+    <ImageAsset Include="Resources\Images.xcassets\AppIcons.appiconset\appicon-87.png">
+      <InProject>false</InProject>
+    </ImageAsset>
+    <ImageAsset Include="Resources\Images.xcassets\AppIcons.appiconset\appicon-80.png">
+      <InProject>false</InProject>
+    </ImageAsset>
+    <ImageAsset Include="Resources\Images.xcassets\AppIcons.appiconset\appicon-120.png">
+      <InProject>false</InProject>
+    </ImageAsset>
+    <ImageAsset Include="Resources\Images.xcassets\AppIcons.appiconset\appicon-57.png">
+      <InProject>false</InProject>
+    </ImageAsset>
+    <ImageAsset Include="Resources\Images.xcassets\AppIcons.appiconset\appicon-114.png">
+      <InProject>false</InProject>
+    </ImageAsset>
+    <ImageAsset Include="Resources\Images.xcassets\AppIcons.appiconset\appicon-180.png">
+      <InProject>false</InProject>
+    </ImageAsset>
+    <ImageAsset Include="Resources\Images.xcassets\CameraIcon.imageset\Contents.json">
+      <InProject>false</InProject>
+    </ImageAsset>
+    <ImageAsset Include="Resources\Images.xcassets\CatchIcon.imageset\Contents.json">
+      <InProject>false</InProject>
+    </ImageAsset>
+    <ImageAsset Include="Resources\Images.xcassets\CameraIcon.imageset\cameraIcon-25.png">
+      <InProject>false</InProject>
+    </ImageAsset>
+    <ImageAsset Include="Resources\Images.xcassets\CameraIcon.imageset\cameraIcon-50.png">
+      <InProject>false</InProject>
+    </ImageAsset>
+    <ImageAsset Include="Resources\Images.xcassets\CameraIcon.imageset\cameraIcon-75.png">
+      <InProject>false</InProject>
+    </ImageAsset>
+    <ImageAsset Include="Resources\Images.xcassets\CatchIcon.imageset\catchIcon-25.png">
+      <InProject>false</InProject>
+    </ImageAsset>
+    <ImageAsset Include="Resources\Images.xcassets\CatchIcon.imageset\catchIcon-50.png">
+      <InProject>false</InProject>
+    </ImageAsset>
+    <ImageAsset Include="Resources\Images.xcassets\CatchIcon.imageset\catchIcon-75.png">
+      <InProject>false</InProject>
+    </ImageAsset>
   </ItemGroup>
   <ItemGroup>
     <InterfaceDefinition Include="Resources\LaunchScreen.xib" />
@@ -213,12 +245,7 @@
       <Visible>False</Visible>
     </XamarinComponentReference>
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="PhotoTossCore\" />
-    <Folder Include="ViewControllers\" />
-    <Folder Include="Views\" />
-    <Folder Include="Helpers\" />
-  </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
     <BundleResource Include="Resources\about-48%402x.png" />
     <BundleResource Include="Resources\ask_question-48%402x.png" />

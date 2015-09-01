@@ -3,11 +3,13 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.IO;
-using RestSharp.Portable;
-using ServiceStack;
-//using ServiceStack.Reflection;
+using System.Collections.Specialized;
+using System.Text;
+using RestSharp;
+using System.Runtime.Serialization;
 using ServiceStack.Text;
-
+using System.Threading.Tasks;
+using Xamarin.Facebook;
 
 namespace PhotoToss.Core
 {
@@ -15,28 +17,23 @@ namespace PhotoToss.Core
     public delegate void PhotoRecord_callback(PhotoRecord theResult);
     public delegate void User_callback(User theResult);
     public delegate void String_callback(String theResult);
-	public delegate void Toss_callback(TossRecord theResult);
+    public delegate void Toss_callback(TossRecord theResult);
 
     public class PhotoTossRest
     {
         private RestClient apiClient;
         private static PhotoTossRest _singleton = null;
-		private string serverURL = "10.0.3.2";
-		private string apiPath = "http://phototoss-server-01.appspot.com/api/"; //"http://10.0.3.2:8080/api/";  //"http://localhost:8080/api/";  //"http://phototoss-server-01.appspot.com/api/";//"http://127.0.0.1:8080/api/"; //"http://phototoss-server-01.appspot.com/api/";//"http://www.photostore.com/api/";
+        private string apiPath = "http://phototoss-server-01.appspot.com/api/";  //"http://localhost:8080/api/";  //"http://phototoss-server-01.appspot.com/api/";//"http://127.0.0.1:8080/api/"; //"http://phototoss-server-01.appspot.com/api/";//"http://www.photostore.com/api/";
         //private Random rndBase = new Random();
         private string _uploadURL;
-		private string _catchURL;
+        private string _catchURL;
         private string _userImageURL;
-		private User _currentUser = null;
-		public PhotoRecord CurrentImage { get; set; }
-		private bool runningLocal = false;
-   
-        private System.Net.Http.HttpMethod METHODPOST = System.Net.Http.HttpMethod.Post;
-        private System.Net.Http.HttpMethod METHODGET = System.Net.Http.HttpMethod.Get;
-
+        private User _currentUser = null;
+        public PhotoRecord CurrentImage { get; set; }
+        
         public PhotoTossRest()
         {
-            System.Diagnostics.Debug.WriteLine("Using Production Server");
+            System.Console.WriteLine("Using Production Server");
             apiClient = new RestClient(apiPath);
             apiClient.CookieContainer = new CookieContainer();
         }
@@ -51,317 +48,221 @@ namespace PhotoToss.Core
             }
         }
 
-		public User CurrentUser
-		{
-			get { return _currentUser; }
-		}
+        public User CurrentUser
+        {
+            get { return _currentUser; }
+        }
 
-		public void GetUserProfileImage(long userId, String_callback callback)
-		{
-			string fullURL = "user/info/";
-
-			RestRequest request = new RestRequest(fullURL, METHODGET);
-			request.AddParameter("id", userId);
-
-            apiClient.Execute<User>(request).ContinueWith((theTask) =>
-            {
-                var response = theTask.Result;
-                if (response == null)
-                    callback(null);
-                else if (response.StatusCode == HttpStatusCode.OK)
-                {
-                    User theUser = response.Data;
-
-                    callback(theUser.imageurl);
-                }
-                else
-                    callback(null);
-            });
-
-            /*
-            apiClient.ExecuteAsync<User>(request, (response) =>
-                {
-                    if (response == null)
-                        callback(null);
-                    else if (response.StatusCode == HttpStatusCode.OK)
-                    {
-                        User theUser = response.Data;
-
-                        callback(theUser.imageurl);
-                    }
-                    else
-                        callback(null);
-                });
-                */
+        public string GetUserProfileImage(string username)
+        {
+            if (!String.IsNullOrEmpty(username))
+             return "https://graph.facebook.com/" + username + "/picture?type=square";
+            else
+                return "https://s3-us-west-2.amazonaws.com/app.goheard.com/images/unknown-user.png";
         }
 
         public void GetUserImages(PhotoRecordList_callback callback)
         {
-			string fullURL = "images";
+            string fullURL = "images";
 
-			RestRequest request = new RestRequest(fullURL, METHODGET);
+            RestRequest request = new RestRequest(fullURL, Method.GET);
 
-			apiClient.Execute<List<PhotoRecord>>(request).ContinueWith((theTask) =>
-                {
-                        var response = theTask.Result;
-                        if (response == null)
-						return;
-					if (response.StatusCode == HttpStatusCode.OK)
-					{
-						List<PhotoRecord> imageList = response.Data;
-
-						//imageList.Sort(objListOrder.OrderBy(o=>o.OrderDate).ToList();
-
-						callback(imageList.OrderByDescending(o => o.created).ToList());
-					}
-					else
-						callback(null);
-				});
-        }
-
-        public void Login(string username, string password, User_callback callback)
-        {
-			string fullURL = "user/login";
-
-			RestRequest request = new RestRequest(fullURL, METHODPOST);
-			request.AddParameter ("username", username);
-			request.AddParameter ("password", password);
-
-            apiClient.Execute<User>(request).ContinueWith((theTask) =>
+            apiClient.ExecuteAsync<List<PhotoRecord>>(request, (response) =>
             {
-                var response = theTask.Result;
-                User newUser = response.Data;
+                if (response == null)
+                    return;
+                if (response.StatusCode == HttpStatusCode.OK)
+                {
+                    List<PhotoRecord> imageList = response.Data;
 
-					if (newUser != null)
-					{
-						_currentUser = newUser;
-						Utilities.SafeSaveSetting(Utilities.USERNAME, username);
-						Utilities.SafeSaveSetting(Utilities.PASSWORD, password);
-						callback(newUser);
-					}
-					else
-						callback(null);
-				});
+                    //imageList.Sort(objListOrder.OrderBy(o=>o.OrderDate).ToList();
+
+                    callback(imageList.OrderByDescending(o => o.created).ToList());
+                }
+                else
+                    callback(null);
+            });
         }
 
         public void Logout()
         {
             string fullURL = "user/logout";
 
-            RestRequest request = new RestRequest(fullURL, METHODPOST);
+            RestRequest request = new RestRequest(fullURL, Method.POST);
 
             apiClient.Execute(request);
 
             _currentUser = null;
         }
 
+
+
         public void FacebookLogin(string userId, string token, User_callback callback)
-		{
-			string fullURL = "user/facebooklogin";
+        {
+            string fullURL = "user/facebooklogin";
 
-			RestRequest request = new RestRequest(fullURL, METHODPOST);
-			request.AddParameter ("id", userId);
-			request.AddParameter ("token", token);
+            RestRequest request = new RestRequest(fullURL, Method.POST);
+            request.AddParameter("id", userId);
+            request.AddParameter("token", token);
 
-			apiClient.Execute<User>(request).ContinueWith((theTask) =>
-				{
-                    User newUser = null;
-                    try
+            apiClient.ExecuteAsync<User>(request, (response) =>
+                {
+                    User newUser = response.Data;
+                    if (newUser != null)
                     {
-                        var response = theTask.Result;
-                        newUser = response.Data;
+                        _currentUser = newUser;
+                        callback(newUser);
                     }
-                    catch (Exception exp)
-                    {
-                     
-                    }
-					
+                    else
+                        callback(null);
+                });
+        }
 
-					if (newUser != null)
-					{
-						_currentUser = newUser;
-						callback(newUser);
-					}
-					else
-						callback(null);
-				});
-		}
-
-		public void CreateAccount(string username, string password, User_callback callback)
-		{
-			string fullURL = "user/create";
-
-			RestRequest request = new RestRequest(fullURL, METHODPOST);
-			request.AddParameter ("username", username);
-			request.AddParameter ("password", password);
-
-            apiClient.Execute<User>(request).ContinueWith((theTask) =>
-            {
-                var response = theTask.Result;
-                User newUser = response.Data;
-
-					if (newUser != null)
-					{
-						_currentUser = newUser;
-						Utilities.SafeSaveSetting(Utilities.USERNAME, username);
-						Utilities.SafeSaveSetting(Utilities.PASSWORD, password);
-						callback(newUser);
-					}
-					else
-						callback(null);
-				});
-		}
-
-		public void SetRecoveryEmail(string emailAddr, String_callback callback)
-		{
-			// to do...
-			callback(emailAddr);
-		}
+  
 
         public void GetUploadURL(String_callback callback)
         {
             string fullURL = "image/upload";
 
-            RestRequest request = new RestRequest(fullURL, METHODGET);
+            RestRequest request = new RestRequest(fullURL, Method.GET);
 
-            apiClient.Execute(request).ContinueWith(theTask =>
-                {
-                    var resp = theTask.Result;
-					_uploadURL = System.Text.Encoding.UTF8.GetString(resp.RawBytes);
-					if (_uploadURL.Contains("localhost") && !runningLocal)
-						_uploadURL = _uploadURL.Replace("localhost", serverURL);
-                    callback(_uploadURL);
-                });
+            apiClient.ExecuteAsync(request, (response) =>
+            {
+                _uploadURL = response.Content;
+                callback(_uploadURL);
+            });
+
+        }
+
+        public void GetUserImageUploadURL(String_callback callback)
+        {
+            string fullURL = "user/image";
+
+            RestRequest request = new RestRequest(fullURL, Method.GET);
+
+            apiClient.ExecuteAsync(request, (response) =>
+            {
+                _userImageURL = response.Content;
+                callback(_userImageURL);
+            });
+
+        }
+
+        public void GetCatchURL(String_callback callback)
+        {
+            string fullURL = "catch";
+
+            RestRequest request = new RestRequest(fullURL, Method.GET);
+
+            apiClient.ExecuteAsync(request, (response) =>
+            {
+                _catchURL = response.Content;
+                callback(_catchURL);
+            });
 
         }
 
 
-		public void GetCatchURL(String_callback callback)
-		{
-			string fullURL = "catch";
-
-			RestRequest request = new RestRequest(fullURL, METHODGET);
-
-            apiClient.Execute<string>(request).ContinueWith((theTask) =>
-            {
-                var response = theTask.Result;
-                _catchURL = response.Data;
-					callback(_catchURL);
-				});
-
-		}
 
 
-		public void GetImage(String_callback callback)
-		{
-			string fullURL = "image";
-
-			RestRequest request = new RestRequest(fullURL, METHODGET);
-
-            apiClient.Execute<string>(request).ContinueWith((theTask) =>
-            {
-                var response = theTask.Result;
-                _uploadURL = response.Data;
-					callback(_uploadURL);
-				});
-		}
-
-
-		public void StartToss(long imageId, int gameType, double longitude, double latitude, Toss_callback callback)
-		{
-			string fullURL = "toss";
-
-			RestRequest request = new RestRequest(fullURL, METHODPOST);
-			request.AddParameter ("image", imageId);
-			request.AddParameter ("game", gameType);
-			request.AddParameter ("long", longitude);
-			request.AddParameter ("lat", latitude);
-
-            apiClient.Execute<TossRecord>(request).ContinueWith((theTask) =>
-            {
-                var response = theTask.Result;
-                callback(response.Data);
-				});
-		}
-
-		public void CatchToss(Stream photoStream, long tossid, double longitude, double latitude, PhotoRecord_callback callback)
-		{
-			RestClient onetimeClient = new RestClient(_catchURL);
-			onetimeClient.CookieContainer = apiClient.CookieContainer;
-
-			var request = new RestRequest("", METHODPOST);
-			request.AddHeader("Accept", "*/*");
-			//request.AlwaysMultipartFormData = true;
-			request.AddParameter("toss", tossid);
-			request.AddParameter("long", longitude);
-			request.AddParameter("lat", latitude);
-			request.AddFile("file", ReadToEnd(photoStream), "file", new System.Net.Http.Headers.MediaTypeHeaderValue("image/jpeg"));
-
-            onetimeClient.Execute<string>(request).ContinueWith((theTask) =>
-            {
-                var response = theTask.Result;
-                if (response.StatusCode == HttpStatusCode.OK)
-					{
-						PhotoRecord newRec = response.Data.FromJson<PhotoRecord>();
-						callback(newRec);
-					}
-					else
-					{
-						//error ocured during upload
-						callback(null);
-					}
-				});
-		}
-
-		public void GetTossStatus(String_callback callback)
-		{
-			string fullURL = "toss/status";
-
-			RestRequest request = new RestRequest(fullURL, METHODGET);
-
-            apiClient.Execute<string>(request).ContinueWith((theTask) =>
-            {
-                var response = theTask.Result;
-                _uploadURL = response.Data;
-					callback(_uploadURL);
-				});
-
-		}
-
-
-
-        public void UploadImage(Stream photoStream, string caption, double longitude, double latitude, PhotoRecord_callback callback)
+        public void GetImage(String_callback callback)
         {
-			RestClient onetimeClient = new RestClient(_uploadURL);
-			onetimeClient.CookieContainer = apiClient.CookieContainer;
+            string fullURL = "image";
 
-            var request = new RestRequest("", METHODPOST);
+            RestRequest request = new RestRequest(fullURL, Method.GET);
+
+            apiClient.ExecuteAsync(request, (response) =>
+            {
+                _uploadURL = response.Content;
+                callback(_uploadURL);
+            });
+        }
+
+
+        public void StartToss(long imageId, int gameType, double longitude, double latitude, Toss_callback callback)
+        {
+            string fullURL = "toss";
+
+            RestRequest request = new RestRequest(fullURL, Method.POST);
+            request.AddParameter("image", imageId);
+            request.AddParameter("game", gameType);
+            request.AddParameter("long", longitude);
+            request.AddParameter("lat", latitude);
+
+            apiClient.ExecuteAsync<TossRecord>(request, (response) =>
+            {
+                callback(response.Data);
+            });
+        }
+
+        public void CatchToss(Stream photoStream, long tossid, double longitude, double latitude, PhotoRecord_callback callback)
+        {
+            RestClient onetimeClient = new RestClient(_catchURL);
+            onetimeClient.CookieContainer = apiClient.CookieContainer;
+
+            var request = new RestRequest("", Method.POST);
             request.AddHeader("Accept", "*/*");
             //request.AlwaysMultipartFormData = true;
-			if (!String.IsNullOrEmpty(caption))
-				request.AddParameter("caption", caption);
-			request.AddParameter("long", longitude);
-			request.AddParameter("lat", latitude);
-            request.AddFile("file", ReadToEnd(photoStream), "file", new System.Net.Http.Headers.MediaTypeHeaderValue("image/jpeg"));
+            request.AddParameter("toss", tossid);
+            request.AddParameter("long", longitude);
+            request.AddParameter("lat", latitude);
+            request.AddFile("file", ReadToEnd(photoStream), "file", "image/jpeg");
 
-            onetimeClient.Execute(request).ContinueWith((theTask) =>
+            onetimeClient.ExecuteAsync(request, (response) =>
             {
-				if (theTask.Status == System.Threading.Tasks.TaskStatus.Faulted)
-					callback(null);
-					else {
-						IRestResponse response = theTask.Result;
-		                if (response.StatusCode == HttpStatusCode.OK)
-		                {
-							string theData = System.Text.Encoding.UTF8.GetString(response.RawBytes);
-							PhotoRecord newRec = theData.FromJson<PhotoRecord>();
-		                    callback(newRec);
-		                }
-		                else
-		                {
-		                    //error ocured during upload
-		                    callback(null);
-		                }
-					}
+                if (response.StatusCode == HttpStatusCode.OK)
+                {
+                    PhotoRecord newRec = response.Content.FromJson<PhotoRecord>();
+                    callback(newRec);
+                }
+                else
+                {
+                    //error ocured during upload
+                    callback(null);
+                }
+            });
+        }
+
+        public void GetTossStatus(String_callback callback)
+        {
+            string fullURL = "toss/status";
+
+            RestRequest request = new RestRequest(fullURL, Method.GET);
+
+            apiClient.ExecuteAsync(request, (response) =>
+            {
+                _uploadURL = response.Content;
+                callback(_uploadURL);
+            });
+
+        }
+
+
+
+        public void UploadImage(Stream photoStream, double longitude, double latitude, PhotoRecord_callback callback)
+        {
+            RestClient onetimeClient = new RestClient(_uploadURL);
+            onetimeClient.CookieContainer = apiClient.CookieContainer;
+
+            var request = new RestRequest("", Method.POST);
+            request.AddHeader("Accept", "*/*");
+            //request.AlwaysMultipartFormData = true;
+            request.AddParameter("long", longitude);
+            request.AddParameter("lat", latitude);
+            request.AddFile("file", ReadToEnd(photoStream), "file", "image/jpeg");
+
+            onetimeClient.ExecuteAsync(request, (response) =>
+            {
+                if (response.StatusCode == HttpStatusCode.OK)
+                {
+                    PhotoRecord newRec = response.Content.FromJson<PhotoRecord>();
+                    callback(newRec);
+                }
+                else
+                {
+                    //error ocured during upload
+                    callback(null);
+                }
             });
         }
 
@@ -370,19 +271,18 @@ namespace PhotoToss.Core
             RestClient onetimeClient = new RestClient(_uploadURL);
             onetimeClient.CookieContainer = apiClient.CookieContainer;
 
-            var request = new RestRequest("", METHODPOST);
+            var request = new RestRequest("", Method.POST);
             request.AddHeader("Accept", "*/*");
             //request.AlwaysMultipartFormData = true;
             request.AddParameter("thumbnail", true);
             request.AddParameter("imageid", imageId);
-            request.AddFile("file", ReadToEnd(photoStream), "file", new System.Net.Http.Headers.MediaTypeHeaderValue("image/jpeg"));
+            request.AddFile("file", ReadToEnd(photoStream), "file", "image/jpeg");
 
-            onetimeClient.Execute(request).ContinueWith((theTask) =>
+            onetimeClient.ExecuteAsync(request, (response) =>
             {
-					IRestResponse response = theTask.Result;
                 if (response.StatusCode == HttpStatusCode.OK)
                 {
-						callback(System.Text.Encoding.UTF8.GetString(response.RawBytes));
+                    callback(response.Content);
                 }
                 else
                 {
@@ -393,30 +293,6 @@ namespace PhotoToss.Core
         }
 
 
-        public void UploadUserImage(Stream photoStream, String_callback callback)
-        {
-			RestClient onetimeClient = new RestClient(_userImageURL);
-            onetimeClient.CookieContainer = apiClient.CookieContainer;
-
-            var request = new RestRequest("", METHODPOST);
-            request.AddHeader("Accept", "*/*");
-            request.AddFile("file", ReadToEnd(photoStream), "file", new System.Net.Http.Headers.MediaTypeHeaderValue("image/jpeg"));
-
-
-            onetimeClient.Execute<string>(request).ContinueWith((theTask) =>
-            {
-                var response = theTask.Result;
-                if (response.StatusCode == HttpStatusCode.OK)
-                {
-                    callback(response.Data);
-                }
-                else
-                {
-                    //error ocured during upload
-                    callback(null);
-                }
-            });
-        }
 
 
         public byte[] ReadToEnd(System.IO.Stream stream)
