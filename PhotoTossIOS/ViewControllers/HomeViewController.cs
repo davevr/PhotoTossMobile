@@ -7,7 +7,6 @@ using JVMenuPopover;
 using ZXing.Mobile;
 
 using CoreGraphics;
-using UIKit;
 using AVFoundation;
 using CoreVideo;
 using CoreMedia;
@@ -34,6 +33,7 @@ namespace PhotoToss.iOSApp
 		LoginButton loginButton;
 		ProfilePictureView pictureView;
 		UILabel nameLabel;
+		public static string kTossCellName = "TossedImageCell";
 
 		public HomeViewController () : base ()
 		{
@@ -60,6 +60,16 @@ namespace PhotoToss.iOSApp
 				DoCatchPicture ();
 			};
 
+			// set up collection view
+			TossedImageCollectionView.RegisterNibForCell(UINib.FromName("TossedImageCell", NSBundle.MainBundle), kTossCellName);
+			TossedImageCollectionView.SetCollectionViewLayout (new UICollectionViewFlowLayout () {
+				SectionInset = new UIEdgeInsets (20,20,20,20),
+				ItemSize = new CGSize(144, 144),
+				ScrollDirection = UICollectionViewScrollDirection.Vertical,
+				MinimumInteritemSpacing = 50, // minimum spacing between cells
+				MinimumLineSpacing = 50 // minimum spacing between rows if ScrollDirection is Vertical or between columns if Horizontal
+			}, true);
+
 			// make the image view (temp)
 			ImageView = new UIImageView (new CGRect (20, 20, 280, 280));
 			ImageView.ContentMode = UIViewContentMode.ScaleAspectFill;
@@ -75,6 +85,7 @@ namespace PhotoToss.iOSApp
 
 		private void CompleteSignin ()
 		{
+			System.Console.WriteLine ("Completing Signin!");
 			// If you have been logged into the app before, ask for the your profile name
 			if (AccessToken.CurrentAccessToken != null) {
 				ShowOverlay (View, "Connecting to the Tosstopolis...");
@@ -90,13 +101,31 @@ namespace PhotoToss.iOSApp
 					var userInfo = result as NSDictionary;
 
 					PhotoToss.Core.PhotoTossRest.Instance.FacebookLogin (userInfo["id"].ToString(), AccessToken.CurrentAccessToken.TokenString, (theUser) => {
-
-						InvokeOnMainThread(() => {
-							HideOverlay();
+							RefreshGrid(() => {
+							System.Console.WriteLine ("About to hide overlay!");
+								HideOverlay();
+								
 						}); 
 					});
 				});
 			}
+		}
+
+		private void RefreshGrid(null_callback callback = null)
+		{
+			System.Console.WriteLine ("Refreshing Grid!");
+			PhotoTossRest.Instance.GetUserImages ((userImageList) => {
+				System.Console.WriteLine ("Got %d user images!", userImageList.Count);
+				TossedImageDataSource dataSource = new TossedImageDataSource();
+				dataSource.photoList = userImageList;
+				InvokeOnMainThread(() => {
+					TossedImageCollectionView.DataSource = dataSource;
+					TossedImageCollectionView.ReloadData();
+					if (callback != null)
+						callback ();
+				});
+			});
+
 		}
 
 		private void EnsureFacebookSignin()
@@ -117,7 +146,7 @@ namespace PhotoToss.iOSApp
 			});
 
 			// Set the Read and Publish permissions you want to get
-			loginButton = new LoginButton (new CGRect (80, 20, 220, 46)) {
+			loginButton = new LoginButton (new CGRect (80, 120, 220, 46)) {
 				LoginBehavior = LoginBehavior.Native,
 				ReadPermissions = readPermissions.ToArray ()
 			};
@@ -133,7 +162,9 @@ namespace PhotoToss.iOSApp
 				}
 
 				// Handle your successful login
-				loadingOverlay.RemoveFromSuperview();
+				RemoveFacebookOverlay();
+
+
 				CompleteSignin();
 			};
 
@@ -144,10 +175,10 @@ namespace PhotoToss.iOSApp
 			};
 
 			// The user image profile is set automatically once is logged in
-			pictureView = new ProfilePictureView (new CGRect (80, 100, 220, 220));
+			pictureView = new ProfilePictureView (new CGRect (80, 200, 220, 220));
 
 			// Create the label that will hold user's facebook name
-			nameLabel = new UILabel (new CGRect (20, 319, 280, 21)) {
+			nameLabel = new UILabel (new CGRect (20, 420, 280, 21)) {
 				TextAlignment = UITextAlignment.Center,
 				BackgroundColor = UIColor.Clear
 			};
@@ -158,6 +189,16 @@ namespace PhotoToss.iOSApp
 			View.AddSubview (loginButton);
 			View.AddSubview (pictureView);
 			View.AddSubview (nameLabel);
+		}
+
+		private void RemoveFacebookOverlay()
+		{
+			InvokeOnMainThread (() => {
+				loadingOverlay.RemoveFromSuperview();
+				loginButton.RemoveFromSuperview();
+				pictureView.RemoveFromSuperview();
+				nameLabel.RemoveFromSuperview();
+			});
 		}
 
 		private void DoTakePicture()
@@ -186,10 +227,10 @@ namespace PhotoToss.iOSApp
 
 			UIImage imageForUploading =  UIImageHelper.ScaleAndRotateImage(eventArgs.OriginalImage);
 			DateTime now = DateTime.Now;
-			string imageName = String.Format ("{0}_{1}.jpg", now.ToLongDateString(), PhotoTossRest.Instance.CurrentUser.id);
+			//string imageName = String.Format ("{0}_{1}.jpg", now.ToLongDateString(), PhotoTossRest.Instance.CurrentUser.id);
 
 			PhotoTossRest.Instance.GetUploadURL ((theUrl) => {
-				PhotoTossRest.Instance.UploadImage (imageForUploading.AsJPEG ().AsStream (), "", curLoc.Longitude, curLoc.Latitude, (theRecord) => {
+				PhotoTossRest.Instance.UploadImage (imageForUploading.AsJPEG ().AsStream (), curLoc.Longitude, curLoc.Latitude, (theRecord) => {
 				
 					InvokeOnMainThread(() => {
 						((UIImagePickerController)sender).DismissViewController (true, () => {

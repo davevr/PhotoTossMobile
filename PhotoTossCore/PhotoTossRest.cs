@@ -9,7 +9,11 @@ using RestSharp;
 using System.Runtime.Serialization;
 using ServiceStack.Text;
 using System.Threading.Tasks;
+#if ANDROID
 using Xamarin.Facebook;
+#elif IOS
+using Facebook;
+#endif
 
 namespace PhotoToss.Core
 {
@@ -18,6 +22,7 @@ namespace PhotoToss.Core
     public delegate void User_callback(User theResult);
     public delegate void String_callback(String theResult);
     public delegate void Toss_callback(TossRecord theResult);
+	public delegate void null_callback();
 
     public class PhotoTossRest
     {

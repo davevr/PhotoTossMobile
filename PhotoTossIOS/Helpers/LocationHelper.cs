@@ -62,8 +62,14 @@ namespace PhotoToss.iOSApp
 
 		private static void UpdateLocation(CLLocation location)
 		{
+			try {
 			_longitude = location.Coordinate.Longitude.ToString();
 			_latitude = location.Coordinate.Latitude.ToString();
+			}
+			catch (Exception exp) {
+				_longitude = "0";
+				_latitude = "0";
+			}
 			_lastUpdated = DateTime.Now;           
 		}
 

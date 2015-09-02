@@ -188,6 +188,7 @@ namespace PhotoToss.AndroidApp
 
 		                });
 				}
+
                 captionText.Text = curRec.caption;
 				Koush.UrlImageViewHelper.SetUrlDrawable (imageView, curRec.imageUrl + "=s" + itemWidth.ToString(), Resource.Drawable.ic_camera);
 

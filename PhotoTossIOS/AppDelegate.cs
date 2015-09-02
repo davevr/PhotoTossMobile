@@ -51,8 +51,6 @@ namespace PhotoToss.iOSApp
 
 		private void ConfigNavMenu()
 		{
-			UIStoryboard board = UIStoryboard.FromName ("Main", null);
-
 			//create the initial view controller
 			//var rootController = (UIViewController)board.InstantiateViewController ("HomeViewController");
 			var rootController = new HomeViewController();
