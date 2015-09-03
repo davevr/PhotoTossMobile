@@ -1,21 +1,54 @@
-﻿<?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="4510" systemVersion="13B42" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES">
-	<dependencies>
-		<plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="3742" />
-	</dependencies>
-	<objects>
-		<placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="TossViewController">
-			<connections>
-				<outlet property="view" destination="iN0-l3-epB" id="kCW-yf-GMq" />
-			</connections>
-		</placeholder>
-		<placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder" />
-		<view contentMode="scaleToFill" id="iN0-l3-epB">
-			<rect key="frame" x="0.0" y="0.0" width="320" height="568" />
-			<autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES" />
-			<color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite" />
-			<simulatedStatusBarMetrics key="simulatedStatusBarMetrics" />
-			<simulatedScreenMetrics key="simulatedDestinationMetrics" type="retina4" />
-		</view>
-	</objects>
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="7706" systemVersion="14F27" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES">
+    <dependencies>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="7703"/>
+        <capability name="Aspect ratio constraints" minToolsVersion="5.1"/>
+    </dependencies>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="TossViewController">
+            <connections>
+                <outlet property="DoneBtn" destination="ytp-PI-YSc" id="VBe-pb-UjC"/>
+                <outlet property="TossImageView" destination="RI5-qF-ews" id="9Mk-Nq-yQM"/>
+                <outlet property="view" destination="iN0-l3-epB" id="kCW-yf-GMq"/>
+            </connections>
+        </placeholder>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <view contentMode="scaleToFill" id="iN0-l3-epB">
+            <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
+            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+            <subviews>
+                <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="RI5-qF-ews">
+                    <rect key="frame" x="0.0" y="0.0" width="320" height="320"/>
+                    <constraints>
+                        <constraint firstAttribute="width" secondItem="RI5-qF-ews" secondAttribute="height" multiplier="1:1" id="Ahc-XD-wzG"/>
+                    </constraints>
+                </imageView>
+                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="ytp-PI-YSc">
+                    <rect key="frame" x="102" y="501" width="120" height="30"/>
+                    <color key="backgroundColor" red="0.0" green="1" blue="0.086479052200000003" alpha="1" colorSpace="calibratedRGB"/>
+                    <constraints>
+                        <constraint firstAttribute="height" constant="30" id="nSy-e2-62i"/>
+                        <constraint firstAttribute="width" constant="120" id="xg5-jk-SGJ"/>
+                    </constraints>
+                    <color key="tintColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
+                    <state key="normal" title="Done">
+                        <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                    </state>
+                </button>
+            </subviews>
+            <color key="backgroundColor" white="0.33333333333333331" alpha="1" colorSpace="calibratedWhite"/>
+            <constraints>
+                <constraint firstItem="RI5-qF-ews" firstAttribute="top" secondItem="iN0-l3-epB" secondAttribute="top" id="Khm-Gj-iwB"/>
+                <constraint firstItem="RI5-qF-ews" firstAttribute="leading" secondItem="iN0-l3-epB" secondAttribute="leading" id="NCn-dQ-gb3"/>
+                <constraint firstAttribute="bottom" secondItem="ytp-PI-YSc" secondAttribute="bottom" constant="37" id="P4D-kN-es1"/>
+                <constraint firstAttribute="trailing" secondItem="RI5-qF-ews" secondAttribute="trailing" id="VPa-OY-4Lf"/>
+                <constraint firstAttribute="centerX" secondItem="ytp-PI-YSc" secondAttribute="centerX" constant="-2" id="lxH-FA-NF6"/>
+            </constraints>
+        </view>
+    </objects>
+    <simulatedMetricsContainer key="defaultSimulatedMetrics">
+        <simulatedStatusBarMetrics key="statusBar"/>
+        <simulatedOrientationMetrics key="orientation"/>
+        <simulatedScreenMetrics key="destination" type="retina4"/>
+    </simulatedMetricsContainer>
 </document>

@@ -49,7 +49,17 @@ namespace PhotoToss.iOSApp
 			// Perform any additional setup after loading the view, typically from a nib.
 			var tossBtn = new UIBarButtonItem ("Toss", UIBarButtonItemStyle.Plain, (sender, e) => {
 
-				System.Console.WriteLine("Toss it baby!!");
+				TossViewController tossViewer = new TossViewController();
+				tossViewer.ModalInPopover = true;
+				tossViewer.ModalPresentationStyle = UIModalPresentationStyle.Popover;
+				tossViewer.ModalTransitionStyle = UIModalTransitionStyle.CoverVertical;
+				if (tossViewer != null) {
+					this.NavigationController.PresentViewController(tossViewer, true, () =>
+						{
+							// init the controller if needed...
+
+						});
+				}
 			});
 
 			NavigationItem.RightBarButtonItem = tossBtn;
