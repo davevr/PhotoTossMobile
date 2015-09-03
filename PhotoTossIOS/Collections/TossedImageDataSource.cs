@@ -38,6 +38,11 @@ namespace PhotoToss.iOSApp
 			return photoList.Count;
 		}
 
+		public PhotoRecord GetItem(NSIndexPath indexPath)
+		{
+			return photoList [(int)indexPath.Item];
+		}
+
 	}
 }
 

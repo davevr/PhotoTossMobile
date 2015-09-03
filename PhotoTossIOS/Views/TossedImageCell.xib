@@ -17,10 +17,10 @@
                         <rect key="frame" x="0.0" y="0.0" width="128" height="128"/>
                     </imageView>
                     <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="unknownperson.png" translatesAutoresizingMaskIntoConstraints="NO" id="FDo-iq-h4A">
-                        <rect key="frame" x="80" y="80" width="64" height="64"/>
+                        <rect key="frame" x="112" y="112" width="32" height="32"/>
                         <constraints>
-                            <constraint firstAttribute="width" constant="64" id="166-J3-qwj"/>
-                            <constraint firstAttribute="height" constant="64" id="CJO-tr-BNZ"/>
+                            <constraint firstAttribute="width" constant="32" id="166-J3-qwj"/>
+                            <constraint firstAttribute="height" constant="32" id="CJO-tr-BNZ"/>
                         </constraints>
                     </imageView>
                 </subviews>

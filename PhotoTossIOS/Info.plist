@@ -52,5 +52,7 @@
 	</array>
 	<key>NSLocationWhenInUseUsageDescription</key>
 	<string>true</string>
+	<key>accelerometer</key>
+	<string></string>
 </dict>
 </plist>

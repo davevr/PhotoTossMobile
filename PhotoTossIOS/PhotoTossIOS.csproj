@@ -100,7 +100,7 @@
       <HintPath>..\Components\restsharp-105.0.1.0\lib\ios-unified\RestSharp.MonoTouch.dll</HintPath>
     </Reference>
     <Reference Include="SDWebImage">
-      <HintPath>..\Components\sdwebimage-3.7.3.0\lib\ios-unified\SDWebImage.dll</HintPath>
+      <HintPath>..\Components\sdwebimage-3.7.1.4\lib\ios-unified\SDWebImage.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
@@ -165,6 +165,11 @@
     <InterfaceDefinition Include="ViewControllers\SettingsViewController.xib" />
     <InterfaceDefinition Include="ViewControllers\AboutViewController.xib" />
     <InterfaceDefinition Include="Views\TossedImageCell.xib" />
+    <InterfaceDefinition Include="ViewControllers\ImageDetailController.xib" />
+    <InterfaceDefinition Include="ViewControllers\TossViewController.xib" />
+    <InterfaceDefinition Include="ViewControllers\ImageViewController.xib" />
+    <InterfaceDefinition Include="ViewControllers\ImageSpreadViewController.xib" />
+    <InterfaceDefinition Include="ViewControllers\ImageStatsViewController.xib" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Info.plist" />
@@ -223,6 +228,26 @@
       <DependentUpon>TossedImageCell.cs</DependentUpon>
     </Compile>
     <Compile Include="Collections\TossedImageDataSource.cs" />
+    <Compile Include="ViewControllers\ImageDetailController.cs" />
+    <Compile Include="ViewControllers\ImageDetailController.designer.cs">
+      <DependentUpon>ImageDetailController.cs</DependentUpon>
+    </Compile>
+    <Compile Include="ViewControllers\TossViewController.cs" />
+    <Compile Include="ViewControllers\TossViewController.designer.cs">
+      <DependentUpon>TossViewController.cs</DependentUpon>
+    </Compile>
+    <Compile Include="ViewControllers\ImageViewController.cs" />
+    <Compile Include="ViewControllers\ImageViewController.designer.cs">
+      <DependentUpon>ImageViewController.cs</DependentUpon>
+    </Compile>
+    <Compile Include="ViewControllers\ImageSpreadViewController.cs" />
+    <Compile Include="ViewControllers\ImageSpreadViewController.designer.cs">
+      <DependentUpon>ImageSpreadViewController.cs</DependentUpon>
+    </Compile>
+    <Compile Include="ViewControllers\ImageStatsViewController.cs" />
+    <Compile Include="ViewControllers\ImageStatsViewController.designer.cs">
+      <DependentUpon>ImageStatsViewController.cs</DependentUpon>
+    </Compile>
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\iOS\Xamarin.iOS.CSharp.targets" />
   <ItemGroup>
@@ -247,7 +272,7 @@
       <Visible>False</Visible>
     </XamarinComponentReference>
     <XamarinComponentReference Include="sdwebimage">
-      <Version>3.7.3.0</Version>
+      <Version>3.7.1.4</Version>
       <Visible>False</Visible>
     </XamarinComponentReference>
   </ItemGroup>

@@ -44,6 +44,9 @@ namespace PhotoToss.iOSApp
 			#endif
 
 			ConfigNavMenu ();
+			UINavigationBar.Appearance.TintColor = UIColor.Green;
+			UINavigationBar.Appearance.BarTintColor = UIColor.White;
+			UINavigationBar.Appearance.BackgroundColor = UIColor.White;
 
 			// This method verifies if you have been logged into the app before, and keep you logged in after you reopen or kill your app.
 			return ApplicationDelegate.SharedInstance.FinishedLaunching (app, options);

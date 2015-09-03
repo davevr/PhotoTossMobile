@@ -732,7 +732,7 @@ namespace PhotoToss.AndroidApp
             PhotoTossRest.Instance.GetUploadURL((theURL) => {
                 using (System.IO.MemoryStream photoStream = new System.IO.MemoryStream())
                 {
-                    Bitmap scaledBitmap = scaledBitmap = BitmapHelper.LoadAndResizeBitmap(MainActivity._file.AbsolutePath, MAX_IMAGE_SIZE);
+                    Bitmap scaledBitmap = BitmapHelper.LoadAndResizeBitmap(MainActivity._file.AbsolutePath, MAX_IMAGE_SIZE);
                     scaledBitmap.Compress(Bitmap.CompressFormat.Jpeg, 90, photoStream);
                     photoStream.Flush();
 

@@ -17,23 +17,29 @@ using PhotoToss.Core;
 
 using Facebook.LoginKit;
 using Facebook.CoreKit;
+using CoreMotion;
 
 
 namespace PhotoToss.iOSApp
 {
-	public partial class HomeViewController : JVMenuViewController
+	public partial class HomeViewController : JVMenuViewController, IUICollectionViewDelegate
 	{
 		public static AVCaptureSession session;
+		public static PhotoRecord CurrentPhotoRecord { get; set; }
 		public static UIImageView ImageView;
 		OutputRecorder outputRecorder;
 		DispatchQueue queue;
 		private UIView loadingOverlay = null;
 		List<string> readPermissions = new List<string> { "public_profile" };
-
+		CMMotionManager motionManager = null;
+		private double maxAcc = 0.0001f;
+		private double maxSpeed = 0.1f;
+		private double maxRot = Math.PI / 4;
 		LoginButton loginButton;
 		ProfilePictureView pictureView;
 		UILabel nameLabel;
 		public static string kTossCellName = "TossedImageCell";
+		private List<double> dataList = new List<double> ();
 
 		public HomeViewController () : base ()
 		{
@@ -45,6 +51,7 @@ namespace PhotoToss.iOSApp
 			base.DidReceiveMemoryWarning ();
 			
 			// Release any cached data, images, etc that aren't in use.
+
 		}
 
 		public override void ViewDidLoad ()
@@ -63,12 +70,14 @@ namespace PhotoToss.iOSApp
 			// set up collection view
 			TossedImageCollectionView.RegisterNibForCell(UINib.FromName("TossedImageCell", NSBundle.MainBundle), kTossCellName);
 			TossedImageCollectionView.SetCollectionViewLayout (new UICollectionViewFlowLayout () {
-				SectionInset = new UIEdgeInsets (20,20,20,20),
+				SectionInset = new UIEdgeInsets (50,20,20,20),
 				ItemSize = new CGSize(144, 144),
 				ScrollDirection = UICollectionViewScrollDirection.Vertical,
-				MinimumInteritemSpacing = 50, // minimum spacing between cells
-				MinimumLineSpacing = 50 // minimum spacing between rows if ScrollDirection is Vertical or between columns if Horizontal
+				MinimumInteritemSpacing = 24, // minimum spacing between cells
+				MinimumLineSpacing = 24 // minimum spacing between rows if ScrollDirection is Vertical or between columns if Horizontal
 			}, true);
+
+			TossedImageCollectionView.Delegate = this;
 
 			// make the image view (temp)
 			ImageView = new UIImageView (new CGRect (20, 20, 280, 280));
@@ -81,6 +90,94 @@ namespace PhotoToss.iOSApp
 				EnsureFacebookSignin ();
 			else
 				CompleteSignin ();
+
+			try {
+				motionManager = new CMMotionManager();
+			}
+			catch (Exception ) {
+				// no motion manager available
+				motionManager = null;
+			}
+
+
+		}
+
+		[Export ("collectionView:didSelectItemAtIndexPath:")]
+		public void ItemSelected (UIKit.UICollectionView collectionView, Foundation.NSIndexPath indexPath)
+		{
+			CurrentPhotoRecord = ((TossedImageDataSource)TossedImageCollectionView.DataSource).GetItem (indexPath);
+
+			ImageViewController imageViewer = new ImageViewController ();
+			if (imageViewer != null) {
+				
+				this.NavigationController.PushViewController (imageViewer, true);
+			}
+		}
+
+		public override void ViewDidAppear (bool animated)
+		{
+			if (motionManager != null)
+				motionManager.StartAccelerometerUpdates (NSOperationQueue.CurrentQueue, MotionCallback);
+			base.ViewDidAppear (animated);
+		}
+
+		public override void ViewDidDisappear (bool animated)
+		{
+			if (motionManager != null)
+				motionManager.StopAccelerometerUpdates ();
+			base.ViewDidDisappear (animated);
+		}
+
+		private void MotionCallback(CMAccelerometerData data, NSError theErr)
+		{
+			double newRot = -data.Acceleration.X;
+			double targetRot = 0;
+
+			dataList.Insert (0, newRot);
+			if (dataList.Count > 10)
+				dataList.RemoveAt (10);
+			
+			foreach (double curVal in dataList) {
+				targetRot += curVal;
+			}
+			targetRot /= dataList.Count;
+			targetRot = Math.Round(targetRot, 2);
+
+			InvokeOnMainThread (() => {
+				foreach (TossedImageCell curCell in TossedImageCollectionView.VisibleCells) 
+				//if (TossedImageCollectionView.VisibleCells.Length > 0)
+				{
+					//TossedImageCell curCell = (TossedImageCell)TossedImageCollectionView.VisibleCells[0];
+
+					if (curCell.Rotation != targetRot)
+					{
+						if (curCell.Rotation < targetRot) {
+							curCell.RotationSpeed += maxAcc;
+							if (curCell.RotationSpeed > maxSpeed)
+								curCell.RotationSpeed = maxSpeed;
+						}
+						else {
+							curCell.RotationSpeed -= maxAcc;
+							if (curCell.RotationSpeed < -maxSpeed)
+								curCell.RotationSpeed = -maxSpeed;
+						}
+						curCell.Rotation += curCell.RotationSpeed;
+						if (curCell.Rotation > maxRot) {
+							curCell.Rotation = maxRot;
+							curCell.RotationSpeed = 0;
+						}
+						else if (curCell.Rotation < -maxRot) {
+							curCell.Rotation = -maxRot;
+							curCell.RotationSpeed = 0;
+						}
+						curCell.Rotation = Math.Round(curCell.Rotation, 2);
+						curCell.Rotation = targetRot;
+						curCell.Transform = CGAffineTransform.MakeRotation ((nfloat)curCell.Rotation);
+					}
+
+				}
+			});
+
 		}
 
 		private void CompleteSignin ()
@@ -227,21 +324,35 @@ namespace PhotoToss.iOSApp
 
 			UIImage imageForUploading =  UIImageHelper.ScaleAndRotateImage(eventArgs.OriginalImage);
 			DateTime now = DateTime.Now;
-			//string imageName = String.Format ("{0}_{1}.jpg", now.ToLongDateString(), PhotoTossRest.Instance.CurrentUser.id);
 
 			PhotoTossRest.Instance.GetUploadURL ((theUrl) => {
 				PhotoTossRest.Instance.UploadImage (imageForUploading.AsJPEG ().AsStream (), curLoc.Longitude, curLoc.Latitude, (theRecord) => {
-				
-					InvokeOnMainThread(() => {
-						((UIImagePickerController)sender).DismissViewController (true, () => {
-						});
-						// to do - update the collection view
-					});
 
+					PhotoTossRest.Instance.GetUploadURL((uploadStr) =>
+						{
+							UIImage thumbnail = CropImage(imageForUploading, new CGRect(0,0,64,64));
+
+							PhotoTossRest.Instance.UploadImageThumb(thumbnail.AsPNG().AsStream (), theRecord.id, (theStr) =>
+									{
+										if (!String.IsNullOrEmpty(theStr))
+											theRecord.thumbnailurl = theStr;
+									
+										InvokeOnMainThread(() => {
+											((UIImagePickerController)sender).DismissViewController (true, () => {
+												});
+										});
+									});
+						});
 				});
 			});
+		}
 
-
+		private UIImage CropImage(UIImage srcImage, CGRect rect) 
+		{ 
+			using (CGImage cr = srcImage.CGImage.WithImageInRect (rect)) {
+				UIImage cropped = UIImage.FromImage (cr);
+				return cropped;
+			}
 		}
 
 		private void ShowOverlay(UIView targetView, string prompt)
