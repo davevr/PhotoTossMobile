@@ -18,6 +18,7 @@ using PhotoToss.Core;
 using Facebook.LoginKit;
 using Facebook.CoreKit;
 using CoreMotion;
+using CoreLocation;
 
 
 namespace PhotoToss.iOSApp
@@ -70,11 +71,11 @@ namespace PhotoToss.iOSApp
 			// set up collection view
 			TossedImageCollectionView.RegisterNibForCell(UINib.FromName("TossedImageCell", NSBundle.MainBundle), kTossCellName);
 			TossedImageCollectionView.SetCollectionViewLayout (new UICollectionViewFlowLayout () {
-				SectionInset = new UIEdgeInsets (50,20,20,20),
-				ItemSize = new CGSize(144, 144),
+				SectionInset = new UIEdgeInsets (50,16,20,16),
+				ItemSize = new CGSize(120,120),
 				ScrollDirection = UICollectionViewScrollDirection.Vertical,
-				MinimumInteritemSpacing = 24, // minimum spacing between cells
-				MinimumLineSpacing = 24 // minimum spacing between rows if ScrollDirection is Vertical or between columns if Horizontal
+				MinimumInteritemSpacing = 8, // minimum spacing between cells
+				MinimumLineSpacing = 16 // minimum spacing between rows if ScrollDirection is Vertical or between columns if Horizontal
 			}, true);
 
 			TossedImageCollectionView.Delegate = this;
@@ -182,8 +183,6 @@ namespace PhotoToss.iOSApp
 
 		private void CompleteSignin ()
 		{
-			System.Console.WriteLine ("Completing Signin!");
-			// If you have been logged into the app before, ask for the your profile name
 			if (AccessToken.CurrentAccessToken != null) {
 				ShowOverlay (View, "Connecting to the Tosstopolis...");
 				var request = new GraphRequest ("/me?fields=name,id", null, AccessToken.CurrentAccessToken.TokenString, null, "GET");
@@ -198,11 +197,29 @@ namespace PhotoToss.iOSApp
 					var userInfo = result as NSDictionary;
 
 					PhotoToss.Core.PhotoTossRest.Instance.FacebookLogin (userInfo["id"].ToString(), AccessToken.CurrentAccessToken.TokenString, (theUser) => {
-							RefreshGrid(() => {
-							System.Console.WriteLine ("About to hide overlay!");
+							RefreshGrid(() => 
+							{
 								HideOverlay();
+								LocationHelper.StartLocationManager(CoreLocation.CLLocation.AccuracyBest);
+								InvokeInBackground(() => {
+									while (CLLocationManager.Status == CLAuthorizationStatus.NotDetermined)
+									{}
+									if (CLLocationManager.Status != CLAuthorizationStatus.AuthorizedWhenInUse)
+									{
+										InvokeOnMainThread(() => {
+											var alertView = new UIAlertView("Error", "PhotoToss will not run without location services.  Please enable the setting and try again.", null, "Ok", null);
+											alertView.Clicked += (object sender, UIButtonEventArgs e) => {
+												UIApplication.SharedApplication.OpenUrl(new NSUrl(UIApplication.OpenSettingsUrlString));
+											};
+											alertView.Show();
+											
+										});
+									}
+									LocationHelper.StopLocationManager();
+								});
+
 								
-						}); 
+							}); 
 					});
 				});
 			}

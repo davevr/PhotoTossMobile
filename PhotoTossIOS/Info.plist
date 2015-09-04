@@ -51,7 +51,7 @@
 		</dict>
 	</array>
 	<key>NSLocationWhenInUseUsageDescription</key>
-	<string>true</string>
+	<string>PhotoToss requires your location to track where your photos are being shared.</string>
 	<key>accelerometer</key>
 	<string></string>
 </dict>

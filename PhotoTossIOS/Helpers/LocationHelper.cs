@@ -1,6 +1,7 @@
 ﻿using System;
 using Foundation;
 using CoreLocation;
+using PhotoToss.Core;
 
 namespace PhotoToss.iOSApp
 {
@@ -11,6 +12,7 @@ namespace PhotoToss.iOSApp
 		private static string _longitude;
 		private static string _latitude;
 		private static DateTime _lastUpdated;
+		private static bool _ready = false;
 
 		public static event EventHandler LocationUpdated;
 
@@ -19,15 +21,21 @@ namespace PhotoToss.iOSApp
 		public static void StartLocationManager(double accuracy)
 		{
 			LocationManager = new CLLocationManager();
-			if (LocationManager.RespondsToSelector(new ObjCRuntime.Selector("requestWhenInUseAuthorization")))
-				LocationManager.RequestWhenInUseAuthorization();
+			if (LocationManager.RespondsToSelector (new ObjCRuntime.Selector ("requestWhenInUseAuthorization"))) {
+				LocationManager.RequestWhenInUseAuthorization ();
 
+			}
+			_ready = (CLLocationManager.Status == CLAuthorizationStatus.AuthorizedWhenInUse);
 			LocationManager.DistanceFilter = CLLocationDistance.FilterNone;
 			LocationManager.DesiredAccuracy = accuracy;
 			UpdateLocation(LocationManager.Location);
 			LocationManager.LocationsUpdated += LocationManager_LocationsUpdated;
 			LocationManager.StartUpdatingLocation();
+			LocationManager.AuthorizationChanged += (object sender, CLAuthorizationChangedEventArgs e) => 
+				{
+				_ready = (e.Status == CLAuthorizationStatus.AuthorizedWhenInUse);
 
+				};
 
 
 			_isTracking = true;
@@ -44,6 +52,13 @@ namespace PhotoToss.iOSApp
 				_isTracking = false;
 			}
 
+		}
+
+		public static bool LocationReady
+		{
+			get {
+				return _ready;
+			}
 		}
 
 		public static void Refresh()
