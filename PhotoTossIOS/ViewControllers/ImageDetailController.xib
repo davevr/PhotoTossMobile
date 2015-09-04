@@ -6,6 +6,8 @@
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="ImageDetailController">
             <connections>
+                <outlet property="ImageHeightConstraint" destination="GgN-sj-zg4" id="9GN-19-g7F"/>
+                <outlet property="ImageScroller" destination="gqY-cd-Gx2" id="J5K-4g-WNE"/>
                 <outlet property="LargeImageView" destination="lMH-Cn-fxy" id="iat-DN-Lue"/>
                 <outlet property="view" destination="iN0-l3-epB" id="kCW-yf-GMq"/>
             </connections>
@@ -15,17 +17,31 @@
             <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>
-                <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="lMH-Cn-fxy">
+                <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" ambiguous="YES" translatesAutoresizingMaskIntoConstraints="NO" id="gqY-cd-Gx2">
                     <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
-                    <color key="backgroundColor" red="0.0014397259830678307" green="0.36529356060606055" blue="0.035021480975008998" alpha="1" colorSpace="calibratedRGB"/>
-                </imageView>
+                    <subviews>
+                        <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="lMH-Cn-fxy">
+                            <rect key="frame" x="0.0" y="0.0" width="320" height="320"/>
+                            <color key="backgroundColor" red="0.0014397259830678307" green="0.36529356060606055" blue="0.035021480975008998" alpha="1" colorSpace="calibratedRGB"/>
+                            <constraints>
+                                <constraint firstAttribute="height" constant="320" id="GgN-sj-zg4"/>
+                            </constraints>
+                        </imageView>
+                    </subviews>
+                    <constraints>
+                        <constraint firstAttribute="width" secondItem="lMH-Cn-fxy" secondAttribute="width" id="NTr-Cj-ZfC"/>
+                        <constraint firstItem="lMH-Cn-fxy" firstAttribute="top" secondItem="gqY-cd-Gx2" secondAttribute="top" id="fju-bQ-5QY"/>
+                        <constraint firstItem="lMH-Cn-fxy" firstAttribute="leading" secondItem="gqY-cd-Gx2" secondAttribute="leading" id="wUo-mj-3IE"/>
+                        <constraint firstAttribute="trailing" secondItem="lMH-Cn-fxy" secondAttribute="trailing" id="zpH-4B-FAL"/>
+                    </constraints>
+                </scrollView>
             </subviews>
             <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
             <constraints>
-                <constraint firstItem="lMH-Cn-fxy" firstAttribute="top" secondItem="iN0-l3-epB" secondAttribute="top" id="0oI-zq-owv"/>
-                <constraint firstItem="lMH-Cn-fxy" firstAttribute="leading" secondItem="iN0-l3-epB" secondAttribute="leading" id="DKe-ki-Gg6"/>
-                <constraint firstAttribute="bottom" secondItem="lMH-Cn-fxy" secondAttribute="bottom" id="mE9-73-Sc6"/>
-                <constraint firstAttribute="trailing" secondItem="lMH-Cn-fxy" secondAttribute="trailing" id="mON-EO-lHY"/>
+                <constraint firstAttribute="bottom" secondItem="gqY-cd-Gx2" secondAttribute="bottom" id="EMy-if-Pxv"/>
+                <constraint firstItem="gqY-cd-Gx2" firstAttribute="leading" secondItem="iN0-l3-epB" secondAttribute="leading" id="fwF-yj-auW"/>
+                <constraint firstAttribute="trailing" secondItem="gqY-cd-Gx2" secondAttribute="trailing" id="pSL-QS-BWn"/>
+                <constraint firstItem="gqY-cd-Gx2" firstAttribute="top" secondItem="iN0-l3-epB" secondAttribute="top" id="uqc-gY-fQf"/>
             </constraints>
         </view>
     </objects>

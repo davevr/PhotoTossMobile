@@ -72,6 +72,7 @@ namespace PhotoToss.AndroidApp
 		public const string ConnectionString = "Endpoint=sb://phototossnotify-ns.servicebus.windows.net/;SharedAccessKeyName=DefaultListenSharedAccessSignature;SharedAccessKey=FwWsviEIwwCK5vSg0kNiKcJs9GKuz70mXxYBGDYIvIU=";
 		public const string NotificationHubPath = "phototossnotify";
 		private const string flurryId = "YS7CWBRTNVQN3HV7Y3N5";
+		private const string hockeyId = "8a9ce92b2889680033ff5c7edb65678a";
 		public LinearLayout loginView = null;
 		ProfileTracker profileTracker;
         private TextView promptText, actionPrompt;
@@ -255,7 +256,31 @@ namespace PhotoToss.AndroidApp
                 System.Console.WriteLine(something);
             }
 
+			// Register the crash manager before Initializing the trace writer
+			HockeyApp.CrashManager.Register (this, hockeyId); 
 
+			//Register to with the Update Manager
+			HockeyApp.UpdateManager.Register (this, hockeyId);
+
+			// Initialize the Trace Writer
+			HockeyApp.TraceWriter.Initialize ();
+
+			// Wire up Unhandled Expcetion handler from Android
+			AndroidEnvironment.UnhandledExceptionRaiser += (sender, args) => 
+			{
+				// Use the trace writer to log exceptions so HockeyApp finds them
+				HockeyApp.TraceWriter.WriteTrace(args.Exception);
+				args.Handled = true;
+			};
+
+			// Wire up the .NET Unhandled Exception handler
+			AppDomain.CurrentDomain.UnhandledException +=
+				(sender, args) => HockeyApp.TraceWriter.WriteTrace(args.ExceptionObject);
+
+			// Wire up the unobserved task exception handler
+			System.Threading.Tasks.TaskScheduler.UnobservedTaskException += 
+				(sender, args) => HockeyApp.TraceWriter.WriteTrace(args.Exception);
+			
             progressDlg = new ProgressDialog(this);
             progressDlg.SetProgressStyle(ProgressDialogStyle.Spinner);
 

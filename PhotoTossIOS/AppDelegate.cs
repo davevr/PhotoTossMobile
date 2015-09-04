@@ -6,6 +6,7 @@ using System.IO.IsolatedStorage;
 using System;
 using System.Collections.Generic;
 using JVMenuPopover;
+using HockeyApp;
 
 namespace PhotoToss.iOSApp
 {
@@ -24,6 +25,7 @@ namespace PhotoToss.iOSApp
 		string appId = "439651239569547";
 		string appName = "PhotoToss";
 		string flurryID = "KTC993B58WKMR9WK66G3";
+		string hockeyID = "41121ea9fd8f6c879122bb728a2488d9";
 		public static GoogleAnalytics   analytics = null;
 		public UINavigationController NavigationController {get; set;}
 
@@ -47,6 +49,30 @@ namespace PhotoToss.iOSApp
 			UINavigationBar.Appearance.TintColor = UIColor.Green;
 			UINavigationBar.Appearance.BarTintColor = UIColor.White;
 			UINavigationBar.Appearance.BackgroundColor = UIColor.White;
+
+			HockeyApp.Setup.EnableCustomCrashReporting (() => {
+
+				//Get the shared instance
+				var manager = BITHockeyManager.SharedHockeyManager;
+
+				//Configure it to use our APP_ID
+				manager.Configure (hockeyID);
+
+				//Start the manager
+				manager.StartManager ();
+
+				//Authenticate (there are other authentication options)
+				manager.Authenticator.AuthenticateInstallation ();
+
+				//Rethrow any unhandled .NET exceptions as native iOS 
+				// exceptions so the stack traces appear nicely in HockeyApp
+				AppDomain.CurrentDomain.UnhandledException += (sender, e) => 
+					Setup.ThrowExceptionAsNative(e.ExceptionObject);
+
+				System.Threading.Tasks.TaskScheduler.UnobservedTaskException += (sender, e) => 
+					Setup.ThrowExceptionAsNative(e.Exception);
+			});
+
 
 			// This method verifies if you have been logged into the app before, and keep you logged in after you reopen or kill your app.
 			return ApplicationDelegate.SharedInstance.FinishedLaunching (app, options);

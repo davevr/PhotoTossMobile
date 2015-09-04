@@ -5,6 +5,7 @@ using Foundation;
 using UIKit;
 using PhotoToss.Core;
 using SDWebImage;
+using CoreGraphics;
 
 
 namespace PhotoToss.iOSApp
@@ -29,11 +30,18 @@ namespace PhotoToss.iOSApp
 		public override void ViewDidLoad ()
 		{
 			base.ViewDidLoad ();
-
+			LargeImageView.ContentMode = UIViewContentMode.ScaleToFill;
 			// Perform any additional setup after loading the view, typically from a nib.
-			if ((LargeImageView != null) && (HomeViewController.CurrentPhotoRecord != null))
-				LargeImageView.SetImage(new NSUrl(HomeViewController.CurrentPhotoRecord.imageUrl + "=s1024"));
+			if ((LargeImageView != null) && (HomeViewController.CurrentPhotoRecord != null)) {
+				LargeImageView.SetImage(new NSUrl (HomeViewController.CurrentPhotoRecord.imageUrl + "=s1024"),
+					UIImage.FromBundle("placeholder"), ImageLoadComplete);
 
+			}
+		}
+
+		private void ImageLoadComplete(UIImage image, NSError theErr, SDImageCacheType cacheType, NSUrl theURL )
+		{
+			ResizeImage();
 		}
 
 
@@ -48,11 +56,28 @@ namespace PhotoToss.iOSApp
 				Title = "Tossed Image";
 
 			}
+
+
+		}
+
+		private void ResizeImage ()
+		{
+			CGSize imageSize = LargeImageView.Image.Size;
+			nfloat scale = imageSize.Height / imageSize.Width;
+			nfloat desiredHeight = LargeImageView.Bounds.Width * scale;
+			ImageHeightConstraint.Constant = desiredHeight;
+			ImageScroller.ContentSize = new CGSize( LargeImageView.Bounds.Width, desiredHeight);
 		}
 
 		public override bool PrefersStatusBarHidden ()
 		{
 			return true;
+		}
+
+		public override void DidRotate (UIInterfaceOrientation fromInterfaceOrientation)
+		{
+			base.DidRotate (fromInterfaceOrientation);
+			ResizeImage ();
 		}
 
 

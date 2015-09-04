@@ -29,7 +29,6 @@ namespace PhotoToss.iOSApp
 	{
 		public static AVCaptureSession session;
 		public static PhotoRecord CurrentPhotoRecord { get; set; }
-		public static UIImageView ImageView;
 		OutputRecorder outputRecorder;
 		DispatchQueue queue;
 		private UIView loadingOverlay = null;
@@ -84,12 +83,6 @@ namespace PhotoToss.iOSApp
 
 			TossedImageCollectionView.Delegate = this;
 
-			// make the image view (temp)
-			ImageView = new UIImageView (new CGRect (20, 20, 280, 280));
-			ImageView.ContentMode = UIViewContentMode.ScaleAspectFill;
-			View.Add (ImageView);
-			ImageView.Hidden = true;
-
 			// Ensure Facebook Signin
 			if (AccessToken.CurrentAccessToken == null)
 				EnsureFacebookSignin ();
@@ -135,8 +128,27 @@ namespace PhotoToss.iOSApp
 
 		private void MotionCallback(CMAccelerometerData data, NSError theErr)
 		{
-			double newRot = -data.Acceleration.X;
+			double newRot = 0;
 			double targetRot = 0;
+
+			switch (InterfaceOrientation)
+			{
+			case UIInterfaceOrientation.LandscapeLeft:
+				newRot = -data.Acceleration.Y;
+				break;
+			case UIInterfaceOrientation.LandscapeRight:
+				newRot = data.Acceleration.Y;
+				break;
+			case UIInterfaceOrientation.Portrait:
+				newRot = -data.Acceleration.X;
+				newRot += 0;
+				break;
+			case UIInterfaceOrientation.PortraitUpsideDown:
+				newRot = data.Acceleration.X;
+				newRot += Math.PI;
+				break;
+			}
+
 
 			dataList.Insert (0, newRot);
 			if (dataList.Count > 10)
@@ -150,10 +162,7 @@ namespace PhotoToss.iOSApp
 
 			InvokeOnMainThread (() => {
 				foreach (TossedImageCell curCell in TossedImageCollectionView.VisibleCells) 
-				//if (TossedImageCollectionView.VisibleCells.Length > 0)
 				{
-					//TossedImageCell curCell = (TossedImageCell)TossedImageCollectionView.VisibleCells[0];
-
 					if (curCell.Rotation != targetRot)
 					{
 						if (curCell.Rotation < targetRot) {
@@ -167,6 +176,7 @@ namespace PhotoToss.iOSApp
 								curCell.RotationSpeed = -maxSpeed;
 						}
 						curCell.Rotation += curCell.RotationSpeed;
+
 						if (curCell.Rotation > maxRot) {
 							curCell.Rotation = maxRot;
 							curCell.RotationSpeed = 0;
@@ -175,6 +185,7 @@ namespace PhotoToss.iOSApp
 							curCell.Rotation = -maxRot;
 							curCell.RotationSpeed = 0;
 						}
+
 						curCell.Rotation = Math.Round(curCell.Rotation, 2);
 						curCell.Rotation = targetRot;
 						curCell.Transform = CGAffineTransform.MakeRotation ((nfloat)curCell.Rotation);
@@ -423,7 +434,6 @@ namespace PhotoToss.iOSApp
 
 		private void CaptureOneFrame(image_callback callback)
 		{
-			ImageView.Hidden = false;
 			SetupCaptureSession (callback);
 		}
 
@@ -481,10 +491,7 @@ namespace PhotoToss.iOSApp
 		public void FinalizeCatch(UIImage image)
 		{
 			BeginInvokeOnMainThread (() => {
-				TryDispose (ImageView.Image);
-				ImageView.Hidden = false;
-				ImageView.Image = image;
-				ImageView.Transform = CGAffineTransform.MakeRotation ((float)Math.PI / 2);
+				ShowOverlay(View, "Tentacling those pixels...");
 				PhotoTossRest.Instance.GetCatchURL ((urlStr) => {
 					LocationHelper.StartLocationManager (CoreLocation.CLLocation.AccuracyBest);
 					LocationHelper.LocationResult curLoc = LocationHelper.GetLocationResult ();
@@ -495,7 +502,7 @@ namespace PhotoToss.iOSApp
 						{
 							InvokeOnMainThread(() => 
 								{
-									ImageView.Hidden = true;
+									HideOverlay();
 									if (newRec != null) 
 										AddNewImage(newRec);
 									else 
