@@ -23,6 +23,8 @@ using CoreLocation;
 
 namespace PhotoToss.iOSApp
 {
+	public delegate void image_callback(UIImage theImage);
+
 	public partial class HomeViewController : JVMenuViewController, IUICollectionViewDelegate
 	{
 		public static AVCaptureSession session;
@@ -41,6 +43,8 @@ namespace PhotoToss.iOSApp
 		UILabel nameLabel;
 		public static string kTossCellName = "TossedImageCell";
 		private List<double> dataList = new List<double> ();
+		private string catchResult;
+
 
 		public HomeViewController () : base ()
 		{
@@ -412,17 +416,18 @@ namespace PhotoToss.iOSApp
 			var result = await scanner.Scan(options, true);
 
 			if (result != null) {
-				CaptureOneFrame ();
+				catchResult = result.Text;
+				CaptureOneFrame (FinalizeCatch);
 			}
 		}
 
-		private void CaptureOneFrame()
+		private void CaptureOneFrame(image_callback callback)
 		{
 			ImageView.Hidden = false;
-			SetupCaptureSession ();
+			SetupCaptureSession (callback);
 		}
 
-		bool SetupCaptureSession ()
+		bool SetupCaptureSession (image_callback callback)
 		{
 			// configure the capture session for low resolution, change this if your code
 			// can cope with more data or volume
@@ -464,6 +469,7 @@ namespace PhotoToss.iOSApp
 			using (var output = new AVCaptureVideoDataOutput { WeakVideoSettings = settings.Dictionary }) {
 				queue = new CoreFoundation.DispatchQueue ("myQueue");
 				outputRecorder = new OutputRecorder ();
+				outputRecorder.callback = callback;
 				output.SetSampleBufferDelegate (outputRecorder, queue);
 				session.AddOutput (output);
 			}
@@ -472,18 +478,60 @@ namespace PhotoToss.iOSApp
 			return true;
 		}
 
+		public void FinalizeCatch(UIImage image)
+		{
+			BeginInvokeOnMainThread (() => {
+				TryDispose (ImageView.Image);
+				ImageView.Hidden = false;
+				ImageView.Image = image;
+				ImageView.Transform = CGAffineTransform.MakeRotation ((float)Math.PI / 2);
+				PhotoTossRest.Instance.GetCatchURL ((urlStr) => {
+					LocationHelper.StartLocationManager (CoreLocation.CLLocation.AccuracyBest);
+					LocationHelper.LocationResult curLoc = LocationHelper.GetLocationResult ();
+					LocationHelper.StopLocationManager ();
+					long tossId = long.Parse (catchResult.Substring (catchResult.LastIndexOf ("/") + 1));
+
+					PhotoTossRest.Instance.CatchToss (image.AsJPEG ().AsStream (), tossId, curLoc.Longitude, curLoc.Latitude, (newRec) => 
+						{
+							InvokeOnMainThread(() => 
+								{
+									ImageView.Hidden = true;
+									if (newRec != null) 
+										AddNewImage(newRec);
+									else 
+										new UIAlertView("Error", "Catch failed.  Please try again.", null, "dang", null).Show();
+								});
+
+						});
+				});
+
+			});
+		}
+
+		private void AddNewImage(PhotoRecord newRec)
+		{
+			((TossedImageDataSource)TossedImageCollectionView.DataSource).photoList.Insert (0, newRec);
+			TossedImageCollectionView.ReloadData ();
+			NSIndexPath path = NSIndexPath.FromRowSection (0, 0);
+			TossedImageCollectionView.ScrollToItem (path, UICollectionViewScrollPosition.Top, true);
+		}
+
+		private static void TryDispose (IDisposable obj)
+		{
+			if (obj != null)
+				obj.Dispose ();
+		}
+
 		public class OutputRecorder : AVCaptureVideoDataOutputSampleBufferDelegate
 		{
+			public image_callback callback { get; set;}
 			public override void DidOutputSampleBuffer (AVCaptureOutput captureOutput, CMSampleBuffer sampleBuffer, AVCaptureConnection connection)
 			{
 				try {
 					var image = ImageFromSampleBuffer (sampleBuffer);
-					BeginInvokeOnMainThread (()=> {
-						TryDispose(ImageView.Image);
-						ImageView.Image = image;
-						ImageView.Transform = CGAffineTransform.MakeRotation((float)Math.PI/2);
-					});
+
 					session.StopRunning();
+					callback(image);
 				} catch (Exception e){
 					Console.WriteLine (e);
 				} finally {
@@ -515,11 +563,7 @@ namespace PhotoToss.iOSApp
 				}
 			}
 
-			void TryDispose (IDisposable obj)
-			{
-				if (obj != null)
-					obj.Dispose ();
-			}
+
 		}
 
 
