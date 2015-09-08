@@ -31,6 +31,7 @@ namespace PhotoToss.Core
 		public DateTime received { get; set; }
 		public long tosserid { get; set; }
         public string tossername { get; set; }
+		public long tossid { get; set; }
 
 
 		// updated after a toss

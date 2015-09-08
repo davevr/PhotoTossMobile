@@ -18,6 +18,7 @@ using Facebook;
 namespace PhotoToss.Core
 {
     public delegate void PhotoRecordList_callback(List<PhotoRecord> theResult);
+	public delegate void TossList_classback(List<TossRecord> theResult);
     public delegate void PhotoRecord_callback(PhotoRecord theResult);
     public delegate void User_callback(User theResult);
     public delegate void String_callback(String theResult);
@@ -88,6 +89,79 @@ namespace PhotoToss.Core
                     callback(null);
             });
         }
+
+		public void GetImageLineage(long imageId, PhotoRecordList_callback callback)
+		{
+			string fullURL = "image/lineage";
+
+			RestRequest request = new RestRequest(fullURL, Method.GET);
+			request.AddParameter("imageid", imageId);
+
+			apiClient.ExecuteAsync<List<PhotoRecord>>(request, (response) =>
+				{
+					if (response == null)
+						return;
+					if (response.StatusCode == HttpStatusCode.OK)
+					{
+						List<PhotoRecord> imageList = response.Data;
+
+						//imageList.Sort(objListOrder.OrderBy(o=>o.OrderDate).ToList();
+
+						callback(imageList);
+					}
+					else
+						callback(null);
+				});
+		}
+
+		public void GetImageTosses(long imageId, TossList_classback callback)
+		{
+			string fullURL = "image/tosses";
+
+			RestRequest request = new RestRequest(fullURL, Method.GET);
+			request.AddParameter("imageid", imageId);
+
+			apiClient.ExecuteAsync<List<TossRecord>>(request, (response) =>
+				{
+					if (response == null)
+						return;
+					if (response.StatusCode == HttpStatusCode.OK)
+					{
+						List<TossRecord> tossList = response.Data;
+
+						//imageList.Sort(objListOrder.OrderBy(o=>o.OrderDate).ToList();
+
+						callback(tossList);
+					}
+					else
+						callback(null);
+				});
+		}
+
+		public void GetTossCatches(long tossId, PhotoRecordList_callback callback)
+		{
+			string fullURL = "toss/catches";
+
+			RestRequest request = new RestRequest(fullURL, Method.GET);
+			request.AddParameter("tossid", tossId);
+
+			apiClient.ExecuteAsync<List<PhotoRecord>>(request, (response) =>
+				{
+					if (response == null)
+						return;
+					if (response.StatusCode == HttpStatusCode.OK)
+					{
+						List<PhotoRecord> photoList = response.Data;
+
+						//imageList.Sort(objListOrder.OrderBy(o=>o.OrderDate).ToList();
+
+						callback(photoList);
+					}
+					else
+						callback(null);
+				});
+		}
+
 
         public void Logout()
         {
