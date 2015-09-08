@@ -9,33 +9,16 @@
     android:paddingRight="4dp"
     android:paddingTop="4dp"
     android:background="@android:color/transparent">
-    <LinearLayout
-        android:orientation="vertical"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:background="@android:color/transparent">
-        <ImageView
-            android:src="@drawable/iconNoBorder"
-            android:layout_width="160dp"
-            android:layout_height="160dp"
-            android:id="@+id/imageView"
-            android:layout_gravity="center"
-            android:layout_marginLeft="0dp"
-            android:layout_marginRight="8dp" />
-        <TextView
-            android:text="sa"
-            android:textAppearance="?android:attr/textAppearanceSmall"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:id="@+id/captionText"
-            android:gravity="center"
-            android:textColor="@color/PT_black"
-            android:background="#ffb88c00"
-            android:layout_marginLeft="0dp"
-            android:layout_marginTop="4dp"
-            android:layout_marginRight="8dp"
-            android:layout_marginBottom="8dp" />
-    </LinearLayout>
+    <ImageView
+        android:src="@drawable/iconNoBorder"
+        android:layout_width="160dp"
+        android:layout_height="160dp"
+        android:id="@+id/imageView"
+        android:layout_gravity="center"
+        android:layout_marginTop="0dp"
+        android:layout_marginLeft="0dp"
+        android:layout_marginBottom="8dp"
+        android:layout_marginRight="8dp" />
     <ImageView
         android:src="@drawable/ic_help"
         android:layout_width="48dp"

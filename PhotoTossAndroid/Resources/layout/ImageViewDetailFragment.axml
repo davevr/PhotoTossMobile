@@ -16,7 +16,7 @@
         android:layout_alignParentTop="true"
         android:layout_margin="8dp" />
     <Button
-        android:text="Cancel Toss"
+        android:text="Toss"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/tossButton"

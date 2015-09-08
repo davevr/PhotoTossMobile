@@ -13,16 +13,19 @@ using Android.Views;
 using Android.Widget;
 using Android.Graphics;
 using ServiceStack.Text;
+using Android.Hardware;
 
 using PhotoToss.Core;
 
 namespace PhotoToss.AndroidApp
 {
-    public class HomeFragment : Android.Support.V4.App.Fragment
+	public class HomeFragment : Android.Support.V4.App.Fragment, ISensorEventListener
     {
         public MainActivity MainPage { get; set; }
         GridView imageGrid;
         public List<PhotoRecord> PhotoList { get; set; }
+		private SensorManager _sensorManager;
+		private List<double> dataList = new List<double> ();
 
         public event Action PulledToRefresh;
 
@@ -42,17 +45,125 @@ namespace PhotoToss.AndroidApp
             imageGrid.ItemClick += imageGrid_ItemClick;
 
             Refresh();
+			_sensorManager = (SensorManager) Activity.GetSystemService(Context.SensorService);
             return view;
         }
 
         void imageGrid_ItemClick(object sender, AdapterView.ItemClickEventArgs e)
         {
 			PhotoTossRest.Instance.CurrentImage = PhotoList [e.Position];
-            this.Activity.StartActivity(typeof(TossActivity));
+            this.Activity.StartActivity(typeof(ImageViewActivity));
         }
 
         
+		public void OnAccuracyChanged(Sensor sensor, SensorStatus accuracy)
+		{
+			// We don't want to do anything here.
+		}
 
+		public void OnSensorChanged(SensorEvent e)
+		{
+			double X ;
+			double Y ;
+			double Z ;
+			//lock (_syncLock)
+			{
+				X = e.Values [0];
+				Y = e.Values [1];
+				Z = e.Values [2];
+			}
+
+			UpdateViewRotation (X,Y,Z);
+
+		}
+
+		private void UpdateViewRotation(double x, double y, double z)
+		{
+			double newRot = 0;
+			double targetRot = 0;
+
+			switch (Activity.WindowManager.DefaultDisplay.Rotation)
+			{
+			case SurfaceOrientation.Rotation90:
+				newRot = -y;
+				break;
+			case SurfaceOrientation.Rotation270:
+				newRot = y;
+				break;
+			case SurfaceOrientation.Rotation0:
+				newRot = x;
+				newRot += 0;
+				break;
+			case SurfaceOrientation.Rotation180:
+				newRot = x;
+				newRot += 0;
+				break;
+			}
+
+			dataList.Insert (0, newRot);
+			if (dataList.Count > 10)
+				dataList.RemoveAt (10);
+
+			foreach (double curVal in dataList) {
+				targetRot += curVal;
+			}
+			targetRot /= dataList.Count;
+			targetRot = Math.Round(targetRot, 2);
+
+			targetRot *= 1;//(180.0 / Math.PI);
+
+			Activity.RunOnUiThread(() => {
+				for (int i = imageGrid.FirstVisiblePosition; i <= imageGrid.LastVisiblePosition; i++)
+				{
+					View curCell = imageGrid.GetChildAt(i);
+
+					if (curCell.Rotation != (float)targetRot)
+					{
+						/*
+						if (curCell.Rotation < targetRot) {
+							curCell.RotationSpeed += maxAcc;
+							if (curCell.RotationSpeed > maxSpeed)
+								curCell.RotationSpeed = maxSpeed;
+						}
+						else {
+							curCell.RotationSpeed -= maxAcc;
+							if (curCell.RotationSpeed < -maxSpeed)
+								curCell.RotationSpeed = -maxSpeed;
+						}
+						curCell.Rotation += curCell.RotationSpeed;
+
+						if (curCell.Rotation > maxRot) {
+							curCell.Rotation = maxRot;
+							curCell.RotationSpeed = 0;
+						}
+						else if (curCell.Rotation < -maxRot) {
+							curCell.Rotation = -maxRot;
+							curCell.RotationSpeed = 0;
+						}
+
+						curCell.Rotation = Math.Round(curCell.Rotation, 2);
+						curCell.Rotation = targetRot;
+						curCell.Transform = CGAffineTransform.MakeRotation ((nfloat)curCell.Rotation);
+						*/
+						curCell.Rotation = (float)targetRot;
+					}
+
+				}
+			});
+		}
+
+
+		public override void OnPause()
+		{
+			base.OnPause();
+			_sensorManager.UnregisterListener(this);
+		}
+
+		public override void OnResume()
+		{
+			base.OnResume();
+			_sensorManager.RegisterListener(this, _sensorManager.GetDefaultSensor(SensorType.Accelerometer), SensorDelay.Normal);
+		}
         
 
 
@@ -144,7 +255,6 @@ namespace PhotoToss.AndroidApp
             {
 				Random	rnd = new Random (position);
 				ImageView imageView, userView;
-                TextView captionText;
                 View curView;
                 PhotoRecord curRec = home.PhotoList[position];
 
@@ -152,12 +262,6 @@ namespace PhotoToss.AndroidApp
                 if (convertView == null)
                 {
                     curView = home.Activity.LayoutInflater.Inflate(Resource.Layout.photoGridCell,null);
-
-
-                    //curView.LayoutParameters = new ViewGroup.LayoutParams(itemWidth, itemWidth); 
-                  
-
-                    //imageView.SetPadding(8, 8, 8, 8);
                 }
                 else
                 {
@@ -166,7 +270,6 @@ namespace PhotoToss.AndroidApp
 				curView.Rotation = ((float)(50 - rnd.Next (100)))/ 10.0f;
                 imageView = curView.FindViewById<ImageView>(Resource.Id.imageView);
 				userView = curView.FindViewById<ImageView> (Resource.Id.profileImage);
-                captionText = curView.FindViewById<TextView>(Resource.Id.captionText);
                 imageView.SetScaleType(ImageView.ScaleType.CenterCrop);
 
                 userView.Visibility = ViewStates.Gone;
@@ -174,13 +277,14 @@ namespace PhotoToss.AndroidApp
 				if ((tosserId != 0) && (tosserId != PhotoTossRest.Instance.CurrentUser.id))
 				{
                     string imageUrl = PhotoTossRest.Instance.GetUserProfileImage(curRec.tossername);
+					userView.SetImageResource (Resource.Drawable.unknown_octopus);
+					userView.Visibility = ViewStates.Visible;
 
 
 		            BitmapHelper.GetImageBitmapFromUrlAsync(imageUrl, (theBitmap) =>
 		                {
 		                    ((Activity)context).RunOnUiThread(() =>
 		                        {
-		                            userView.Visibility = ViewStates.Visible;
 		                            Bitmap userBitMap = BitmapHelper.GetImageBitmapFromUrl(imageUrl);
 		                            CircleDrawable myCircle = new CircleDrawable(userBitMap);
 		                            userView.SetImageDrawable(myCircle);
@@ -188,9 +292,7 @@ namespace PhotoToss.AndroidApp
 
 		                });
 				}
-
-                captionText.Text = curRec.caption;
-				Koush.UrlImageViewHelper.SetUrlDrawable (imageView, curRec.imageUrl + "=s" + itemWidth.ToString(), Resource.Drawable.ic_camera);
+				Koush.UrlImageViewHelper.SetUrlDrawable (imageView, curRec.imageUrl + "=s" + itemWidth.ToString() + "-c", Resource.Drawable.ic_camera);
 
                
                 return curView;

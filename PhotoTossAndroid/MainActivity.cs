@@ -53,7 +53,7 @@ namespace PhotoToss.AndroidApp
 	[Activity(Label = "PhotoToss", MainLauncher = true, Icon = "@drawable/iconnoborder", Theme = "@style/Theme.AppCompat.Light", ScreenOrientation=Android.Content.PM.ScreenOrientation.Portrait )]
 	public class MainActivity : Android.Support.V7.App.AppCompatActivity, ILocationListener
 	{
-		private String[] mDrawerTitles = new string[] { "Home", "Browse", "Stats", "Profile"};
+		private String[] mDrawerTitles = new string[] { "Home", "Leaderboards", "Profile", "Settings",  "About PhotoToss"};
 		private DrawerLayout mDrawerLayout;
 		private ListView mDrawerList;
 		private MyDrawerToggle mDrawerToggle;
@@ -61,8 +61,9 @@ namespace PhotoToss.AndroidApp
 
 		private HomeFragment homePage;
 		private BrowseFragment browsePage;
-		private StatsFragment statsPage;
+		private SettingsFragment settingsPage;
 		private ProfileFragment profilePage;
+		private AboutFragment aboutPage;
 		public static Typeface headlineFace;
 		public static Typeface bodyFace;
 		public static File _dir;
@@ -87,36 +88,6 @@ namespace PhotoToss.AndroidApp
 		ICallbackManager callbackManager;
 
 		public event Action PulledToRefresh;
-
-		class TypefaceSpan : MetricAffectingSpan
-		{
-			private static LruCache sTypefaceCache = new LruCache(1024);
-
-			private Typeface mTypeface;
-
-			public TypefaceSpan(Context context, String typefaceName) 
-			{
-				mTypeface = (Typeface)sTypefaceCache.Get(typefaceName);
-
-				if (mTypeface == null)
-				{
-					mTypeface = Typeface.CreateFromAsset(context.Assets, string.Format("fonts/{0}", typefaceName));
-					sTypefaceCache.Put(typefaceName, mTypeface);
-				}
-			}
-
-			public override void UpdateMeasureState(TextPaint tp)
-			{
-				tp.SetTypeface(mTypeface);
-				tp.Flags = tp.Flags | PaintFlags.SubpixelText;
-			}
-
-			public override void UpdateDrawState(TextPaint tp)
-			{
-				tp.SetTypeface(mTypeface);
-				tp.Flags = tp.Flags | PaintFlags.SubpixelText;
-			}
-		}
 
 
 		class MyDrawerToggle : Android.Support.V7.App.ActionBarDrawerToggle
@@ -480,10 +451,6 @@ namespace PhotoToss.AndroidApp
 					CatchAPicture();
 					return true;
 					break;
-				case Resource.Id.AboutBtn:
-					break;
-				case Resource.Id.SettingsBtn:
-					break;
 				default:
 					// show never get here.
 					break;
@@ -511,7 +478,7 @@ namespace PhotoToss.AndroidApp
 
 			switch (position)
 			{
-			case 0:
+			case 0: // home
 				if (homePage == null)
 				{
 					homePage = new HomeFragment();
@@ -521,7 +488,7 @@ namespace PhotoToss.AndroidApp
 				newPage = homePage;
 				pageName = "PhotoToss";
 				break;
-			case 1:
+			case 1: // leaderboards
 				if (browsePage == null)
 				{
 					browsePage = new BrowseFragment();
@@ -530,16 +497,7 @@ namespace PhotoToss.AndroidApp
 				}
 				newPage = browsePage;
 				break;
-			case 2:
-				if (statsPage == null)
-				{
-					statsPage = new StatsFragment();
-					statsPage.MainPage = this;
-					firstTime = true;
-				}
-				newPage = statsPage;
-				break;
-			case 3:
+			case 2: // profile
 				if (profilePage == null)
 				{
 					profilePage = new ProfileFragment();
@@ -547,6 +505,26 @@ namespace PhotoToss.AndroidApp
 					firstTime = true;
 				}
 				newPage = profilePage;
+				break;
+
+			case 3: // Settings
+				if (settingsPage == null)
+				{
+					settingsPage = new SettingsFragment();
+					settingsPage.MainPage = this;
+					firstTime = true;
+				}
+				newPage = settingsPage;
+				break;
+
+			case 4: // About
+				if (aboutPage == null)
+				{
+					aboutPage = new AboutFragment();
+					aboutPage.MainPage = this;
+					firstTime = true;
+				}
+				newPage = aboutPage;
 				break;
 			}
 
@@ -609,8 +587,8 @@ namespace PhotoToss.AndroidApp
 							homePage.Refresh();
 						if (browsePage != null)
 							browsePage.Refresh();
-						if (statsPage != null)
-							statsPage.Refresh();
+						if (settingsPage != null)
+							settingsPage.Refresh();
 						if (profilePage != null)
 							profilePage.Refresh();
 						if (callback != null)

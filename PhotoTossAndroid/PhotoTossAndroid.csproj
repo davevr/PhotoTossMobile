@@ -15,7 +15,7 @@
     <AndroidApplication>True</AndroidApplication>
     <AndroidUseLatestPlatformSdk>False</AndroidUseLatestPlatformSdk>
     <AssemblyName>PhotoTossAndroid</AssemblyName>
-    <TargetFrameworkVersion>v4.4</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v5.1</TargetFrameworkVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -37,6 +37,7 @@
     <AndroidUseSharedRuntime>false</AndroidUseSharedRuntime>
     <ConsolePause>false</ConsolePause>
     <DefineConstants>ANDROID</DefineConstants>
+    <DebugType>full</DebugType>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="RestSharp.MonoDroid">
@@ -155,6 +156,10 @@
     <Reference Include="HockeyApp.Android">
       <HintPath>..\Components\hockeyappandroid-3.5.0\lib\android\HockeyApp.Android.dll</HintPath>
     </Reference>
+    <Reference Include="Refractored.PagerSlidingTabStrip">
+      <HintPath>..\packages\Refractored.PagerSlidingTabStrip.1.0.9\lib\MonoAndroid10\Refractored.PagerSlidingTabStrip.dll</HintPath>
+    </Reference>
+    <Reference Include="Mono.Android.Export" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -165,7 +170,6 @@
     <Compile Include="Activities\ImageFragment.cs" />
     <Compile Include="Activities\ProfileFragment.cs" />
     <Compile Include="Activities\SignInFragment.cs" />
-    <Compile Include="Activities\StatsFragment.cs" />
     <Compile Include="Activities\TossActivity.cs" />
     <Compile Include="Activities\UploadActivity.cs" />
     <Compile Include="HelperClasses\BitmapHelper.cs" />
@@ -199,6 +203,13 @@
     <Compile Include="Views\ScaleImageView.cs" />
     <Compile Include="MainActivity.cs" />
     <Compile Include="Resources\Resource.designer.cs" />
+    <Compile Include="Activities\SettingsFragment.cs" />
+    <Compile Include="Activities\AboutFragment.cs" />
+    <Compile Include="Activities\ImageViewActivity.cs" />
+    <Compile Include="Activities\ImageViewDetailFragment.cs" />
+    <Compile Include="Activities\ImageViewSpreadFragment.cs" />
+    <Compile Include="Activities\ImageViewStatsFragment.cs" />
+    <Compile Include="HelperClasses\TypefaceSpan.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\AboutResources.txt" />
@@ -207,6 +218,17 @@
     <None Include="packages.config" />
     <AndroidResource Include="Resources\layout\Main.axml" />
     <None Include="_external\ByteSmith.WindowsAzure.Messaging.Android.dll" />
+    <AndroidResource Include="Resources\layout\SettingsFragment.axml" />
+    <AndroidResource Include="Resources\layout\AboutFragment.axml" />
+    <AndroidResource Include="Resources\layout\ImageViewActivity.axml" />
+    <AndroidResource Include="Resources\layout\sub_tool_bar.axml" />
+    <AndroidResource Include="Resources\layout\tool_bar.axml" />
+    <AndroidResource Include="Resources\layout\ImageViewDetailFragment.axml" />
+    <AndroidResource Include="Resources\values\styles.xml" />
+    <AndroidResource Include="Resources\layout\ImageViewSpreadFragment.axml" />
+    <AndroidResource Include="Resources\layout\ImageViewStatsFragment.axml" />
+    <AndroidResource Include="Resources\values\dimens.xml" />
+    <AndroidResource Include="Resources\menu\ImageDetailMenu.xml" />
   </ItemGroup>
   <ItemGroup>
     <AndroidResource Include="Resources\values\Strings.xml" />
@@ -224,7 +246,6 @@
     <AndroidResource Include="Resources\layout\photoGridCell.axml" />
     <AndroidResource Include="Resources\layout\ProfileFragment.axml" />
     <AndroidResource Include="Resources\layout\SignInLayout.axml" />
-    <AndroidResource Include="Resources\layout\StatsFragment.axml" />
     <AndroidResource Include="Resources\layout\TossFragment.axml" />
     <AndroidResource Include="Resources\layout\UploadActivity.axml" />
     <AndroidResource Include="Resources\layout\ViewPager.axml" />
@@ -295,6 +316,10 @@
     </XamarinComponentReference>
     <XamarinComponentReference Include="hockeyappandroid">
       <Version>3.5.0</Version>
+      <Visible>False</Visible>
+    </XamarinComponentReference>
+    <XamarinComponentReference Include="PagerSlidingTabStrip">
+      <Version>1.0.9</Version>
       <Visible>False</Visible>
     </XamarinComponentReference>
   </ItemGroup>
