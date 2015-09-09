@@ -371,7 +371,9 @@ namespace PhotoToss.iOSApp
 									
 										InvokeOnMainThread(() => {
 											((UIImagePickerController)sender).DismissViewController (true, () => {
-												});
+											if (theRecord != null) 
+												AddNewImage(theRecord);
+										});
 										});
 									});
 						});

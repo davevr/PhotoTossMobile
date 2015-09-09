@@ -21,14 +21,14 @@
                 <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" ambiguous="YES" translatesAutoresizingMaskIntoConstraints="NO" id="N3C-kB-xDc">
                     <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
                     <subviews>
-                        <mapView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" ambiguous="YES" misplaced="YES" mapType="standard" translatesAutoresizingMaskIntoConstraints="NO" id="udo-El-U2l">
-                            <rect key="frame" x="0.0" y="0.0" width="320" height="309"/>
+                        <mapView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" mapType="standard" translatesAutoresizingMaskIntoConstraints="NO" id="udo-El-U2l">
+                            <rect key="frame" x="0.0" y="0.0" width="320" height="320"/>
                             <constraints>
-                                <constraint firstAttribute="width" secondItem="udo-El-U2l" secondAttribute="height" multiplier="320:309" id="CYP-Lc-2HD"/>
+                                <constraint firstAttribute="width" secondItem="udo-El-U2l" secondAttribute="height" multiplier="1:1" id="CYP-Lc-2HD"/>
                             </constraints>
                         </mapView>
                         <tableView clipsSubviews="YES" contentMode="scaleToFill" ambiguous="YES" misplaced="YES" alwaysBounceVertical="YES" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="22" sectionFooterHeight="22" translatesAutoresizingMaskIntoConstraints="NO" id="cx0-Mu-nw9">
-                            <rect key="frame" x="0.0" y="317" width="320" height="271"/>
+                            <rect key="frame" x="0.0" y="328" width="320" height="77"/>
                             <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         </tableView>
                     </subviews>
@@ -36,6 +36,7 @@
                         <constraint firstItem="udo-El-U2l" firstAttribute="leading" secondItem="N3C-kB-xDc" secondAttribute="leading" id="7Kv-as-Xj2"/>
                         <constraint firstAttribute="trailing" secondItem="cx0-Mu-nw9" secondAttribute="trailing" id="EYB-Nx-JZ3"/>
                         <constraint firstItem="cx0-Mu-nw9" firstAttribute="top" secondItem="udo-El-U2l" secondAttribute="bottom" constant="8" id="Is4-ct-5IN"/>
+                        <constraint firstItem="udo-El-U2l" firstAttribute="width" secondItem="N3C-kB-xDc" secondAttribute="width" id="Wwh-dL-Zfa"/>
                         <constraint firstItem="cx0-Mu-nw9" firstAttribute="leading" secondItem="N3C-kB-xDc" secondAttribute="leading" id="i0j-4A-tQI"/>
                         <constraint firstAttribute="trailing" secondItem="udo-El-U2l" secondAttribute="trailing" id="mi3-lQ-oJu"/>
                         <constraint firstItem="udo-El-U2l" firstAttribute="top" secondItem="N3C-kB-xDc" secondAttribute="top" id="uQT-e5-fPr"/>

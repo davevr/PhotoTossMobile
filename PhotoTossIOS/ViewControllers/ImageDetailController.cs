@@ -56,8 +56,6 @@ namespace PhotoToss.iOSApp
 				Title = "Tossed Image";
 
 			}
-
-
 		}
 
 		private void ResizeImage ()

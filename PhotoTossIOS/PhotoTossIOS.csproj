@@ -161,6 +161,16 @@
     <ImageAsset Include="Resources\Images.xcassets\CatchIcon.imageset\catchIcon-75.png">
       <InProject>false</InProject>
     </ImageAsset>
+    <ImageAsset Include="Resources\Images.xcassets\SpreadIcon.imageset\Contents.json" />
+    <ImageAsset Include="Resources\Images.xcassets\StatsIcon.imageset\Contents.json" />
+    <ImageAsset Include="Resources\Images.xcassets\SpreadIcon.imageset\spread25.png" />
+    <ImageAsset Include="Resources\Images.xcassets\SpreadIcon.imageset\spread50.png" />
+    <ImageAsset Include="Resources\Images.xcassets\SpreadIcon.imageset\spread75.png" />
+    <ImageAsset Include="Resources\Images.xcassets\StatsIcon.imageset\stats25.png" />
+    <ImageAsset Include="Resources\Images.xcassets\StatsIcon.imageset\stats50.png" />
+    <ImageAsset Include="Resources\Images.xcassets\StatsIcon.imageset\stats75.png" />
+    <ImageAsset Include="Resources\Images.xcassets\TossIcon.imageset\Contents.json" />
+    <ImageAsset Include="Resources\Images.xcassets\TossIcon.imageset\ic_toss.png" />
   </ItemGroup>
   <ItemGroup>
     <InterfaceDefinition Include="Resources\LaunchScreen.xib" />
@@ -176,6 +186,10 @@
     <InterfaceDefinition Include="ViewControllers\ImageViewController.xib" />
     <InterfaceDefinition Include="ViewControllers\ImageSpreadViewController.xib" />
     <InterfaceDefinition Include="ViewControllers\ImageStatsViewController.xib" />
+    <InterfaceDefinition Include="Views\TossInfoCell~iphone.xib" />
+    <InterfaceDefinition Include="Views\TossInfoCell~ipad.xib" />
+    <InterfaceDefinition Include="Views\ImageInfoCell~iphone.xib" />
+    <InterfaceDefinition Include="Views\ImageInfoCell~ipad.xib" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Info.plist" />
@@ -253,6 +267,14 @@
     <Compile Include="ViewControllers\ImageStatsViewController.cs" />
     <Compile Include="ViewControllers\ImageStatsViewController.designer.cs">
       <DependentUpon>ImageStatsViewController.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Views\TossInfoCell.cs" />
+    <Compile Include="Views\TossInfoCell.designer.cs">
+      <DependentUpon>TossInfoCell.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Views\ImageInfoCell.cs" />
+    <Compile Include="Views\ImageInfoCell.designer.cs">
+      <DependentUpon>ImageInfoCell.cs</DependentUpon>
     </Compile>
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\iOS\Xamarin.iOS.CSharp.targets" />

@@ -42,6 +42,7 @@ namespace PhotoToss.Core
         private object cachedImage = null;
         private object cachedCatchImage = null;
 
+		public List<TossRecord> tossList {get; set;}
 
         public static PhotoRecord MakeSample()
         {
