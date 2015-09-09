@@ -49,8 +49,25 @@ namespace PhotoToss.iOSApp
 
 			HistoryTable.RegisterNibForCellReuse (UINib.FromName ("ImageInfoCell", NSBundle.MainBundle), kImageInfoCellName);
 			HistoryTable.RegisterNibForCellReuse (UINib.FromName ("TossInfoCell", NSBundle.MainBundle), kTossInfoCellName);
-			HistoryTable.DataSource = null;
+			HistoryTable.RowHeight = UITableView.AutomaticDimension;
+			HistoryTable.EstimatedRowHeight = (nfloat)320.0;
+			HistoryTable.Source = new ImageSpreadTableSource ();
+			/*
+			HistoryTable.AddObserver (@"contentSize", NSKeyValueObservingOptions.New, (observed) => {
+				InvokeOnMainThread(() => 
+					{
+						this.HistoryTable.SizeToFit();
+					});
+			});
+			*/
 
+		}
+
+		private void ShowAnnotations()
+		{
+			InvokeOnMainThread (() => {
+				MapView.ShowAnnotations (MapView.Annotations, true);
+			});
 		}
 
 		public override void ViewDidAppear (bool animated)
@@ -59,14 +76,52 @@ namespace PhotoToss.iOSApp
 			LoadParents ();
 		}
 
+		private void UpdateSizes()
+		{
+			InvokeOnMainThread (() => {
+				int cellCount = 128; // header height * 2
+				if (parentList != null)
+					cellCount += (parentList.Count * 360);
+				if (spreadList != null)
+					cellCount += (spreadList.Count * 360);
+				CGRect boundsRect = HistoryTable.Bounds;
+				boundsRect.Height = cellCount;
+				HistoryTable.Bounds = boundsRect;
+				ScrollViewer.ContentSize = new CGSize(boundsRect.Width, boundsRect.Height + MapView.Bounds.Height);
+			});
 
+		}
 
 		private void LoadParents()
 		{
 			PhotoTossRest.Instance.GetImageLineage(HomeViewController.CurrentPhotoRecord.id, (resultList) =>
 				{
-					parentList = resultList;
+					if (resultList != null) {
+						parentList = resultList;
+					}
+					InvokeOnMainThread(() => 
+						{
+							HistoryTable.ReloadData();
+							UpdateSizes();
+							// add pins
+							if (resultList != null) 
+							{
+								int parentCount = resultList.Count;
+								foreach (PhotoRecord curRec in resultList)
+								{
+									CLLocationCoordinate2D theLoc = new CLLocationCoordinate2D (curRec.createdlat, curRec.createdlong);
+									MapView.AddAnnotations (new MKPointAnnotation (){
+										Title = parentCount == 1 ? "Original Toss" : "Toss #" + (parentCount - 1).ToString(),
+										Subtitle = "date/time",
+										Coordinate = theLoc
+									});
 
+								}
+
+								ShowAnnotations();
+
+							}
+						});
 
 				});
 		}
@@ -95,18 +150,43 @@ namespace PhotoToss.iOSApp
 				
 			}
 
+			public override nint NumberOfSections (UITableView tableView)
+			{
+				return 2;
+			}
+
+			public override string TitleForHeader (UITableView tableView, nint section)
+			{
+				switch (section) {
+				case 0:
+					return "Lineage";
+					break;
+				case 1:
+					return "Tosses";
+					break;
+				}
+
+				return null;
+			}
+
+
+
 			public override nint RowsInSection (UITableView tableview, nint section)
 			{
+				nint count = 0;
 				switch (section)
 				{
 				case 0:
-					return parentList.Count;
+					if (parentList != null)
+						count = parentList.Count;
 					break;
 				case 1:
-					return spreadList.Count;
+					if (spreadList != null)
+						count = spreadList.Count;
 					break;
 				}
-				return 0;
+
+				return count;
 
 			}
 
@@ -178,9 +258,9 @@ namespace PhotoToss.iOSApp
 					cell = ImageInfoCell.Create (); // new  UITableViewCell(UITableViewCellStyle.Default, kImageInfoCellName); }
 				}
 
-				PhotoRecord item = parentList [(int)indexPath.Item];
+				PhotoRecord item = (PhotoRecord)parentList [(int)indexPath.Item];
 
-				cell.TextLabel.Text = item.ownername;
+				cell.ConformToRecord (item);
 
 				return cell;
 			}
@@ -211,7 +291,7 @@ namespace PhotoToss.iOSApp
 
 				PhotoRecord item = (PhotoRecord)spreadList [(int)indexPath.Item];
 
-				cell.TextLabel.Text = item.tossername;
+				cell.ConformToRecord (item);
 
 				return cell;
 			}
@@ -226,13 +306,28 @@ namespace PhotoToss.iOSApp
 					cell = TossInfoCell.Create (); // new  UITableViewCell(UITableViewCellStyle.Default, kImageInfoCellName); }
 				}
 
-				TossRecord item = (TossRecord)spreadList [indexPath.Item];
+				TossRecord item = (TossRecord)spreadList [(int)indexPath.Item];
 
-				cell.TextLabel.Text = item.ownerId;
+				cell.TextLabel.Text = item.ownerId.ToString();
 
 				return cell;
 			}
 
+			public override nfloat GetHeightForRow (UITableView tableView, NSIndexPath indexPath)
+			{
+				nfloat theHeight = 32;
+
+				switch (indexPath.Section) {
+				case 0:
+					theHeight = 360;
+					break;
+				case 1:
+					theHeight = 360;
+					break;
+				}
+
+				return theHeight;
+			}
 
 
 		}
