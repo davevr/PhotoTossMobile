@@ -46,7 +46,7 @@ namespace PhotoToss.iOSApp
 			LocationHelper.StopLocationManager ();
 
 
-			PhotoTossRest.Instance.StartToss (imageId, 0, 100, 100, (theToss) => {
+			PhotoTossRest.Instance.StartToss (imageId, 0, curLoc.Longitude, curLoc.Latitude, (theToss) => {
 				var writer = new BarcodeWriter {
 					Format = ZXing.BarcodeFormat.AZTEC,
 					Options = new ZXing.Common.EncodingOptions {

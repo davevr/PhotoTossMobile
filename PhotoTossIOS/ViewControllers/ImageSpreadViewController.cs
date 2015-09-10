@@ -51,7 +51,7 @@ namespace PhotoToss.iOSApp
 			HistoryTable.RegisterNibForCellReuse (UINib.FromName ("TossInfoCell", NSBundle.MainBundle), kTossInfoCellName);
 			HistoryTable.RowHeight = UITableView.AutomaticDimension;
 			HistoryTable.EstimatedRowHeight = (nfloat)320.0;
-			HistoryTable.Source = new ImageSpreadTableSource ();
+			HistoryTable.Source = new ImageSpreadTableSource (this);
 			/*
 			HistoryTable.AddObserver (@"contentSize", NSKeyValueObservingOptions.New, (observed) => {
 				InvokeOnMainThread(() => 
@@ -60,6 +60,7 @@ namespace PhotoToss.iOSApp
 					});
 			});
 			*/
+			LoadParents ();
 
 		}
 
@@ -73,7 +74,7 @@ namespace PhotoToss.iOSApp
 		public override void ViewDidAppear (bool animated)
 		{
 			base.ViewDidAppear (animated);
-			LoadParents ();
+
 		}
 
 		private void UpdateSizes()
@@ -92,6 +93,35 @@ namespace PhotoToss.iOSApp
 
 		}
 
+		public void ScrollToLoc(double latLoc, double longLoc)
+		{
+			if (latLoc < -90)
+			latLoc = 0;
+			else if (latLoc > 90)
+				latLoc = 0;
+
+			if (longLoc < -180)
+				longLoc = -180;
+			else if (longLoc > 0)
+				longLoc = 0;
+			
+			CLLocationCoordinate2D theLoc = new CLLocationCoordinate2D (latLoc, longLoc);
+			MKCoordinateRegion region;
+			MKCoordinateSpan span;
+
+			span.LatitudeDelta=0.1;
+			span.LongitudeDelta=0.1; 
+
+			region.Span=span;
+			region.Center=theLoc;
+
+			InvokeOnMainThread (() => {
+				MapView.SetRegion (region, true);
+				MapView.RegionThatFits (region);
+			});
+
+		}
+
 		private void LoadParents()
 		{
 			PhotoTossRest.Instance.GetImageLineage(HomeViewController.CurrentPhotoRecord.id, (resultList) =>
@@ -99,22 +129,38 @@ namespace PhotoToss.iOSApp
 					if (resultList != null) {
 						parentList = resultList;
 					}
+
 					InvokeOnMainThread(() => 
 						{
 							HistoryTable.ReloadData();
+							ScrollViewer.ContentOffset = new CGPoint(0,0);
 							UpdateSizes();
 							// add pins
 							if (resultList != null) 
 							{
 								int parentCount = resultList.Count;
+
 								foreach (PhotoRecord curRec in resultList)
 								{
-									CLLocationCoordinate2D theLoc = new CLLocationCoordinate2D (curRec.createdlat, curRec.createdlong);
+									double latLoc = curRec.createdlat;
+									double longLoc = curRec.createdlong;
+									if (latLoc < -90)
+										latLoc = 0;
+									else if (latLoc > 90)
+										latLoc = 0;
+
+									if (longLoc < -180)
+										longLoc = -180;
+									else if (longLoc > 0)
+										longLoc = 0;
+									
+									CLLocationCoordinate2D theLoc = new CLLocationCoordinate2D (latLoc, longLoc);
 									MapView.AddAnnotations (new MKPointAnnotation (){
 										Title = parentCount == 1 ? "Original Toss" : "Toss #" + (parentCount - 1).ToString(),
 										Subtitle = "date/time",
 										Coordinate = theLoc
 									});
+									parentCount--;
 
 								}
 
@@ -123,8 +169,126 @@ namespace PhotoToss.iOSApp
 							}
 						});
 
+					LoadChildren();
+
 				});
 		}
+
+		private void LoadChildren()
+		{
+			spreadList = new List<object> ();
+			LoadTossesForImage (HomeViewController.CurrentPhotoRecord);
+		}
+
+		private void LoadTossesForImage(PhotoRecord curImage)
+		{
+			PhotoTossRest.Instance.GetImageTosses(curImage.id, (resultList) =>
+				{
+					if ((resultList != null) && (resultList.Count > 0)) {
+						int curLoc = spreadList.IndexOf(curImage) + 1;
+						spreadList.InsertRange(curLoc, resultList);
+						curImage.tossList = resultList;
+
+						InvokeOnMainThread(() => 
+							{
+								HistoryTable.ReloadData();
+								UpdateSizes();
+								// add pins
+								int tossCount = 1;
+								foreach (TossRecord curRec in resultList)
+								{
+									double latLoc = curRec.shareLat;
+									double longLoc = curRec.shareLong;
+									if (latLoc < -90)
+										latLoc = 0;
+									else if (latLoc > 90)
+										latLoc = 0;
+
+									if (longLoc < -180)
+										longLoc = -180;
+									else if (longLoc > 0)
+										longLoc = 0;
+									
+									CLLocationCoordinate2D theLoc = new CLLocationCoordinate2D (latLoc, longLoc);
+									MapView.AddAnnotations (new MKPointAnnotation (){
+										Title = "Toss #" + tossCount.ToString(),
+										Subtitle = "date/time",
+										Coordinate = theLoc
+									});
+									tossCount++;
+
+								}
+
+								ShowAnnotations();
+							});
+					}
+					else {
+						curImage.tossList = new List<TossRecord>();
+						InvokeOnMainThread(() => 
+							{
+								HistoryTable.ReloadData();
+								UpdateSizes();
+							});
+					}
+
+				});
+		}
+
+		private void LoadImagesForToss(TossRecord curToss)
+		{
+			PhotoTossRest.Instance.GetTossCatches(curToss.id, (resultList) =>
+				{
+					if ((resultList != null) && (resultList.Count > 0)) {
+						int curLoc = spreadList.IndexOf(curToss) + 1;
+						spreadList.InsertRange(curLoc, resultList);
+						curToss.catchList = resultList;
+
+						InvokeOnMainThread(() => 
+							{
+								HistoryTable.ReloadData();
+								UpdateSizes();
+								// add pins
+								int tossCount = 1;
+								foreach (PhotoRecord curRec in resultList)
+								{
+									double latLoc = curRec.receivedlat;
+									double longLoc = curRec.receivedlong;
+									if (latLoc < -90)
+										latLoc = 0;
+									else if (latLoc > 90)
+										latLoc = 0;
+
+									if (longLoc < -180)
+										longLoc = -180;
+									else if (longLoc > 0)
+										longLoc = 0;
+
+									CLLocationCoordinate2D theLoc = new CLLocationCoordinate2D (latLoc, longLoc);
+									MapView.AddAnnotations (new MKPointAnnotation (){
+										Title = "Toss #" + tossCount.ToString(),
+										Subtitle = "date/time",
+										Coordinate = theLoc
+									});
+									tossCount++;
+
+								}
+
+								ShowAnnotations();
+							});
+					}
+					else {
+						curToss.catchList = new List<PhotoRecord>();
+						InvokeOnMainThread(() => 
+							{
+								HistoryTable.ReloadData();
+								UpdateSizes();
+							});
+					}
+
+				});
+		}
+
+
 
 		private void ExpandItem(int theItem)
 		{
@@ -145,10 +309,52 @@ namespace PhotoToss.iOSApp
 
 		public class ImageSpreadTableSource : UITableViewSource
 		{
-			public ImageSpreadTableSource ()
+			ImageSpreadViewController viewController = null;
+
+			public ImageSpreadTableSource (ImageSpreadViewController controller)
 			{
-				
+				viewController = controller;
 			}
+
+			public override void RowSelected (UITableView tableView, NSIndexPath indexPath)
+			{
+				switch (indexPath.Section) {
+				case 0:
+					HandleParentSelected (tableView, indexPath.Item);
+					break;
+
+				case 1:
+					HandleSpreadSelected (tableView, indexPath.Item);
+					break;
+				}
+			}
+
+			private void HandleParentSelected(UITableView tableView, nint index)
+			{
+				PhotoRecord curRec = parentList[(int)index];
+				if (curRec.tossid == 0)
+					viewController.ScrollToLoc (curRec.createdlat, curRec.createdlong);
+				else
+					viewController.ScrollToLoc (curRec.receivedlat, curRec.createdlong);
+
+			}
+
+			private void HandleSpreadSelected(UITableView tableView, nint index)
+			{
+				object curRec = spreadList[(int)index];
+				if (curRec is PhotoRecord) {
+					PhotoRecord curPhotoRec = (PhotoRecord)curRec;
+					if (curPhotoRec.tossid == 0)
+						viewController.ScrollToLoc (curPhotoRec.createdlat, curPhotoRec.createdlong);
+					else
+						viewController.ScrollToLoc (curPhotoRec.receivedlat, curPhotoRec.createdlong);
+				} else {
+					TossRecord curTossRec = (TossRecord)curRec;
+					viewController.ScrollToLoc (curTossRec.shareLat, curTossRec.shareLong);
+				}
+
+			}
+
 
 			public override nint NumberOfSections (UITableView tableView)
 			{
@@ -308,7 +514,7 @@ namespace PhotoToss.iOSApp
 
 				TossRecord item = (TossRecord)spreadList [(int)indexPath.Item];
 
-				cell.TextLabel.Text = item.ownerId.ToString();
+				cell.ConformToRecord (item);
 
 				return cell;
 			}
@@ -322,7 +528,11 @@ namespace PhotoToss.iOSApp
 					theHeight = 360;
 					break;
 				case 1:
-					theHeight = 360;
+					object theObj = spreadList [(int)indexPath.Item];
+					if (theObj is PhotoRecord)
+						theHeight = 360;
+					else
+						theHeight = 44;
 					break;
 				}
 

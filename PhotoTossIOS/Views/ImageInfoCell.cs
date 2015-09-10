@@ -35,15 +35,27 @@ namespace PhotoToss.iOSApp
 			df.TimeStyle = NSDateFormatterStyle.Medium;
 
 			DateTitle.Text = df.StringFor (DateTimeToNSDate(thePhoto.received));
+			string catchURL;
+			string tosserName;
 
-			string thumbnailURL = thePhoto.imageUrl + "=320-c";
+			if ((thePhoto.tossid == null) || (thePhoto.tossid == 0)) {
+				catchURL = thePhoto.imageUrl;
+				tosserName = thePhoto.ownername; 
+				TypeIcon.Image = UIImage.FromBundle ("CameraIcon");
+			} else {
+				catchURL = thePhoto.catchUrl;
+				tosserName = thePhoto.tossername;
+				TypeIcon.Image = UIImage.FromBundle ("CatchIcon");
+			}
+
+			string thumbnailURL = catchURL + "=s320-c";
 			MainImage.SetImage(new NSUrl(thumbnailURL), UIImage.FromBundle("placeholder"));
 
 			if ((thePhoto.tosserid != 0) && (thePhoto.tosserid != PhotoTossRest.Instance.CurrentUser.id)) {
 				PersonImage.Hidden = false;
 				PersonImage.Layer.CornerRadius = PersonImage.Bounds.Width / 2;
 				PersonImage.Layer.MasksToBounds = true;
-				PersonImage.SetImage (new NSUrl(PhotoTossRest.Instance.GetUserProfileImage (thePhoto.tossername)), UIImage.FromBundle ("unknownperson"));
+				PersonImage.SetImage (new NSUrl(PhotoTossRest.Instance.GetUserProfileImage (tosserName)), UIImage.FromBundle ("unknownperson"));
 			} else {
 				PersonImage.Hidden = true;
 			}
