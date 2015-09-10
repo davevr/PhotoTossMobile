@@ -22,10 +22,26 @@ namespace PhotoToss.iOSApp
 		UIKit.UIImageView PersonImage { get; set; }
 
 		[Outlet]
+		UIKit.UIButton ShowTossesBtn { get; set; }
+
+		[Outlet]
+		UIKit.UILabel TossCountLabel { get; set; }
+
+		[Outlet]
 		UIKit.UIImageView TypeIcon { get; set; }
 		
 		void ReleaseDesignerOutlets ()
 		{
+			if (TossCountLabel != null) {
+				TossCountLabel.Dispose ();
+				TossCountLabel = null;
+			}
+
+			if (ShowTossesBtn != null) {
+				ShowTossesBtn.Dispose ();
+				ShowTossesBtn = null;
+			}
+
 			if (DateTitle != null) {
 				DateTitle.Dispose ();
 				DateTitle = null;

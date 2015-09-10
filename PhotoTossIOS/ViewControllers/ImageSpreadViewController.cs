@@ -52,15 +52,30 @@ namespace PhotoToss.iOSApp
 			HistoryTable.RowHeight = UITableView.AutomaticDimension;
 			HistoryTable.EstimatedRowHeight = (nfloat)320.0;
 			HistoryTable.Source = new ImageSpreadTableSource (this);
-			/*
-			HistoryTable.AddObserver (@"contentSize", NSKeyValueObservingOptions.New, (observed) => {
-				InvokeOnMainThread(() => 
-					{
-						this.HistoryTable.SizeToFit();
-					});
-			});
-			*/
+
+
+			ShowAllBtn.TouchUpInside += (object sender, EventArgs e) => {
+				ShowAnnotations();
+			};
+
+			ShowMeBtn.TouchUpInside += (object sender, EventArgs e) => {
+				LocationHelper.StartLocationManager (CoreLocation.CLLocation.AccuracyBest);
+				LocationHelper.LocationResult curLoc = LocationHelper.GetLocationResult ();
+				LocationHelper.StopLocationManager ();
+				ScrollToLoc(curLoc.Latitude, curLoc.Longitude);
+			};
 			LoadParents ();
+
+		}
+
+		public void ExpandTossRecord(TossRecord theRec)
+		{
+			LoadImagesForToss (theRec);
+		}
+
+		public void ExpandImageRecord(PhotoRecord theRec)
+		{
+			LoadTossesForImage (theRec);
 
 		}
 
@@ -74,23 +89,35 @@ namespace PhotoToss.iOSApp
 		public override void ViewDidAppear (bool animated)
 		{
 			base.ViewDidAppear (animated);
+			UpdateSizes ();
+		}
 
+		private nfloat GetCellSizes()
+		{
+			nfloat totalSize = 0;
+			for (nint section = 0; section < HistoryTable.Source.NumberOfSections(HistoryTable); section++) {
+				for (nint row = 0; row < HistoryTable.Source.RowsInSection (HistoryTable, section); row++) {
+					NSIndexPath newPath = NSIndexPath.FromItemSection (row, section);
+					totalSize += HistoryTable.Source.GetHeightForRow (HistoryTable, newPath);
+				}
+			}
+
+			return totalSize;
 		}
 
 		private void UpdateSizes()
 		{
+			/*
+			nfloat cellSizes = GetCellSizes ();
 			InvokeOnMainThread (() => {
-				int cellCount = 128; // header height * 2
-				if (parentList != null)
-					cellCount += (parentList.Count * 360);
-				if (spreadList != null)
-					cellCount += (spreadList.Count * 360);
+				nfloat cellCount = 128; // header height * 2
+				cellCount += cellSizes;
 				CGRect boundsRect = HistoryTable.Bounds;
-				boundsRect.Height = cellCount;
+				boundsRect.Height = cellCount + 320;
 				HistoryTable.Bounds = boundsRect;
-				ScrollViewer.ContentSize = new CGSize(boundsRect.Width, boundsRect.Height + MapView.Bounds.Height);
-			});
 
+			});
+	*/
 		}
 
 		public void ScrollToLoc(double latLoc, double longLoc)
@@ -109,8 +136,8 @@ namespace PhotoToss.iOSApp
 			MKCoordinateRegion region;
 			MKCoordinateSpan span;
 
-			span.LatitudeDelta=0.1;
-			span.LongitudeDelta=0.1; 
+			span.LatitudeDelta=0.01;
+			span.LongitudeDelta=0.01; 
 
 			region.Span=span;
 			region.Center=theLoc;
@@ -124,16 +151,17 @@ namespace PhotoToss.iOSApp
 
 		private void LoadParents()
 		{
+			parentList = new List<PhotoRecord> ();
+			parentList.Add (HomeViewController.CurrentPhotoRecord);
 			PhotoTossRest.Instance.GetImageLineage(HomeViewController.CurrentPhotoRecord.id, (resultList) =>
 				{
 					if (resultList != null) {
-						parentList = resultList;
+						parentList.InsertRange(1,resultList);
 					}
 
 					InvokeOnMainThread(() => 
 						{
 							HistoryTable.ReloadData();
-							ScrollViewer.ContentOffset = new CGPoint(0,0);
 							UpdateSizes();
 							// add pins
 							if (resultList != null) 
@@ -365,10 +393,10 @@ namespace PhotoToss.iOSApp
 			{
 				switch (section) {
 				case 0:
-					return "Lineage";
+					return "Where it came from";
 					break;
 				case 1:
-					return "Tosses";
+					return "Where it went";
 					break;
 				}
 
@@ -466,7 +494,7 @@ namespace PhotoToss.iOSApp
 
 				PhotoRecord item = (PhotoRecord)parentList [(int)indexPath.Item];
 
-				cell.ConformToRecord (item);
+				cell.ConformToRecord (item, viewController, false);
 
 				return cell;
 			}
@@ -497,7 +525,7 @@ namespace PhotoToss.iOSApp
 
 				PhotoRecord item = (PhotoRecord)spreadList [(int)indexPath.Item];
 
-				cell.ConformToRecord (item);
+				cell.ConformToRecord (item, viewController, true);
 
 				return cell;
 			}
@@ -514,7 +542,7 @@ namespace PhotoToss.iOSApp
 
 				TossRecord item = (TossRecord)spreadList [(int)indexPath.Item];
 
-				cell.ConformToRecord (item);
+				cell.ConformToRecord (item, viewController);
 
 				return cell;
 			}
@@ -525,12 +553,12 @@ namespace PhotoToss.iOSApp
 
 				switch (indexPath.Section) {
 				case 0:
-					theHeight = 360;
+					theHeight = 370;
 					break;
 				case 1:
 					object theObj = spreadList [(int)indexPath.Item];
 					if (theObj is PhotoRecord)
-						theHeight = 360;
+						theHeight = 370;
 					else
 						theHeight = 44;
 					break;

@@ -19,13 +19,16 @@ namespace PhotoToss.iOSApp
 		MapKit.MKMapView MapView { get; set; }
 
 		[Outlet]
-		UIKit.UIScrollView ScrollViewer { get; set; }
+		UIKit.UIButton ShowAllBtn { get; set; }
+
+		[Outlet]
+		UIKit.UIButton ShowMeBtn { get; set; }
 		
 		void ReleaseDesignerOutlets ()
 		{
-			if (ScrollViewer != null) {
-				ScrollViewer.Dispose ();
-				ScrollViewer = null;
+			if (HistoryTable != null) {
+				HistoryTable.Dispose ();
+				HistoryTable = null;
 			}
 
 			if (MapView != null) {
@@ -33,9 +36,14 @@ namespace PhotoToss.iOSApp
 				MapView = null;
 			}
 
-			if (HistoryTable != null) {
-				HistoryTable.Dispose ();
-				HistoryTable = null;
+			if (ShowMeBtn != null) {
+				ShowMeBtn.Dispose ();
+				ShowMeBtn = null;
+			}
+
+			if (ShowAllBtn != null) {
+				ShowAllBtn.Dispose ();
+				ShowAllBtn = null;
 			}
 		}
 	}

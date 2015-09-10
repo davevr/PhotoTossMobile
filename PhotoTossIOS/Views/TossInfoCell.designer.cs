@@ -20,14 +20,14 @@ namespace PhotoToss.iOSApp
 		
 		void ReleaseDesignerOutlets ()
 		{
-			if (TossLabel != null) {
-				TossLabel.Dispose ();
-				TossLabel = null;
-			}
-
 			if (ShowCatchesButton != null) {
 				ShowCatchesButton.Dispose ();
 				ShowCatchesButton = null;
+			}
+
+			if (TossLabel != null) {
+				TossLabel.Dispose ();
+				TossLabel = null;
 			}
 		}
 	}
