@@ -72,6 +72,12 @@
     </MtouchI18n>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="HockeyApp.iOS">
+      <HintPath>..\Components\hockeyappios-3.7.1.0\lib\ios-unified\HockeyApp.iOS.dll</HintPath>
+    </Reference>
+    <Reference Include="SDWebImage">
+      <HintPath>..\Components\sdwebimage-3.7.1.4\lib\ios-unified\SDWebImage.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Xml" />
     <Reference Include="System.Core" />
@@ -99,14 +105,8 @@
     <Reference Include="JVMenuPopover">
       <HintPath>..\Components\jvmenupopover-1.1\lib\ios-unified\JVMenuPopover.dll</HintPath>
     </Reference>
-    <Reference Include="SDWebImage">
-      <HintPath>..\Components\sdwebimage-3.7.1.4\lib\ios-unified\SDWebImage.dll</HintPath>
-    </Reference>
     <Reference Include="Calabash">
       <HintPath>..\packages\Xamarin.TestCloud.Agent.0.14.3\lib\Xamarin.iOS10\Calabash.dll</HintPath>
-    </Reference>
-    <Reference Include="HockeyApp.iOS">
-      <HintPath>..\Components\hockeyappios-3.7.1.0\lib\ios-unified\HockeyApp.iOS.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
@@ -304,7 +304,5 @@
     <BundleResource Include="Resources\placeholder%402x.png" />
     <BundleResource Include="Resources\unknownperson%402x.png" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Collections\" />
-  </ItemGroup>
+  <ItemGroup />
 </Project>
