@@ -1488,6 +1488,48 @@ namespace PhotoToss.AndroidApp
 			global::GooglePlayServices.Resource.Styleable.WalletFragmentStyle_maskedWalletDetailsLogoImageType = global::PhotoToss.AndroidApp.Resource.Styleable.WalletFragmentStyle_maskedWalletDetailsLogoImageType;
 			global::GooglePlayServices.Resource.Styleable.WalletFragmentStyle_maskedWalletDetailsLogoTextColor = global::PhotoToss.AndroidApp.Resource.Styleable.WalletFragmentStyle_maskedWalletDetailsLogoTextColor;
 			global::GooglePlayServices.Resource.Styleable.WalletFragmentStyle_maskedWalletDetailsTextAppearance = global::PhotoToss.AndroidApp.Resource.Styleable.WalletFragmentStyle_maskedWalletDetailsTextAppearance;
+			global::com.refractored.Resource.Attribute.pstsDividerColor = global::PhotoToss.AndroidApp.Resource.Attribute.pstsDividerColor;
+			global::com.refractored.Resource.Attribute.pstsDividerPadding = global::PhotoToss.AndroidApp.Resource.Attribute.pstsDividerPadding;
+			global::com.refractored.Resource.Attribute.pstsDividerWidth = global::PhotoToss.AndroidApp.Resource.Attribute.pstsDividerWidth;
+			global::com.refractored.Resource.Attribute.pstsIndicatorColor = global::PhotoToss.AndroidApp.Resource.Attribute.pstsIndicatorColor;
+			global::com.refractored.Resource.Attribute.pstsIndicatorHeight = global::PhotoToss.AndroidApp.Resource.Attribute.pstsIndicatorHeight;
+			global::com.refractored.Resource.Attribute.pstsPaddingMiddle = global::PhotoToss.AndroidApp.Resource.Attribute.pstsPaddingMiddle;
+			global::com.refractored.Resource.Attribute.pstsScrollOffset = global::PhotoToss.AndroidApp.Resource.Attribute.pstsScrollOffset;
+			global::com.refractored.Resource.Attribute.pstsShouldExpand = global::PhotoToss.AndroidApp.Resource.Attribute.pstsShouldExpand;
+			global::com.refractored.Resource.Attribute.pstsTabBackground = global::PhotoToss.AndroidApp.Resource.Attribute.pstsTabBackground;
+			global::com.refractored.Resource.Attribute.pstsTabPaddingLeftRight = global::PhotoToss.AndroidApp.Resource.Attribute.pstsTabPaddingLeftRight;
+			global::com.refractored.Resource.Attribute.pstsTextAllCaps = global::PhotoToss.AndroidApp.Resource.Attribute.pstsTextAllCaps;
+			global::com.refractored.Resource.Attribute.pstsTextAlpha = global::PhotoToss.AndroidApp.Resource.Attribute.pstsTextAlpha;
+			global::com.refractored.Resource.Attribute.pstsTextColorSelected = global::PhotoToss.AndroidApp.Resource.Attribute.pstsTextColorSelected;
+			global::com.refractored.Resource.Attribute.pstsTextSelectedStyle = global::PhotoToss.AndroidApp.Resource.Attribute.pstsTextSelectedStyle;
+			global::com.refractored.Resource.Attribute.pstsTextStyle = global::PhotoToss.AndroidApp.Resource.Attribute.pstsTextStyle;
+			global::com.refractored.Resource.Attribute.pstsUnderlineColor = global::PhotoToss.AndroidApp.Resource.Attribute.pstsUnderlineColor;
+			global::com.refractored.Resource.Attribute.pstsUnderlineHeight = global::PhotoToss.AndroidApp.Resource.Attribute.pstsUnderlineHeight;
+			global::com.refractored.Resource.Color.psts_background_tab_pressed = global::PhotoToss.AndroidApp.Resource.Color.psts_background_tab_pressed;
+			global::com.refractored.Resource.Drawable.psts_background_tab = global::PhotoToss.AndroidApp.Resource.Drawable.psts_background_tab;
+			global::com.refractored.Resource.Id.bold = global::PhotoToss.AndroidApp.Resource.Id.bold;
+			global::com.refractored.Resource.Id.italic = global::PhotoToss.AndroidApp.Resource.Id.italic;
+			global::com.refractored.Resource.Id.normal = global::PhotoToss.AndroidApp.Resource.Id.normal;
+			global::com.refractored.Resource.Id.psts_tab_title = global::PhotoToss.AndroidApp.Resource.Id.psts_tab_title;
+			global::com.refractored.Resource.Layout.psts_tab = global::PhotoToss.AndroidApp.Resource.Layout.psts_tab;
+			global::com.refractored.Resource.Styleable.PagerSlidingTabStrip = global::PhotoToss.AndroidApp.Resource.Styleable.PagerSlidingTabStrip;
+			global::com.refractored.Resource.Styleable.PagerSlidingTabStrip_pstsDividerColor = global::PhotoToss.AndroidApp.Resource.Styleable.PagerSlidingTabStrip_pstsDividerColor;
+			global::com.refractored.Resource.Styleable.PagerSlidingTabStrip_pstsDividerPadding = global::PhotoToss.AndroidApp.Resource.Styleable.PagerSlidingTabStrip_pstsDividerPadding;
+			global::com.refractored.Resource.Styleable.PagerSlidingTabStrip_pstsDividerWidth = global::PhotoToss.AndroidApp.Resource.Styleable.PagerSlidingTabStrip_pstsDividerWidth;
+			global::com.refractored.Resource.Styleable.PagerSlidingTabStrip_pstsIndicatorColor = global::PhotoToss.AndroidApp.Resource.Styleable.PagerSlidingTabStrip_pstsIndicatorColor;
+			global::com.refractored.Resource.Styleable.PagerSlidingTabStrip_pstsIndicatorHeight = global::PhotoToss.AndroidApp.Resource.Styleable.PagerSlidingTabStrip_pstsIndicatorHeight;
+			global::com.refractored.Resource.Styleable.PagerSlidingTabStrip_pstsPaddingMiddle = global::PhotoToss.AndroidApp.Resource.Styleable.PagerSlidingTabStrip_pstsPaddingMiddle;
+			global::com.refractored.Resource.Styleable.PagerSlidingTabStrip_pstsScrollOffset = global::PhotoToss.AndroidApp.Resource.Styleable.PagerSlidingTabStrip_pstsScrollOffset;
+			global::com.refractored.Resource.Styleable.PagerSlidingTabStrip_pstsShouldExpand = global::PhotoToss.AndroidApp.Resource.Styleable.PagerSlidingTabStrip_pstsShouldExpand;
+			global::com.refractored.Resource.Styleable.PagerSlidingTabStrip_pstsTabBackground = global::PhotoToss.AndroidApp.Resource.Styleable.PagerSlidingTabStrip_pstsTabBackground;
+			global::com.refractored.Resource.Styleable.PagerSlidingTabStrip_pstsTabPaddingLeftRight = global::PhotoToss.AndroidApp.Resource.Styleable.PagerSlidingTabStrip_pstsTabPaddingLeftRight;
+			global::com.refractored.Resource.Styleable.PagerSlidingTabStrip_pstsTextAllCaps = global::PhotoToss.AndroidApp.Resource.Styleable.PagerSlidingTabStrip_pstsTextAllCaps;
+			global::com.refractored.Resource.Styleable.PagerSlidingTabStrip_pstsTextAlpha = global::PhotoToss.AndroidApp.Resource.Styleable.PagerSlidingTabStrip_pstsTextAlpha;
+			global::com.refractored.Resource.Styleable.PagerSlidingTabStrip_pstsTextColorSelected = global::PhotoToss.AndroidApp.Resource.Styleable.PagerSlidingTabStrip_pstsTextColorSelected;
+			global::com.refractored.Resource.Styleable.PagerSlidingTabStrip_pstsTextSelectedStyle = global::PhotoToss.AndroidApp.Resource.Styleable.PagerSlidingTabStrip_pstsTextSelectedStyle;
+			global::com.refractored.Resource.Styleable.PagerSlidingTabStrip_pstsTextStyle = global::PhotoToss.AndroidApp.Resource.Styleable.PagerSlidingTabStrip_pstsTextStyle;
+			global::com.refractored.Resource.Styleable.PagerSlidingTabStrip_pstsUnderlineColor = global::PhotoToss.AndroidApp.Resource.Styleable.PagerSlidingTabStrip_pstsUnderlineColor;
+			global::com.refractored.Resource.Styleable.PagerSlidingTabStrip_pstsUnderlineHeight = global::PhotoToss.AndroidApp.Resource.Styleable.PagerSlidingTabStrip_pstsUnderlineHeight;
 			global::ZXing.Mobile.Resource.Id.contentFrame = global::PhotoToss.AndroidApp.Resource.Id.contentFrame;
 			global::ZXing.Mobile.Resource.Layout.zxingscanneractivitylayout = global::PhotoToss.AndroidApp.Resource.Layout.zxingscanneractivitylayout;
 			global::ZXing.Mobile.Resource.Layout.zxingscannerfragmentlayout = global::PhotoToss.AndroidApp.Resource.Layout.zxingscannerfragmentlayout;
@@ -2097,6 +2139,57 @@ namespace PhotoToss.AndroidApp
 			// aapt resource value: 0x7f010072
 			public const int prompt = 2130772082;
 			
+			// aapt resource value: 0x7f010105
+			public const int pstsDividerColor = 2130772229;
+			
+			// aapt resource value: 0x7f010109
+			public const int pstsDividerPadding = 2130772233;
+			
+			// aapt resource value: 0x7f010106
+			public const int pstsDividerWidth = 2130772230;
+			
+			// aapt resource value: 0x7f010103
+			public const int pstsIndicatorColor = 2130772227;
+			
+			// aapt resource value: 0x7f010107
+			public const int pstsIndicatorHeight = 2130772231;
+			
+			// aapt resource value: 0x7f01010f
+			public const int pstsPaddingMiddle = 2130772239;
+			
+			// aapt resource value: 0x7f01010b
+			public const int pstsScrollOffset = 2130772235;
+			
+			// aapt resource value: 0x7f01010d
+			public const int pstsShouldExpand = 2130772237;
+			
+			// aapt resource value: 0x7f01010c
+			public const int pstsTabBackground = 2130772236;
+			
+			// aapt resource value: 0x7f01010a
+			public const int pstsTabPaddingLeftRight = 2130772234;
+			
+			// aapt resource value: 0x7f01010e
+			public const int pstsTextAllCaps = 2130772238;
+			
+			// aapt resource value: 0x7f010111
+			public const int pstsTextAlpha = 2130772241;
+			
+			// aapt resource value: 0x7f010110
+			public const int pstsTextColorSelected = 2130772240;
+			
+			// aapt resource value: 0x7f010113
+			public const int pstsTextSelectedStyle = 2130772243;
+			
+			// aapt resource value: 0x7f010112
+			public const int pstsTextStyle = 2130772242;
+			
+			// aapt resource value: 0x7f010104
+			public const int pstsUnderlineColor = 2130772228;
+			
+			// aapt resource value: 0x7f010108
+			public const int pstsUnderlineHeight = 2130772232;
+			
 			// aapt resource value: 0x7f010070
 			public const int queryBackground = 2130772080;
 			
@@ -2363,47 +2456,47 @@ namespace PhotoToss.AndroidApp
 		public partial class Color
 		{
 			
-			// aapt resource value: 0x7f06005c
-			public const int PT_black = 2131099740;
-			
-			// aapt resource value: 0x7f060058
-			public const int PT_dark_orange = 2131099736;
-			
-			// aapt resource value: 0x7f06005a
-			public const int PT_dark_teal = 2131099738;
-			
-			// aapt resource value: 0x7f060057
-			public const int PT_light_orange = 2131099735;
+			// aapt resource value: 0x7f06005d
+			public const int PT_black = 2131099741;
 			
 			// aapt resource value: 0x7f060059
-			public const int PT_light_teal = 2131099737;
+			public const int PT_dark_orange = 2131099737;
 			
 			// aapt resource value: 0x7f06005b
-			public const int PT_white = 2131099739;
+			public const int PT_dark_teal = 2131099739;
 			
-			// aapt resource value: 0x7f06005d
-			public const int abc_background_cache_hint_selector_material_dark = 2131099741;
+			// aapt resource value: 0x7f060058
+			public const int PT_light_orange = 2131099736;
+			
+			// aapt resource value: 0x7f06005a
+			public const int PT_light_teal = 2131099738;
+			
+			// aapt resource value: 0x7f06005c
+			public const int PT_white = 2131099740;
 			
 			// aapt resource value: 0x7f06005e
-			public const int abc_background_cache_hint_selector_material_light = 2131099742;
+			public const int abc_background_cache_hint_selector_material_dark = 2131099742;
+			
+			// aapt resource value: 0x7f06005f
+			public const int abc_background_cache_hint_selector_material_light = 2131099743;
 			
 			// aapt resource value: 0x7f060017
 			public const int abc_input_method_navigation_guard = 2131099671;
 			
-			// aapt resource value: 0x7f06005f
-			public const int abc_primary_text_disable_only_material_dark = 2131099743;
-			
 			// aapt resource value: 0x7f060060
-			public const int abc_primary_text_disable_only_material_light = 2131099744;
+			public const int abc_primary_text_disable_only_material_dark = 2131099744;
 			
 			// aapt resource value: 0x7f060061
-			public const int abc_primary_text_material_dark = 2131099745;
+			public const int abc_primary_text_disable_only_material_light = 2131099745;
 			
 			// aapt resource value: 0x7f060062
-			public const int abc_primary_text_material_light = 2131099746;
+			public const int abc_primary_text_material_dark = 2131099746;
 			
 			// aapt resource value: 0x7f060063
-			public const int abc_search_url_text = 2131099747;
+			public const int abc_primary_text_material_light = 2131099747;
+			
+			// aapt resource value: 0x7f060064
+			public const int abc_search_url_text = 2131099748;
 			
 			// aapt resource value: 0x7f060018
 			public const int abc_search_url_text_normal = 2131099672;
@@ -2414,11 +2507,11 @@ namespace PhotoToss.AndroidApp
 			// aapt resource value: 0x7f06001a
 			public const int abc_search_url_text_selected = 2131099674;
 			
-			// aapt resource value: 0x7f060064
-			public const int abc_secondary_text_material_dark = 2131099748;
-			
 			// aapt resource value: 0x7f060065
-			public const int abc_secondary_text_material_light = 2131099749;
+			public const int abc_secondary_text_material_dark = 2131099749;
+			
+			// aapt resource value: 0x7f060066
+			public const int abc_secondary_text_material_light = 2131099750;
 			
 			// aapt resource value: 0x7f06001b
 			public const int accent_material_dark = 2131099675;
@@ -2531,11 +2624,11 @@ namespace PhotoToss.AndroidApp
 			// aapt resource value: 0x7f060012
 			public const int common_signin_btn_light_text_pressed = 2131099666;
 			
-			// aapt resource value: 0x7f060066
-			public const int common_signin_btn_text_dark = 2131099750;
-			
 			// aapt resource value: 0x7f060067
-			public const int common_signin_btn_text_light = 2131099751;
+			public const int common_signin_btn_text_dark = 2131099751;
+			
+			// aapt resource value: 0x7f060068
+			public const int common_signin_btn_text_light = 2131099752;
 			
 			// aapt resource value: 0x7f060029
 			public const int dim_foreground_disabled_material_dark = 2131099689;
@@ -2606,6 +2699,9 @@ namespace PhotoToss.AndroidApp
 			// aapt resource value: 0x7f06003f
 			public const int primary_text_disabled_material_light = 2131099711;
 			
+			// aapt resource value: 0x7f060057
+			public const int psts_background_tab_pressed = 2131099735;
+			
 			// aapt resource value: 0x7f060040
 			public const int ripple_material_dark = 2131099712;
 			
@@ -2630,11 +2726,11 @@ namespace PhotoToss.AndroidApp
 			// aapt resource value: 0x7f060047
 			public const int switch_thumb_disabled_material_light = 2131099719;
 			
-			// aapt resource value: 0x7f060068
-			public const int switch_thumb_material_dark = 2131099752;
-			
 			// aapt resource value: 0x7f060069
-			public const int switch_thumb_material_light = 2131099753;
+			public const int switch_thumb_material_dark = 2131099753;
+			
+			// aapt resource value: 0x7f06006a
+			public const int switch_thumb_material_light = 2131099754;
 			
 			// aapt resource value: 0x7f060048
 			public const int switch_thumb_normal_material_dark = 2131099720;
@@ -2681,11 +2777,11 @@ namespace PhotoToss.AndroidApp
 			// aapt resource value: 0x7f06000c
 			public const int wallet_link_text_light = 2131099660;
 			
-			// aapt resource value: 0x7f06006a
-			public const int wallet_primary_text_holo_light = 2131099754;
-			
 			// aapt resource value: 0x7f06006b
-			public const int wallet_secondary_text_holo_dark = 2131099755;
+			public const int wallet_primary_text_holo_light = 2131099755;
+			
+			// aapt resource value: 0x7f06006c
+			public const int wallet_secondary_text_holo_dark = 2131099756;
 			
 			static Color()
 			{
@@ -3511,8 +3607,8 @@ namespace PhotoToss.AndroidApp
 			// aapt resource value: 0x7f0200a9
 			public const int mr_ic_settings_light = 2130837673;
 			
-			// aapt resource value: 0x7f0200ae
-			public const int notification_template_icon_bg = 2130837678;
+			// aapt resource value: 0x7f0200af
+			public const int notification_template_icon_bg = 2130837679;
 			
 			// aapt resource value: 0x7f0200aa
 			public const int powered_by_google_dark = 2130837674;
@@ -3521,10 +3617,13 @@ namespace PhotoToss.AndroidApp
 			public const int powered_by_google_light = 2130837675;
 			
 			// aapt resource value: 0x7f0200ac
-			public const int tosstopus = 2130837676;
+			public const int psts_background_tab = 2130837676;
 			
 			// aapt resource value: 0x7f0200ad
-			public const int unknown_octopus = 2130837677;
+			public const int tosstopus = 2130837677;
+			
+			// aapt resource value: 0x7f0200ae
+			public const int unknown_octopus = 2130837678;
 			
 			static Drawable()
 			{
@@ -3539,65 +3638,65 @@ namespace PhotoToss.AndroidApp
 		public partial class Id
 		{
 			
-			// aapt resource value: 0x7f0900b5
-			public const int AddTagBtn = 2131296437;
+			// aapt resource value: 0x7f0900b8
+			public const int AddTagBtn = 2131296440;
 			
-			// aapt resource value: 0x7f0900c2
-			public const int CatchButton = 2131296450;
-			
-			// aapt resource value: 0x7f0900bd
-			public const int ImageDetailMenu = 2131296445;
-			
-			// aapt resource value: 0x7f09007f
-			public const int ItemName = 2131296383;
+			// aapt resource value: 0x7f0900c5
+			public const int CatchButton = 2131296453;
 			
 			// aapt resource value: 0x7f0900c0
-			public const int MainMenu = 2131296448;
+			public const int ImageDetailMenu = 2131296448;
 			
-			// aapt resource value: 0x7f0900b4
-			public const int NewTagText = 2131296436;
+			// aapt resource value: 0x7f090081
+			public const int ItemName = 2131296385;
+			
+			// aapt resource value: 0x7f0900c3
+			public const int MainMenu = 2131296451;
+			
+			// aapt resource value: 0x7f0900b7
+			public const int NewTagText = 2131296439;
+			
+			// aapt resource value: 0x7f0900c4
+			public const int PhotoButton = 2131296452;
 			
 			// aapt resource value: 0x7f0900c1
-			public const int PhotoButton = 2131296449;
+			public const int TossButton = 2131296449;
 			
-			// aapt resource value: 0x7f0900be
-			public const int TossButton = 2131296446;
+			// aapt resource value: 0x7f0900b9
+			public const int UploadBtn = 2131296441;
 			
-			// aapt resource value: 0x7f0900b6
-			public const int UploadBtn = 2131296438;
+			// aapt resource value: 0x7f0900a0
+			public const int action0 = 2131296416;
 			
-			// aapt resource value: 0x7f09009e
-			public const int action0 = 2131296414;
+			// aapt resource value: 0x7f09008d
+			public const int actionPrompt = 2131296397;
 			
-			// aapt resource value: 0x7f09008b
-			public const int actionPrompt = 2131296395;
-			
-			// aapt resource value: 0x7f090068
-			public const int action_bar = 2131296360;
+			// aapt resource value: 0x7f09006a
+			public const int action_bar = 2131296362;
 			
 			// aapt resource value: 0x7f090001
 			public const int action_bar_activity_content = 2131296257;
 			
-			// aapt resource value: 0x7f090067
-			public const int action_bar_container = 2131296359;
+			// aapt resource value: 0x7f090069
+			public const int action_bar_container = 2131296361;
 			
-			// aapt resource value: 0x7f090063
-			public const int action_bar_root = 2131296355;
+			// aapt resource value: 0x7f090065
+			public const int action_bar_root = 2131296357;
 			
 			// aapt resource value: 0x7f090002
 			public const int action_bar_spinner = 2131296258;
 			
-			// aapt resource value: 0x7f09004c
-			public const int action_bar_subtitle = 2131296332;
+			// aapt resource value: 0x7f09004e
+			public const int action_bar_subtitle = 2131296334;
 			
-			// aapt resource value: 0x7f09004b
-			public const int action_bar_title = 2131296331;
+			// aapt resource value: 0x7f09004d
+			public const int action_bar_title = 2131296333;
 			
-			// aapt resource value: 0x7f090069
-			public const int action_context_bar = 2131296361;
+			// aapt resource value: 0x7f09006b
+			public const int action_context_bar = 2131296363;
 			
-			// aapt resource value: 0x7f0900a2
-			public const int action_divider = 2131296418;
+			// aapt resource value: 0x7f0900a4
+			public const int action_divider = 2131296420;
 			
 			// aapt resource value: 0x7f090003
 			public const int action_menu_divider = 2131296259;
@@ -3605,17 +3704,17 @@ namespace PhotoToss.AndroidApp
 			// aapt resource value: 0x7f090004
 			public const int action_menu_presenter = 2131296260;
 			
-			// aapt resource value: 0x7f090065
-			public const int action_mode_bar = 2131296357;
+			// aapt resource value: 0x7f090067
+			public const int action_mode_bar = 2131296359;
 			
-			// aapt resource value: 0x7f090064
-			public const int action_mode_bar_stub = 2131296356;
+			// aapt resource value: 0x7f090066
+			public const int action_mode_bar_stub = 2131296358;
 			
-			// aapt resource value: 0x7f09004d
-			public const int action_mode_close_button = 2131296333;
+			// aapt resource value: 0x7f09004f
+			public const int action_mode_close_button = 2131296335;
 			
-			// aapt resource value: 0x7f09004e
-			public const int activity_chooser_view_content = 2131296334;
+			// aapt resource value: 0x7f090050
+			public const int activity_chooser_view_content = 2131296336;
 			
 			// aapt resource value: 0x7f090021
 			public const int adjust_height = 2131296289;
@@ -3623,23 +3722,26 @@ namespace PhotoToss.AndroidApp
 			// aapt resource value: 0x7f090022
 			public const int adjust_width = 2131296290;
 			
-			// aapt resource value: 0x7f090058
-			public const int alertTitle = 2131296344;
+			// aapt resource value: 0x7f09005a
+			public const int alertTitle = 2131296346;
 			
 			// aapt resource value: 0x7f09002e
 			public const int always = 2131296302;
 			
-			// aapt resource value: 0x7f090095
-			public const int art = 2131296405;
+			// aapt resource value: 0x7f090097
+			public const int art = 2131296407;
 			
 			// aapt resource value: 0x7f090046
 			public const int automatic = 2131296326;
 			
-			// aapt resource value: 0x7f090084
-			public const int aztekView = 2131296388;
+			// aapt resource value: 0x7f090086
+			public const int aztekView = 2131296390;
 			
 			// aapt resource value: 0x7f09002b
 			public const int beginning = 2131296299;
+			
+			// aapt resource value: 0x7f09004b
+			public const int bold = 2131296331;
 			
 			// aapt resource value: 0x7f090014
 			public const int book_now = 2131296276;
@@ -3653,14 +3755,14 @@ namespace PhotoToss.AndroidApp
 			// aapt resource value: 0x7f09003e
 			public const int button = 2131296318;
 			
-			// aapt resource value: 0x7f09005e
-			public const int buttonPanel = 2131296350;
+			// aapt resource value: 0x7f090060
+			public const int buttonPanel = 2131296352;
 			
-			// aapt resource value: 0x7f0900bb
-			public const int buttonZxingFlash = 2131296443;
+			// aapt resource value: 0x7f0900be
+			public const int buttonZxingFlash = 2131296446;
 			
-			// aapt resource value: 0x7f09009b
-			public const int buttons = 2131296411;
+			// aapt resource value: 0x7f09009d
+			public const int buttons = 2131296413;
 			
 			// aapt resource value: 0x7f090010
 			public const int buyButton = 2131296272;
@@ -3671,11 +3773,11 @@ namespace PhotoToss.AndroidApp
 			// aapt resource value: 0x7f090016
 			public const int buy_with_google = 2131296278;
 			
-			// aapt resource value: 0x7f09009f
-			public const int cancel_action = 2131296415;
+			// aapt resource value: 0x7f0900a1
+			public const int cancel_action = 2131296417;
 			
-			// aapt resource value: 0x7f0900b2
-			public const int captionText = 2131296434;
+			// aapt resource value: 0x7f0900b5
+			public const int captionText = 2131296437;
 			
 			// aapt resource value: 0x7f090000
 			public const int cast_notification_id = 2131296256;
@@ -3683,11 +3785,11 @@ namespace PhotoToss.AndroidApp
 			// aapt resource value: 0x7f090043
 			public const int center = 2131296323;
 			
-			// aapt resource value: 0x7f090060
-			public const int checkbox = 2131296352;
+			// aapt resource value: 0x7f090062
+			public const int checkbox = 2131296354;
 			
-			// aapt resource value: 0x7f0900a5
-			public const int chronometer = 2131296421;
+			// aapt resource value: 0x7f0900a7
+			public const int chronometer = 2131296423;
 			
 			// aapt resource value: 0x7f090018
 			public const int classic = 2131296280;
@@ -3695,50 +3797,50 @@ namespace PhotoToss.AndroidApp
 			// aapt resource value: 0x7f09002f
 			public const int collapseActionView = 2131296303;
 			
-			// aapt resource value: 0x7f09007a
-			public const int com_facebook_body_frame = 2131296378;
-			
 			// aapt resource value: 0x7f09007c
-			public const int com_facebook_button_xout = 2131296380;
-			
-			// aapt resource value: 0x7f090078
-			public const int com_facebook_fragment_container = 2131296376;
-			
-			// aapt resource value: 0x7f090079
-			public const int com_facebook_login_activity_progress_bar = 2131296377;
+			public const int com_facebook_body_frame = 2131296380;
 			
 			// aapt resource value: 0x7f09007e
-			public const int com_facebook_tooltip_bubble_view_bottom_pointer = 2131296382;
+			public const int com_facebook_button_xout = 2131296382;
 			
-			// aapt resource value: 0x7f09007d
-			public const int com_facebook_tooltip_bubble_view_text_body = 2131296381;
+			// aapt resource value: 0x7f09007a
+			public const int com_facebook_fragment_container = 2131296378;
 			
 			// aapt resource value: 0x7f09007b
-			public const int com_facebook_tooltip_bubble_view_top_pointer = 2131296379;
+			public const int com_facebook_login_activity_progress_bar = 2131296379;
 			
-			// aapt resource value: 0x7f0900bc
-			public const int contentFrame = 2131296444;
+			// aapt resource value: 0x7f090080
+			public const int com_facebook_tooltip_bubble_view_bottom_pointer = 2131296384;
 			
-			// aapt resource value: 0x7f090059
-			public const int contentPanel = 2131296345;
+			// aapt resource value: 0x7f09007f
+			public const int com_facebook_tooltip_bubble_view_text_body = 2131296383;
 			
-			// aapt resource value: 0x7f09005d
-			public const int custom = 2131296349;
-			
-			// aapt resource value: 0x7f09005c
-			public const int customPanel = 2131296348;
-			
-			// aapt resource value: 0x7f090066
-			public const int decor_content_parent = 2131296358;
-			
-			// aapt resource value: 0x7f090051
-			public const int default_activity_button = 2131296337;
-			
-			// aapt resource value: 0x7f090094
-			public const int default_control_frame = 2131296404;
+			// aapt resource value: 0x7f09007d
+			public const int com_facebook_tooltip_bubble_view_top_pointer = 2131296381;
 			
 			// aapt resource value: 0x7f0900bf
-			public const int deleteBtn = 2131296447;
+			public const int contentFrame = 2131296447;
+			
+			// aapt resource value: 0x7f09005b
+			public const int contentPanel = 2131296347;
+			
+			// aapt resource value: 0x7f09005f
+			public const int custom = 2131296351;
+			
+			// aapt resource value: 0x7f09005e
+			public const int customPanel = 2131296350;
+			
+			// aapt resource value: 0x7f090068
+			public const int decor_content_parent = 2131296360;
+			
+			// aapt resource value: 0x7f090053
+			public const int default_activity_button = 2131296339;
+			
+			// aapt resource value: 0x7f090096
+			public const int default_control_frame = 2131296406;
+			
+			// aapt resource value: 0x7f0900c2
+			public const int deleteBtn = 2131296450;
 			
 			// aapt resource value: 0x7f090033
 			public const int dialog = 2131296307;
@@ -3746,8 +3848,8 @@ namespace PhotoToss.AndroidApp
 			// aapt resource value: 0x7f090025
 			public const int disableHome = 2131296293;
 			
-			// aapt resource value: 0x7f09009c
-			public const int disconnect = 2131296412;
+			// aapt resource value: 0x7f09009e
+			public const int disconnect = 2131296414;
 			
 			// aapt resource value: 0x7f090047
 			public const int display_always = 2131296327;
@@ -3755,29 +3857,29 @@ namespace PhotoToss.AndroidApp
 			// aapt resource value: 0x7f090017
 			public const int donate_with_google = 2131296279;
 			
-			// aapt resource value: 0x7f090086
-			public const int drawer_layout = 2131296390;
+			// aapt resource value: 0x7f090088
+			public const int drawer_layout = 2131296392;
 			
 			// aapt resource value: 0x7f090034
 			public const int dropdown = 2131296308;
 			
-			// aapt resource value: 0x7f09006a
-			public const int edit_query = 2131296362;
+			// aapt resource value: 0x7f09006c
+			public const int edit_query = 2131296364;
 			
 			// aapt resource value: 0x7f09002c
 			public const int end = 2131296300;
 			
-			// aapt resource value: 0x7f0900aa
-			public const int end_padder = 2131296426;
+			// aapt resource value: 0x7f0900ac
+			public const int end_padder = 2131296428;
 			
-			// aapt resource value: 0x7f09004f
-			public const int expand_activities_button = 2131296335;
+			// aapt resource value: 0x7f090051
+			public const int expand_activities_button = 2131296337;
 			
-			// aapt resource value: 0x7f09005f
-			public const int expanded_menu = 2131296351;
+			// aapt resource value: 0x7f090061
+			public const int expanded_menu = 2131296353;
 			
-			// aapt resource value: 0x7f090087
-			public const int fragmentContainer = 2131296391;
+			// aapt resource value: 0x7f090089
+			public const int fragmentContainer = 2131296393;
 			
 			// aapt resource value: 0x7f090019
 			public const int grayscale = 2131296281;
@@ -3797,29 +3899,32 @@ namespace PhotoToss.AndroidApp
 			// aapt resource value: 0x7f09001d
 			public const int hybrid = 2131296285;
 			
-			// aapt resource value: 0x7f090053
-			public const int icon = 2131296339;
+			// aapt resource value: 0x7f090055
+			public const int icon = 2131296341;
 			
 			// aapt resource value: 0x7f090030
 			public const int ifRoom = 2131296304;
 			
-			// aapt resource value: 0x7f090050
-			public const int image = 2131296336;
+			// aapt resource value: 0x7f090052
+			public const int image = 2131296338;
+			
+			// aapt resource value: 0x7f0900ad
+			public const int imageView = 2131296429;
+			
+			// aapt resource value: 0x7f09008c
+			public const int imageView1 = 2131296396;
+			
+			// aapt resource value: 0x7f090082
+			public const int imagesView = 2131296386;
 			
 			// aapt resource value: 0x7f0900ab
-			public const int imageView = 2131296427;
-			
-			// aapt resource value: 0x7f09008a
-			public const int imageView1 = 2131296394;
-			
-			// aapt resource value: 0x7f090080
-			public const int imagesView = 2131296384;
-			
-			// aapt resource value: 0x7f0900a9
-			public const int info = 2131296425;
+			public const int info = 2131296427;
 			
 			// aapt resource value: 0x7f090041
 			public const int inline = 2131296321;
+			
+			// aapt resource value: 0x7f09004c
+			public const int italic = 2131296332;
 			
 			// aapt resource value: 0x7f090049
 			public const int large = 2131296329;
@@ -3827,50 +3932,50 @@ namespace PhotoToss.AndroidApp
 			// aapt resource value: 0x7f090044
 			public const int left = 2131296324;
 			
-			// aapt resource value: 0x7f090088
-			public const int left_drawer = 2131296392;
+			// aapt resource value: 0x7f09008a
+			public const int left_drawer = 2131296394;
 			
-			// aapt resource value: 0x7f0900a3
-			public const int line1 = 2131296419;
+			// aapt resource value: 0x7f0900a5
+			public const int line1 = 2131296421;
 			
-			// aapt resource value: 0x7f0900a7
-			public const int line3 = 2131296423;
+			// aapt resource value: 0x7f0900a9
+			public const int line3 = 2131296425;
 			
-			// aapt resource value: 0x7f0900b1
-			public const int linearLayout1 = 2131296433;
+			// aapt resource value: 0x7f0900b4
+			public const int linearLayout1 = 2131296436;
 			
-			// aapt resource value: 0x7f0900b9
-			public const int linearLayout2 = 2131296441;
+			// aapt resource value: 0x7f0900bc
+			public const int linearLayout2 = 2131296444;
 			
 			// aapt resource value: 0x7f090023
 			public const int listMode = 2131296291;
 			
-			// aapt resource value: 0x7f090052
-			public const int list_item = 2131296338;
+			// aapt resource value: 0x7f090054
+			public const int list_item = 2131296340;
 			
-			// aapt resource value: 0x7f090089
-			public const int loginView = 2131296393;
+			// aapt resource value: 0x7f09008b
+			public const int loginView = 2131296395;
 			
 			// aapt resource value: 0x7f090012
 			public const int match_parent = 2131296274;
 			
-			// aapt resource value: 0x7f0900a1
-			public const int media_actions = 2131296417;
+			// aapt resource value: 0x7f0900a3
+			public const int media_actions = 2131296419;
 			
-			// aapt resource value: 0x7f090093
-			public const int media_route_control_frame = 2131296403;
+			// aapt resource value: 0x7f090095
+			public const int media_route_control_frame = 2131296405;
 			
-			// aapt resource value: 0x7f09008f
-			public const int media_route_list = 2131296399;
+			// aapt resource value: 0x7f090091
+			public const int media_route_list = 2131296401;
 			
-			// aapt resource value: 0x7f090099
-			public const int media_route_volume_layout = 2131296409;
+			// aapt resource value: 0x7f09009b
+			public const int media_route_volume_layout = 2131296411;
 			
-			// aapt resource value: 0x7f09009a
-			public const int media_route_volume_slider = 2131296410;
+			// aapt resource value: 0x7f09009c
+			public const int media_route_volume_slider = 2131296412;
 			
-			// aapt resource value: 0x7f09008e
-			public const int messenger_send_button = 2131296398;
+			// aapt resource value: 0x7f090090
+			public const int messenger_send_button = 2131296400;
 			
 			// aapt resource value: 0x7f09002d
 			public const int middle = 2131296301;
@@ -3899,26 +4004,26 @@ namespace PhotoToss.AndroidApp
 			// aapt resource value: 0x7f09003b
 			public const int page = 2131296315;
 			
-			// aapt resource value: 0x7f0900b7
-			public const int pager = 2131296439;
+			// aapt resource value: 0x7f0900ba
+			public const int pager = 2131296442;
 			
-			// aapt resource value: 0x7f090055
-			public const int parentPanel = 2131296341;
+			// aapt resource value: 0x7f090057
+			public const int parentPanel = 2131296343;
 			
-			// aapt resource value: 0x7f090096
-			public const int play_pause = 2131296406;
+			// aapt resource value: 0x7f090098
+			public const int play_pause = 2131296408;
 			
-			// aapt resource value: 0x7f090083
-			public const int post_pager = 2131296387;
+			// aapt resource value: 0x7f090085
+			public const int post_pager = 2131296389;
 			
 			// aapt resource value: 0x7f09000c
 			public const int production = 2131296268;
 			
-			// aapt resource value: 0x7f0900ac
-			public const int profileImage = 2131296428;
+			// aapt resource value: 0x7f0900ae
+			public const int profileImage = 2131296430;
 			
-			// aapt resource value: 0x7f09008c
-			public const int profilePicture = 2131296396;
+			// aapt resource value: 0x7f09008e
+			public const int profilePicture = 2131296398;
 			
 			// aapt resource value: 0x7f090006
 			public const int progress_circular = 2131296262;
@@ -3926,20 +4031,23 @@ namespace PhotoToss.AndroidApp
 			// aapt resource value: 0x7f090007
 			public const int progress_horizontal = 2131296263;
 			
-			// aapt resource value: 0x7f09008d
-			public const int promptText = 2131296397;
+			// aapt resource value: 0x7f09008f
+			public const int promptText = 2131296399;
 			
-			// aapt resource value: 0x7f090062
-			public const int radio = 2131296354;
+			// aapt resource value: 0x7f0900b2
+			public const int psts_tab_title = 2131296434;
 			
-			// aapt resource value: 0x7f0900ae
-			public const int registerButton = 2131296430;
+			// aapt resource value: 0x7f090064
+			public const int radio = 2131296356;
+			
+			// aapt resource value: 0x7f0900b0
+			public const int registerButton = 2131296432;
 			
 			// aapt resource value: 0x7f090045
 			public const int right = 2131296325;
 			
-			// aapt resource value: 0x7f090091
-			public const int route_name = 2131296401;
+			// aapt resource value: 0x7f090093
+			public const int route_name = 2131296403;
 			
 			// aapt resource value: 0x7f09000d
 			public const int sandbox = 2131296269;
@@ -3950,53 +4058,53 @@ namespace PhotoToss.AndroidApp
 			// aapt resource value: 0x7f090036
 			public const int screen = 2131296310;
 			
-			// aapt resource value: 0x7f09005a
-			public const int scrollView = 2131296346;
+			// aapt resource value: 0x7f09005c
+			public const int scrollView = 2131296348;
 			
-			// aapt resource value: 0x7f0900b0
-			public const int scrollView1 = 2131296432;
-			
-			// aapt resource value: 0x7f09006c
-			public const int search_badge = 2131296364;
-			
-			// aapt resource value: 0x7f09006b
-			public const int search_bar = 2131296363;
-			
-			// aapt resource value: 0x7f09006d
-			public const int search_button = 2131296365;
-			
-			// aapt resource value: 0x7f090072
-			public const int search_close_btn = 2131296370;
+			// aapt resource value: 0x7f0900b3
+			public const int scrollView1 = 2131296435;
 			
 			// aapt resource value: 0x7f09006e
-			public const int search_edit_frame = 2131296366;
+			public const int search_badge = 2131296366;
 			
-			// aapt resource value: 0x7f090074
-			public const int search_go_btn = 2131296372;
+			// aapt resource value: 0x7f09006d
+			public const int search_bar = 2131296365;
 			
 			// aapt resource value: 0x7f09006f
-			public const int search_mag_icon = 2131296367;
+			public const int search_button = 2131296367;
+			
+			// aapt resource value: 0x7f090074
+			public const int search_close_btn = 2131296372;
 			
 			// aapt resource value: 0x7f090070
-			public const int search_plate = 2131296368;
-			
-			// aapt resource value: 0x7f090071
-			public const int search_src_text = 2131296369;
-			
-			// aapt resource value: 0x7f090075
-			public const int search_voice_btn = 2131296373;
+			public const int search_edit_frame = 2131296368;
 			
 			// aapt resource value: 0x7f090076
-			public const int select_dialog_listview = 2131296374;
+			public const int search_go_btn = 2131296374;
+			
+			// aapt resource value: 0x7f090071
+			public const int search_mag_icon = 2131296369;
+			
+			// aapt resource value: 0x7f090072
+			public const int search_plate = 2131296370;
+			
+			// aapt resource value: 0x7f090073
+			public const int search_src_text = 2131296371;
+			
+			// aapt resource value: 0x7f090077
+			public const int search_voice_btn = 2131296375;
+			
+			// aapt resource value: 0x7f090078
+			public const int select_dialog_listview = 2131296376;
 			
 			// aapt resource value: 0x7f090011
 			public const int selectionDetails = 2131296273;
 			
-			// aapt resource value: 0x7f090092
-			public const int settings = 2131296402;
+			// aapt resource value: 0x7f090094
+			public const int settings = 2131296404;
 			
-			// aapt resource value: 0x7f090061
-			public const int shortcut = 2131296353;
+			// aapt resource value: 0x7f090063
+			public const int shortcut = 2131296355;
 			
 			// aapt resource value: 0x7f090027
 			public const int showCustom = 2131296295;
@@ -4028,29 +4136,29 @@ namespace PhotoToss.AndroidApp
 			// aapt resource value: 0x7f09003f
 			public const int standard = 2131296319;
 			
-			// aapt resource value: 0x7f0900a0
-			public const int status_bar_latest_event_content = 2131296416;
+			// aapt resource value: 0x7f0900a2
+			public const int status_bar_latest_event_content = 2131296418;
 			
-			// aapt resource value: 0x7f09009d
-			public const int stop = 2131296413;
+			// aapt resource value: 0x7f09009f
+			public const int stop = 2131296415;
 			
 			// aapt resource value: 0x7f09000e
 			public const int strict_sandbox = 2131296270;
 			
-			// aapt resource value: 0x7f090073
-			public const int submit_area = 2131296371;
+			// aapt resource value: 0x7f090075
+			public const int submit_area = 2131296373;
 			
-			// aapt resource value: 0x7f090098
-			public const int subtitle = 2131296408;
+			// aapt resource value: 0x7f09009a
+			public const int subtitle = 2131296410;
 			
 			// aapt resource value: 0x7f090024
 			public const int tabMode = 2131296292;
 			
-			// aapt resource value: 0x7f090082
-			public const int tabs = 2131296386;
+			// aapt resource value: 0x7f090084
+			public const int tabs = 2131296388;
 			
-			// aapt resource value: 0x7f0900b3
-			public const int tagsField = 2131296435;
+			// aapt resource value: 0x7f0900b6
+			public const int tagsField = 2131296438;
 			
 			// aapt resource value: 0x7f090020
 			public const int terrain = 2131296288;
@@ -4058,59 +4166,59 @@ namespace PhotoToss.AndroidApp
 			// aapt resource value: 0x7f09000f
 			public const int test = 2131296271;
 			
+			// aapt resource value: 0x7f0900aa
+			public const int text = 2131296426;
+			
 			// aapt resource value: 0x7f0900a8
-			public const int text = 2131296424;
+			public const int text2 = 2131296424;
+			
+			// aapt resource value: 0x7f09005d
+			public const int textSpacerNoButtons = 2131296349;
+			
+			// aapt resource value: 0x7f090079
+			public const int textView1 = 2131296377;
+			
+			// aapt resource value: 0x7f0900bb
+			public const int textView2 = 2131296443;
+			
+			// aapt resource value: 0x7f0900bd
+			public const int textView3 = 2131296445;
+			
+			// aapt resource value: 0x7f090099
+			public const int text_wrapper = 2131296409;
 			
 			// aapt resource value: 0x7f0900a6
-			public const int text2 = 2131296422;
+			public const int time = 2131296422;
 			
-			// aapt resource value: 0x7f09005b
-			public const int textSpacerNoButtons = 2131296347;
+			// aapt resource value: 0x7f090056
+			public const int title = 2131296342;
 			
-			// aapt resource value: 0x7f090077
-			public const int textView1 = 2131296375;
+			// aapt resource value: 0x7f090092
+			public const int title_bar = 2131296402;
 			
-			// aapt resource value: 0x7f0900b8
-			public const int textView2 = 2131296440;
+			// aapt resource value: 0x7f090059
+			public const int title_template = 2131296345;
 			
-			// aapt resource value: 0x7f0900ba
-			public const int textView3 = 2131296442;
-			
-			// aapt resource value: 0x7f090097
-			public const int text_wrapper = 2131296407;
-			
-			// aapt resource value: 0x7f0900a4
-			public const int time = 2131296420;
-			
-			// aapt resource value: 0x7f090054
-			public const int title = 2131296340;
-			
-			// aapt resource value: 0x7f090090
-			public const int title_bar = 2131296400;
-			
-			// aapt resource value: 0x7f090057
-			public const int title_template = 2131296343;
-			
-			// aapt resource value: 0x7f090081
-			public const int tool_bar = 2131296385;
+			// aapt resource value: 0x7f090083
+			public const int tool_bar = 2131296387;
 			
 			// aapt resource value: 0x7f090042
 			public const int top = 2131296322;
 			
-			// aapt resource value: 0x7f090056
-			public const int topPanel = 2131296342;
+			// aapt resource value: 0x7f090058
+			public const int topPanel = 2131296344;
 			
-			// aapt resource value: 0x7f090085
-			public const int tossButton = 2131296389;
+			// aapt resource value: 0x7f090087
+			public const int tossButton = 2131296391;
 			
-			// aapt resource value: 0x7f0900ad
-			public const int txt_nickname = 2131296429;
+			// aapt resource value: 0x7f0900af
+			public const int txt_nickname = 2131296431;
 			
 			// aapt resource value: 0x7f09003c
 			public const int unknown = 2131296316;
 			
-			// aapt resource value: 0x7f0900af
-			public const int unregisterButton = 2131296431;
+			// aapt resource value: 0x7f0900b1
+			public const int unregisterButton = 2131296433;
 			
 			// aapt resource value: 0x7f090009
 			public const int up = 2131296265;
@@ -4346,46 +4454,49 @@ namespace PhotoToss.AndroidApp
 			public const int ProfileFragment = 2130903097;
 			
 			// aapt resource value: 0x7f03003a
-			public const int select_dialog_item_material = 2130903098;
+			public const int psts_tab = 2130903098;
 			
 			// aapt resource value: 0x7f03003b
-			public const int select_dialog_multichoice_material = 2130903099;
+			public const int select_dialog_item_material = 2130903099;
 			
 			// aapt resource value: 0x7f03003c
-			public const int select_dialog_singlechoice_material = 2130903100;
+			public const int select_dialog_multichoice_material = 2130903100;
 			
 			// aapt resource value: 0x7f03003d
-			public const int SettingsFragment = 2130903101;
+			public const int select_dialog_singlechoice_material = 2130903101;
 			
 			// aapt resource value: 0x7f03003e
-			public const int SignInLayout = 2130903102;
+			public const int SettingsFragment = 2130903102;
 			
 			// aapt resource value: 0x7f03003f
-			public const int sub_tool_bar = 2130903103;
+			public const int SignInLayout = 2130903103;
 			
 			// aapt resource value: 0x7f030040
-			public const int support_simple_spinner_dropdown_item = 2130903104;
+			public const int sub_tool_bar = 2130903104;
 			
 			// aapt resource value: 0x7f030041
-			public const int tool_bar = 2130903105;
+			public const int support_simple_spinner_dropdown_item = 2130903105;
 			
 			// aapt resource value: 0x7f030042
-			public const int TossFragment = 2130903106;
+			public const int tool_bar = 2130903106;
 			
 			// aapt resource value: 0x7f030043
-			public const int UploadActivity = 2130903107;
+			public const int TossFragment = 2130903107;
 			
 			// aapt resource value: 0x7f030044
-			public const int ViewPager = 2130903108;
+			public const int UploadActivity = 2130903108;
 			
 			// aapt resource value: 0x7f030045
-			public const int ZxingOverlay = 2130903109;
+			public const int ViewPager = 2130903109;
 			
 			// aapt resource value: 0x7f030046
-			public const int zxingscanneractivitylayout = 2130903110;
+			public const int ZxingOverlay = 2130903110;
 			
 			// aapt resource value: 0x7f030047
-			public const int zxingscannerfragmentlayout = 2130903111;
+			public const int zxingscanneractivitylayout = 2130903111;
+			
+			// aapt resource value: 0x7f030048
+			public const int zxingscannerfragmentlayout = 2130903112;
 			
 			static Layout()
 			{
@@ -6275,6 +6386,76 @@ namespace PhotoToss.AndroidApp
 			
 			// aapt resource value: 7
 			public const int MenuView_preserveIconSpacing = 7;
+			
+			public static int[] PagerSlidingTabStrip = new int[] {
+					2130772227,
+					2130772228,
+					2130772229,
+					2130772230,
+					2130772231,
+					2130772232,
+					2130772233,
+					2130772234,
+					2130772235,
+					2130772236,
+					2130772237,
+					2130772238,
+					2130772239,
+					2130772240,
+					2130772241,
+					2130772242,
+					2130772243};
+			
+			// aapt resource value: 2
+			public const int PagerSlidingTabStrip_pstsDividerColor = 2;
+			
+			// aapt resource value: 6
+			public const int PagerSlidingTabStrip_pstsDividerPadding = 6;
+			
+			// aapt resource value: 3
+			public const int PagerSlidingTabStrip_pstsDividerWidth = 3;
+			
+			// aapt resource value: 0
+			public const int PagerSlidingTabStrip_pstsIndicatorColor = 0;
+			
+			// aapt resource value: 4
+			public const int PagerSlidingTabStrip_pstsIndicatorHeight = 4;
+			
+			// aapt resource value: 12
+			public const int PagerSlidingTabStrip_pstsPaddingMiddle = 12;
+			
+			// aapt resource value: 8
+			public const int PagerSlidingTabStrip_pstsScrollOffset = 8;
+			
+			// aapt resource value: 10
+			public const int PagerSlidingTabStrip_pstsShouldExpand = 10;
+			
+			// aapt resource value: 9
+			public const int PagerSlidingTabStrip_pstsTabBackground = 9;
+			
+			// aapt resource value: 7
+			public const int PagerSlidingTabStrip_pstsTabPaddingLeftRight = 7;
+			
+			// aapt resource value: 11
+			public const int PagerSlidingTabStrip_pstsTextAllCaps = 11;
+			
+			// aapt resource value: 14
+			public const int PagerSlidingTabStrip_pstsTextAlpha = 14;
+			
+			// aapt resource value: 13
+			public const int PagerSlidingTabStrip_pstsTextColorSelected = 13;
+			
+			// aapt resource value: 16
+			public const int PagerSlidingTabStrip_pstsTextSelectedStyle = 16;
+			
+			// aapt resource value: 15
+			public const int PagerSlidingTabStrip_pstsTextStyle = 15;
+			
+			// aapt resource value: 1
+			public const int PagerSlidingTabStrip_pstsUnderlineColor = 1;
+			
+			// aapt resource value: 5
+			public const int PagerSlidingTabStrip_pstsUnderlineHeight = 5;
 			
 			public static int[] PopupWindow = new int[] {
 					16843126,

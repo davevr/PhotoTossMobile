@@ -21,6 +21,7 @@ using Android.Text;
 using Android.Text.Style;
 using Android.Content.PM;
 
+
 namespace PhotoToss.AndroidApp
 {
 	[Activity(Theme = "@style/AppSubTheme", ScreenOrientation = ScreenOrientation.Portrait)]	
