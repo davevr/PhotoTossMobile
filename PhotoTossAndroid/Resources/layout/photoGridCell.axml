@@ -11,6 +11,7 @@
     android:background="@android:color/transparent">
     <ImageView
         android:src="@drawable/iconNoBorder"
+        android:background="@android:drawable/dialog_holo_light_frame"
         android:layout_width="160dp"
         android:layout_height="160dp"
         android:id="@+id/imageView"

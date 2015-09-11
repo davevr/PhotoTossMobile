@@ -117,7 +117,7 @@ namespace PhotoToss.AndroidApp
 				{
 					View curCell = imageGrid.GetChildAt(i);
 
-					if (curCell.Rotation != (float)targetRot)
+					if ((curCell != null) && (curCell.Rotation != (float)targetRot))
 					{
 						/*
 						if (curCell.Rotation < targetRot) {
