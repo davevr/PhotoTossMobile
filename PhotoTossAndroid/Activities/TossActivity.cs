@@ -29,10 +29,8 @@ namespace PhotoToss.AndroidApp
 		Android.Util.DisplayMetrics	metrics;
 
 
-
         protected override void OnCreate(Bundle bundle)
         {
-
 			RequestWindowFeature (WindowFeatures.NoTitle);
 			Window.SetFlags (WindowManagerFlags.Fullscreen, WindowManagerFlags.Fullscreen);
 			Window.SetFlags (WindowManagerFlags.Secure, WindowManagerFlags.Secure);
@@ -40,35 +38,6 @@ namespace PhotoToss.AndroidApp
 
             // Create your application here
             SetContentView(Resource.Layout.TossFragment);
-
-			// get the actual menu object from the layout
-			/*
-			var menu = FindViewById<SatelliteMenuButton>(Resource.Id.menu);
-
-			// register for the menu item selection event here
-			menu.MenuItemClick += delegate(object sender, SatelliteMenuItemEventArgs e)
-			{
-				// parse the enum value from int back to the enum here
-				string mit = e.MenuItem.Tag.ToString();
-
-				// just show the menu item selected toast, in the app we would probably fire new activity or similar
-				Toast.MakeText(this, string.Format("Menu item selected: {0}", mit), ToastLength.Short).Show();
-			};
-
-			// array of items
-			var items = new List<SatelliteMenuButtonItem>();
-
-			// just add one by one
-			items.Add(new SatelliteMenuButtonItem((int) 1, Resource.Drawable.ic_help));
-			items.Add(new SatelliteMenuButtonItem((int) 2, Resource.Drawable.ic_settings));
-			items.Add(new SatelliteMenuButtonItem((int) 3, Resource.Drawable.ic_star_rate_black_48dp));
-			items.Add(new SatelliteMenuButtonItem((int) 4, Resource.Drawable.ic_delete_black_48dp));
-			items.Add(new SatelliteMenuButtonItem((int) 5, Resource.Drawable.ic_camera));
-			items.Add(new SatelliteMenuButtonItem((int) 6, Resource.Drawable.ic_catch));
-
-			// now add all to the menus
-			menu.AddItems(items.ToArray());
-			*/
 
 			PhotoRecord curRec = PhotoTossRest.Instance.CurrentImage;
 			metrics = Resources.DisplayMetrics;
@@ -79,26 +48,26 @@ namespace PhotoToss.AndroidApp
 
             tossBtn = FindViewById<Button>(Resource.Id.tossButton);
 			imageView = FindViewById<ImageView>(Resource.Id.aztekView);
-			Koush.UrlImageViewHelper.SetUrlDrawable (imageView, curRec.imageUrl + "=s" + itemWidth.ToString(), Resource.Drawable.ic_camera);
-
-
 
 
             tossBtn.Click +=  delegate
             {
-                tossBtn.Text = "cancel toss";
-				double myLong = MainActivity._lastLocation.Longitude;
-				double myLat = MainActivity._lastLocation.Latitude;
-				int gameType = 0;
-				long imageId = curRec.id;
-
-				PhotoTossRest.Instance.StartToss(imageId, gameType, myLong, myLat, PresentTossResult);
-
-                
+				Finish();
 
 
             };
         }
+
+		protected override void OnStart ()
+		{
+			base.OnStart ();
+			double myLong = MainActivity._lastLocation.Longitude;
+			double myLat = MainActivity._lastLocation.Latitude;
+			int gameType = 0;
+			PhotoRecord curRec = PhotoTossRest.Instance.CurrentImage;
+			long imageId = curRec.id;
+			PhotoTossRest.Instance.StartToss(imageId, gameType, myLong, myLat, PresentTossResult);
+		}
 
 		private void PresentTossResult(TossRecord theToss)
 		{

@@ -16,14 +16,15 @@ namespace PhotoToss.iOSApp
 		public ImageViewController () : base ("ImageViewController", null)
 		{
 			tab1 = new ImageDetailController();
-			tab1.Title = "Image";
+			tab1.TabBarItem = new UITabBarItem ("Image", UIImage.FromBundle ("CameraIcon"), 0);
 
+		
 			tab2 = new ImageSpreadViewController();
-			tab2.Title = "Spread";
+			tab2.TabBarItem = new UITabBarItem ("Spread", UIImage.FromBundle ("SpreadIcon"), 1);
 			tab2.View.BackgroundColor = UIColor.Orange;
 
 			tab3 = new ImageStatsViewController();
-			tab3.Title = "Stats";
+			tab3.TabBarItem = new UITabBarItem ("Stats", UIImage.FromBundle ("StatsIcon"), 2);
 			tab3.View.BackgroundColor = UIColor.Red;
 
 			var tabs = new UIViewController[] {
@@ -47,7 +48,7 @@ namespace PhotoToss.iOSApp
 			base.ViewDidLoad ();
 			
 			// Perform any additional setup after loading the view, typically from a nib.
-			var tossBtn = new UIBarButtonItem ("Toss", UIBarButtonItemStyle.Plain, (sender, e) => {
+			var tossBtn = new UIBarButtonItem(UIImage.FromBundle("TossIcon"),UIBarButtonItemStyle.Plain,  (sender, e) => {
 
 				TossViewController tossViewer = new TossViewController();
 				tossViewer.ModalInPopover = true;
@@ -63,8 +64,6 @@ namespace PhotoToss.iOSApp
 			});
 
 			NavigationItem.RightBarButtonItem = tossBtn;
-
-
 
 
 		}

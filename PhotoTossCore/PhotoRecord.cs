@@ -31,6 +31,7 @@ namespace PhotoToss.Core
 		public DateTime received { get; set; }
 		public long tosserid { get; set; }
         public string tossername { get; set; }
+		public long tossid { get; set; }
 
 
 		// updated after a toss
@@ -41,6 +42,7 @@ namespace PhotoToss.Core
         private object cachedImage = null;
         private object cachedCatchImage = null;
 
+		public List<TossRecord> tossList {get; set;}
 
         public static PhotoRecord MakeSample()
         {

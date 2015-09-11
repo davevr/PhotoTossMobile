@@ -36,9 +36,12 @@
     <MtouchArch>ARMv7, ARM64</MtouchArch>
     <ConsolePause>false</ConsolePause>
     <CodesignKey>iPhone Distribution</CodesignKey>
-    <CodesignProvision>666c9307-c6ca-4562-84fd-a87d499b03cb</CodesignProvision>
+    <CodesignProvision>21a6b77d-15b9-4396-a5a7-e221593a4bc2</CodesignProvision>
     <IpaPackageName>
     </IpaPackageName>
+    <MtouchUseRefCounting>true</MtouchUseRefCounting>
+    <MtouchI18n>
+    </MtouchI18n>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|iPhoneSimulator' ">
     <Optimize>true</Optimize>
@@ -105,8 +108,14 @@
     <Reference Include="JVMenuPopover">
       <HintPath>..\Components\jvmenupopover-1.1\lib\ios-unified\JVMenuPopover.dll</HintPath>
     </Reference>
+    <Reference Include="HockeyApp.iOS">
+      <HintPath>..\Components\hockeyappios-3.7.1.0\lib\ios-unified\HockeyApp.iOS.dll</HintPath>
+    </Reference>
+    <Reference Include="SDWebImage">
+      <HintPath>..\Components\sdwebimage-3.7.1.4\lib\ios-unified\SDWebImage.dll</HintPath>
+    </Reference>
     <Reference Include="Calabash">
-      <HintPath>..\packages\Xamarin.TestCloud.Agent.0.14.3\lib\Xamarin.iOS10\Calabash.dll</HintPath>
+      <HintPath>..\packages\Xamarin.TestCloud.Agent.0.16.0\lib\Xamarin.iOS10\Calabash.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
@@ -161,6 +170,36 @@
     <ImageAsset Include="Resources\Images.xcassets\CatchIcon.imageset\catchIcon-75.png">
       <InProject>false</InProject>
     </ImageAsset>
+    <ImageAsset Include="Resources\Images.xcassets\SpreadIcon.imageset\Contents.json">
+      <InProject>false</InProject>
+    </ImageAsset>
+    <ImageAsset Include="Resources\Images.xcassets\StatsIcon.imageset\Contents.json">
+      <InProject>false</InProject>
+    </ImageAsset>
+    <ImageAsset Include="Resources\Images.xcassets\SpreadIcon.imageset\spread25.png">
+      <InProject>false</InProject>
+    </ImageAsset>
+    <ImageAsset Include="Resources\Images.xcassets\SpreadIcon.imageset\spread50.png">
+      <InProject>false</InProject>
+    </ImageAsset>
+    <ImageAsset Include="Resources\Images.xcassets\SpreadIcon.imageset\spread75.png">
+      <InProject>false</InProject>
+    </ImageAsset>
+    <ImageAsset Include="Resources\Images.xcassets\StatsIcon.imageset\stats25.png">
+      <InProject>false</InProject>
+    </ImageAsset>
+    <ImageAsset Include="Resources\Images.xcassets\StatsIcon.imageset\stats50.png">
+      <InProject>false</InProject>
+    </ImageAsset>
+    <ImageAsset Include="Resources\Images.xcassets\StatsIcon.imageset\stats75.png">
+      <InProject>false</InProject>
+    </ImageAsset>
+    <ImageAsset Include="Resources\Images.xcassets\TossIcon.imageset\Contents.json">
+      <InProject>false</InProject>
+    </ImageAsset>
+    <ImageAsset Include="Resources\Images.xcassets\TossIcon.imageset\ic_toss.png">
+      <InProject>false</InProject>
+    </ImageAsset>
   </ItemGroup>
   <ItemGroup>
     <InterfaceDefinition Include="Resources\LaunchScreen.xib" />
@@ -176,6 +215,8 @@
     <InterfaceDefinition Include="ViewControllers\ImageViewController.xib" />
     <InterfaceDefinition Include="ViewControllers\ImageSpreadViewController.xib" />
     <InterfaceDefinition Include="ViewControllers\ImageStatsViewController.xib" />
+    <InterfaceDefinition Include="Views\ImageInfoCell.xib" />
+    <InterfaceDefinition Include="Views\TossInfoCell.xib" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Info.plist" />
@@ -253,6 +294,14 @@
     <Compile Include="ViewControllers\ImageStatsViewController.cs" />
     <Compile Include="ViewControllers\ImageStatsViewController.designer.cs">
       <DependentUpon>ImageStatsViewController.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Views\TossInfoCell.cs" />
+    <Compile Include="Views\TossInfoCell.designer.cs">
+      <DependentUpon>TossInfoCell.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Views\ImageInfoCell.cs" />
+    <Compile Include="Views\ImageInfoCell.designer.cs">
+      <DependentUpon>ImageInfoCell.cs</DependentUpon>
     </Compile>
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\iOS\Xamarin.iOS.CSharp.targets" />

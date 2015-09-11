@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="7706" systemVersion="14F27" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES">
+    <dependencies>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="7703"/>
+    </dependencies>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <tableViewCell contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" rowHeight="370" id="cxk-wN-pdQ" customClass="ImageInfoCell">
+            <rect key="frame" x="0.0" y="0.0" width="320" height="370"/>
+            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+            <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="cxk-wN-pdQ" id="YTl-1W-gDM">
+                <rect key="frame" x="0.0" y="0.0" width="320" height="43"/>
+                <autoresizingMask key="autoresizingMask"/>
+                <subviews>
+                    <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="CatchIcon" translatesAutoresizingMaskIntoConstraints="NO" id="Hw4-3I-xsd">
+                        <rect key="frame" x="8" y="6" width="25" height="25"/>
+                        <constraints>
+                            <constraint firstAttribute="height" constant="25" id="EQp-WU-URu"/>
+                            <constraint firstAttribute="width" constant="25" id="bUd-UV-QQg"/>
+                        </constraints>
+                    </imageView>
+                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="September 21, 2015 9:15:34 PM" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="xjt-1E-jcx">
+                        <rect key="frame" x="41" y="0.0" width="217" height="21"/>
+                        <constraints>
+                            <constraint firstAttribute="height" constant="21" id="PGJ-ZU-5Cc"/>
+                        </constraints>
+                        <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                        <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                        <nil key="highlightedColor"/>
+                    </label>
+                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="fYG-a4-TY5">
+                        <rect key="frame" x="41" y="25" width="188" height="21"/>
+                        <constraints>
+                            <constraint firstAttribute="height" constant="21" id="LGP-5R-CYT"/>
+                        </constraints>
+                        <fontDescription key="fontDescription" type="italicSystem" pointSize="14"/>
+                        <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                        <nil key="highlightedColor"/>
+                    </label>
+                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="RPi-9i-K5F">
+                        <rect key="frame" x="258" y="1" width="56" height="30"/>
+                        <constraints>
+                            <constraint firstAttribute="width" constant="56" id="MQe-ej-EzH"/>
+                            <constraint firstAttribute="height" constant="30" id="ySt-nm-UV6"/>
+                        </constraints>
+                        <state key="normal" title="Tosses">
+                            <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                        </state>
+                    </button>
+                    <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="placeholder.png" translatesAutoresizingMaskIntoConstraints="NO" id="wCs-yD-gY9">
+                        <rect key="frame" x="0.0" y="50" width="304" height="304"/>
+                        <constraints>
+                            <constraint firstAttribute="height" constant="304" id="BkV-VV-4NT"/>
+                        </constraints>
+                    </imageView>
+                    <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="unknownperson.png" translatesAutoresizingMaskIntoConstraints="NO" id="8qg-rt-6fi">
+                        <rect key="frame" x="256" y="306" width="64" height="64"/>
+                        <constraints>
+                            <constraint firstAttribute="height" constant="64" id="IT3-6m-eTy"/>
+                            <constraint firstAttribute="width" constant="64" id="cg3-Zc-KhY"/>
+                        </constraints>
+                    </imageView>
+                </subviews>
+                <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                <constraints>
+                    <constraint firstItem="RPi-9i-K5F" firstAttribute="leading" secondItem="xjt-1E-jcx" secondAttribute="trailing" id="1kg-y7-kh2"/>
+                    <constraint firstItem="RPi-9i-K5F" firstAttribute="leading" secondItem="fYG-a4-TY5" secondAttribute="trailing" constant="29" id="AHR-RV-0mz"/>
+                    <constraint firstItem="xjt-1E-jcx" firstAttribute="leading" secondItem="Hw4-3I-xsd" secondAttribute="trailing" constant="8" id="Duv-J9-fyf"/>
+                    <constraint firstItem="fYG-a4-TY5" firstAttribute="leading" secondItem="Hw4-3I-xsd" secondAttribute="trailing" constant="8" id="Elq-fQ-pao"/>
+                    <constraint firstItem="wCs-yD-gY9" firstAttribute="top" secondItem="fYG-a4-TY5" secondAttribute="bottom" constant="4" id="KHN-aq-w0K"/>
+                    <constraint firstItem="Hw4-3I-xsd" firstAttribute="leading" secondItem="YTl-1W-gDM" secondAttribute="leading" constant="8" id="KXe-HX-3ZS"/>
+                    <constraint firstAttribute="trailing" secondItem="wCs-yD-gY9" secondAttribute="trailing" constant="16" id="SRM-Kt-HkJ"/>
+                    <constraint firstItem="Hw4-3I-xsd" firstAttribute="top" secondItem="YTl-1W-gDM" secondAttribute="top" constant="6" id="Y1p-nn-4gR"/>
+                    <constraint firstItem="wCs-yD-gY9" firstAttribute="leading" secondItem="YTl-1W-gDM" secondAttribute="leading" id="ecf-Eh-jVU"/>
+                    <constraint firstItem="fYG-a4-TY5" firstAttribute="top" secondItem="xjt-1E-jcx" secondAttribute="bottom" constant="4" id="kfO-kl-sUH"/>
+                    <constraint firstItem="RPi-9i-K5F" firstAttribute="top" secondItem="YTl-1W-gDM" secondAttribute="top" constant="1" id="ksR-gQ-w3v"/>
+                    <constraint firstItem="wCs-yD-gY9" firstAttribute="trailing" secondItem="8qg-rt-6fi" secondAttribute="trailing" constant="-16" id="lJa-JC-7UV"/>
+                    <constraint firstItem="xjt-1E-jcx" firstAttribute="top" secondItem="YTl-1W-gDM" secondAttribute="top" id="pRb-9b-DgZ"/>
+                    <constraint firstItem="wCs-yD-gY9" firstAttribute="bottom" secondItem="8qg-rt-6fi" secondAttribute="bottom" constant="-16" id="qDZ-B1-faE"/>
+                    <constraint firstAttribute="trailing" secondItem="RPi-9i-K5F" secondAttribute="trailing" constant="6" id="uO1-x1-udf"/>
+                </constraints>
+            </tableViewCellContentView>
+            <connections>
+                <outlet property="DateTitle" destination="xjt-1E-jcx" id="o9I-gh-KWh"/>
+                <outlet property="MainImage" destination="wCs-yD-gY9" id="4fy-j2-uve"/>
+                <outlet property="PersonImage" destination="8qg-rt-6fi" id="2xQ-RP-yKf"/>
+                <outlet property="ShowTossesBtn" destination="RPi-9i-K5F" id="crR-1n-Srr"/>
+                <outlet property="TossCountLabel" destination="fYG-a4-TY5" id="Xx6-Zh-7TE"/>
+                <outlet property="TypeIcon" destination="Hw4-3I-xsd" id="Ra2-7A-iXC"/>
+            </connections>
+            <point key="canvasLocation" x="413" y="612"/>
+        </tableViewCell>
+    </objects>
+    <resources>
+        <image name="CatchIcon" width="25" height="25"/>
+        <image name="placeholder.png" width="80" height="60"/>
+        <image name="unknownperson.png" width="64" height="64"/>
+    </resources>
+    <simulatedMetricsContainer key="defaultSimulatedMetrics">
+        <simulatedStatusBarMetrics key="statusBar"/>
+        <simulatedOrientationMetrics key="orientation"/>
+        <simulatedScreenMetrics key="destination" type="retina4"/>
+    </simulatedMetricsContainer>
+</document>

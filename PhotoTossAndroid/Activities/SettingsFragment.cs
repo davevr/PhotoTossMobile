@@ -13,7 +13,7 @@ using Android.Widget;
 
 namespace PhotoToss.AndroidApp
 {
-    public class StatsFragment : Android.Support.V4.App.Fragment
+    public class SettingsFragment : Android.Support.V4.App.Fragment
     {
 
         public MainActivity MainPage { get; set; }
@@ -21,7 +21,7 @@ namespace PhotoToss.AndroidApp
         {
             base.OnCreateView(inflater, container, savedInstanceState);
 
-            var view = inflater.Inflate(Resource.Layout.StatsFragment, container, false);
+            var view = inflater.Inflate(Resource.Layout.SettingsFragment, container, false);
 
 
 
