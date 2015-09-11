@@ -86,7 +86,7 @@ namespace PhotoToss.AndroidApp
 		public static Location	_lastLocation = new Location("passive");
 		private LocationManager _locationManager;
 		ICallbackManager callbackManager;
-
+		public delegate void Bitmap_callback(Bitmap theResult);
 		public event Action PulledToRefresh;
 
 
@@ -640,39 +640,51 @@ namespace PhotoToss.AndroidApp
 
 		}
 
-		void HandleScanResult(ZXing.Result result)
+		private void HandleScanResult(ZXing.Result result)
 		{
-			string msg = "";	
-
 			if (result != null && !string.IsNullOrEmpty (result.Text)) {
-				PhotoTossRest.Instance.GetCatchURL ((urlStr) => {
-					double latitude = 0.0;
-					double longitude = 0.0;
-					Bitmap tempImage = BitmapFactory.DecodeResource(Resources, Resource.Drawable.iconNoBorder);
-					System.IO.Stream photoStream = new MemoryStream();
-					tempImage.Compress(Bitmap.CompressFormat.Jpeg, 0, photoStream);
-					// remove toss ID from URL
-					long tossId = long.Parse(result.Text.Substring(result.Text.LastIndexOf("/") + 1));
+				long tossId = long.Parse(result.Text.Substring(result.Text.LastIndexOf("/") + 1));
+				CaptureImageFromCamera ((theImage) => {
 
-					PhotoTossRest.Instance.CatchToss(photoStream, tossId, longitude, latitude, (newRec) => 
-						{
-							if (newRec != null)
-								homePage.AddImage(newRec);
-							else
-							{
-								RunOnUiThread(()=> {
-									Toast.MakeText(this, "Catch failed.  Please try again.", ToastLength.Long).Show();
-								});
-							}
-
-						});
+					FinalizeToss (tossId, theImage);
 				});
 			} else {
-				msg = "Scanning Canceled!";
+				string msg = "Scanning Canceled!";
 				this.RunOnUiThread (() => {
 					Toast.MakeText (this, msg, ToastLength.Short).Show ();
 				});
 			}
+		}
+
+		private void CaptureImageFromCamera(Bitmap_callback callback) {
+			Bitmap tempImage = BitmapFactory.DecodeResource(Resources, Resource.Drawable.iconNoBorder);
+			callback (tempImage);
+		}
+
+		private void FinalizeToss (long tossId, Bitmap catchImage)
+		{
+			PhotoTossRest.Instance.GetCatchURL ((urlStr) => {
+				double longitude = MainActivity._lastLocation.Longitude;
+				double latitude = MainActivity._lastLocation.Latitude;
+				Bitmap tempImage = BitmapFactory.DecodeResource(Resources, Resource.Drawable.iconNoBorder);
+				System.IO.Stream photoStream = new MemoryStream();
+				tempImage.Compress(Bitmap.CompressFormat.Jpeg, 0, photoStream);
+				// remove toss ID from URL
+
+
+				PhotoTossRest.Instance.CatchToss(photoStream, tossId, longitude, latitude, (newRec) => 
+					{
+						if (newRec != null)
+							homePage.AddImage(newRec);
+						else
+						{
+							RunOnUiThread(()=> {
+								Toast.MakeText(this, "Catch failed.  Please try again.", ToastLength.Long).Show();
+							});
+						}
+
+					});
+			});
 		}
 
 		private Bitmap GetImageBitmapFromUrl(string url)

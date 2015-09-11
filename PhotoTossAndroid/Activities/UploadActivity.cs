@@ -25,10 +25,7 @@ namespace PhotoToss.AndroidApp
     {
         private ImageView imageView;
         private EditText captionText;
-        private TextView tagField;
-        private EditText newTagText;
-        private Button addTagBtn;
-        private Button uploadBtn;
+       private Button uploadBtn;
 		private int MAX_IMAGE_SIZE = 2048;
 		private Bitmap scaledBitmap;
 		private ProgressDialog progressDlg;
@@ -43,9 +40,6 @@ namespace PhotoToss.AndroidApp
 
             imageView = FindViewById<ImageView>(Resource.Id.imageView);
             captionText = FindViewById<EditText>(Resource.Id.captionText);
-            tagField = FindViewById<TextView>(Resource.Id.tagsField);
-            newTagText = FindViewById<EditText>(Resource.Id.NewTagText);
-            addTagBtn = FindViewById<Button>(Resource.Id.AddTagBtn);
             uploadBtn = FindViewById<Button>(Resource.Id.UploadBtn);
 
 			scaledBitmap = BitmapHelper.LoadAndResizeBitmap (MainActivity._file.AbsolutePath, MAX_IMAGE_SIZE);

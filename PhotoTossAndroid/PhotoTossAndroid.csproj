@@ -229,6 +229,13 @@
     <AndroidResource Include="Resources\layout\ImageViewStatsFragment.axml" />
     <AndroidResource Include="Resources\values\dimens.xml" />
     <AndroidResource Include="Resources\menu\ImageDetailMenu.xml" />
+    <AndroidResource Include="Resources\drawable\background.png" />
+    <AndroidResource Include="Resources\drawable\ic_toss.png" />
+    <AndroidResource Include="Resources\values-v19\dimens.xml" />
+    <AndroidResource Include="Resources\values-v19\styles.xml" />
+    <AndroidResource Include="Resources\values-v21\dimens.xml" />
+    <AndroidResource Include="Resources\values-v21\styles.xml" />
+    <AndroidResource Include="Resources\drawable\bg_3.png" />
   </ItemGroup>
   <ItemGroup>
     <AndroidResource Include="Resources\values\Strings.xml" />
@@ -325,6 +332,8 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Resources\drawable-mdpi\" />
+    <Folder Include="Resources\values-v19\" />
+    <Folder Include="Resources\values-v21\" />
   </ItemGroup>
   <ItemGroup>
     <AndroidAsset Include="Assets\fonts\RammettoOne-Regular.ttf" />

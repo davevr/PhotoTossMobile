@@ -210,7 +210,7 @@ namespace PhotoToss.AndroidApp
                 });
         }
 
-        public class PhotoRecordAdapter : BaseAdapter
+        public class PhotoRecordAdapter : BaseAdapter, Koush.IUrlImageViewCallback
         {
             private readonly Context context;
             private readonly HomeFragment home;
@@ -251,6 +251,19 @@ namespace PhotoToss.AndroidApp
                 return 0;
             }
 
+			public void OnLoaded(ImageView theImage, Bitmap theBitmap, string theURL, bool p4)
+			{
+				SetRoundImage (theImage, theBitmap);
+			}
+
+			private void SetRoundImage(ImageView theImage, Bitmap theBitmap)
+			{
+				((Activity)context).RunOnUiThread (() => {
+					CircleDrawable myCircle = new CircleDrawable (theBitmap);
+					theImage.SetImageDrawable (myCircle);
+				});
+			}
+
             public override View GetView(int position, View convertView, ViewGroup parent)
             {
 				Random	rnd = new Random (position);
@@ -277,20 +290,17 @@ namespace PhotoToss.AndroidApp
 				if ((tosserId != 0) && (tosserId != PhotoTossRest.Instance.CurrentUser.id))
 				{
                     string imageUrl = PhotoTossRest.Instance.GetUserProfileImage(curRec.tossername);
-					userView.SetImageResource (Resource.Drawable.unknown_octopus);
 					userView.Visibility = ViewStates.Visible;
 
+					var theObj = Koush.DrawableCache.Instance.Get (imageUrl);
 
-		            BitmapHelper.GetImageBitmapFromUrlAsync(imageUrl, (theBitmap) =>
-		                {
-		                    ((Activity)context).RunOnUiThread(() =>
-		                        {
-		                            Bitmap userBitMap = BitmapHelper.GetImageBitmapFromUrl(imageUrl);
-		                            CircleDrawable myCircle = new CircleDrawable(userBitMap);
-		                            userView.SetImageDrawable(myCircle);
-		                        });
+					if (theObj == null)
+						Koush.UrlImageViewHelper.SetUrlDrawable (userView, imageUrl, Resource.Drawable.unknown_octopus,this);
+					else {
+						Koush.UrlImageViewHelper.ZombieDrawable drawable = (Koush.UrlImageViewHelper.ZombieDrawable)theObj;
+						SetRoundImage (userView, drawable.Bitmap);
+					}
 
-		                });
 				}
 				Koush.UrlImageViewHelper.SetUrlDrawable (imageView, curRec.imageUrl + "=s" + itemWidth.ToString() + "-c", Resource.Drawable.ic_camera);
 

@@ -4,7 +4,7 @@
     android:layout_height="fill_parent"
     android:minWidth="25px"
     android:minHeight="25px"
-    android:background="@drawable/iconNoBorder">
+    android:background="@drawable/bg_3">
     <GridView
         android:minWidth="25px"
         android:minHeight="25px"
@@ -13,5 +13,5 @@
         android:id="@+id/imagesView"
         android:verticalSpacing="16dp"
         android:stretchMode="columnWidth"
-        android:background="#A0FFFFFF" />
+        android:background="#00FFFFFF" />
 </RelativeLayout>

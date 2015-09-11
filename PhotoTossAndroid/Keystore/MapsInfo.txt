@@ -1,1 +1,13 @@
-Maps InfoAPI KEYAIzaSyCQedhE1fZ_So4VS9qHU6au72g5xXbEj3ASHA1 Hashes:Dave’s Laptop hash:93:FE:02:49:3A:29:51:6A:1B:C6:E0:1F:5F:99:5D:74:A5:1D:45:5ARelease Hash22:BD:6E:B5:B2:F6:D9:BA:5E:2B:1E:6E:55:C7:04:F9:EE:D1:96:82
+Maps InfoAPI KEYAIzaSyBPVI-Q9zVNfIb4CjeB2Unl_xE3u0mIowsSHA1 Hashes:
+
+DA Laptop debug Hash:
+C6:D7:EF:3B:42:50:31:07:1A:1F:02:9A:D6:06:A7:BD:A4:7D:03:31
+
+iMac debug Hash:
+ED:EC:A6:67:88:DA:BC:3E:B3:42:25:3B:84:88:FB:A0:62:4C:FA:38
+
+Dave’s PC debug hash:
+01:12:4C:A0:5A:1E:AA:F5:D6:D0:56:3A:5A:5B:48:A4:21:FC:20:8E
+Dave’s Laptop debug hash:93:FE:02:49:3A:29:51:6A:1B:C6:E0:1F:5F:99:5D:74:A5:1D:45:5ARelease Hash22:BD:6E:B5:B2:F6:D9:BA:5E:2B:1E:6E:55:C7:04:F9:EE:D1:96:82Path commandskeytool -list -v -keystore "C:\Users\davevr\AppData\Local\Xamarin\Mono for Android\debug.keystore" -alias androiddebugkey -storepass android -keypass android
+
+keytool -list -v -keystore /Users/Dave/.local/share/Xamarin/Mono\ for\ Android/debug.keystore -alias androiddebugkey -storepass android -keypass android

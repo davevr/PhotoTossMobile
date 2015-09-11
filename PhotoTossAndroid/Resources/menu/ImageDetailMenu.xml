@@ -4,15 +4,15 @@
       xmlns:app="http://schemas.android.com/apk/res-auto"
       android:id="@+id/ImageDetailMenu">
   <item android:id="@+id/TossButton"
-        android:icon="@drawable/ic_camera"
+        android:icon="@drawable/ic_toss"
         app:showAsAction="always"
         android:orderInCategory="0"
-        android:title="toss">
+        android:title="toss it!">
   </item>
   <item android:id="@+id/deleteBtn"
       android:icon="@drawable/ic_delete_black_48dp"
       app:showAsAction="always"
       android:orderInCategory="1"
-      android:title="delete">
+      android:title="trash it!">
   </item>
 </menu>

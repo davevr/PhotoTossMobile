@@ -5,10 +5,41 @@
     android:layout_height="fill_parent"
     android:minWidth="25px"
     android:minHeight="25px">
-    <TextView
-        android:text="Spread View - how this thing is spreading..."
-        android:textAppearance="?android:attr/textAppearanceLarge"
+    <fragment
+        android:id="@+id/map"
         android:layout_width="match_parent"
+        android:layout_height="200dp"
+        class="com.google.android.gms.maps.SupportMapFragment" />
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/textView1" />
+        android:minWidth="25px"
+        android:minHeight="25px">
+        <Button
+            android:text="Show Me"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/showMeBtn"
+            android:layout_marginLeft="16dp"
+            android:layout_marginRight="16dp" />
+        <Space
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:id="@+id/space1"
+            android:layout_weight="1" />
+        <Button
+            android:text="Show ALl"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/showAllBtn"
+            android:layout_weight="0"
+            android:layout_marginRight="16dp" />
+    </LinearLayout>
+    <ListView
+        android:minWidth="25px"
+        android:minHeight="25px"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/spreadList" />
 </LinearLayout>

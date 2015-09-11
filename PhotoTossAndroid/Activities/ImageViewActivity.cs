@@ -98,7 +98,7 @@ namespace PhotoToss.AndroidApp
 			SupportActionBar.SetBackgroundDrawable(new Android.Graphics.Drawables.ColorDrawable( Resources.GetColor(Resource.Color.PT_light_teal)));
 
 
-			this.Title =  "Image Details";
+			this.Title =  "Photo";
 
 
 			detailFragment = new ImageViewDetailFragment();
@@ -107,7 +107,7 @@ namespace PhotoToss.AndroidApp
 
 			pager = FindViewById<ViewPager>(Resource.Id.post_pager);
 			pager.Adapter = new ImageViewPageAdapter(this.SupportFragmentManager, this);
-
+			pager.AddOnPageChangeListener (this);
 			tabs = FindViewById<PagerSlidingTabStrip>(Resource.Id.tabs);
 			tabs.SetViewPager(pager);
 			tabs.IndicatorColor = Resources.GetColor(Resource.Color.PT_light_orange);
@@ -143,14 +143,17 @@ namespace PhotoToss.AndroidApp
 			{
 			case 0:
 				// Images
+				detailFragment.Update();
 				break;
 
 			case 1:
 				//Spread
+				spreadFragment.Update();
 				break;
 
 			case 2:
 				// Stats
+				statsFragment.Update();
 				break;
 
 			}

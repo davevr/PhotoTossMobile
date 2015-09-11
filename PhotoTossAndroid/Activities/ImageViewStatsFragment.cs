@@ -29,6 +29,11 @@ namespace PhotoToss.AndroidApp
 
 			return fragment;
 		}
+
+
+		public void Update()
+		{
+
+		}
 	}
 }
-

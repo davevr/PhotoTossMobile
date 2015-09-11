@@ -4,6 +4,9 @@
 	<application android:label="PhotoToss" android:theme="@android:style/Theme.Holo.Light.DarkActionBar" android:icon="@drawable/iconnoborder_crop">
 		<activity android:name="com.facebook.FacebookActivity" android:configChanges="keyboard|keyboardHidden|screenLayout|screenSize|orientation" android:theme="@android:style/Theme.Translucent.NoTitleBar" android:label="@string/app_name" />
 		<activity android:name="net.hockeyapp.android.UpdateActivity" />
+		<!-- Put your Google Maps V2 API Key here. -->
+        <meta-data android:name="com.google.android.maps.v2.API_KEY" android:value="AIzaSyBPVI-Q9zVNfIb4CjeB2Unl_xE3u0mIows" />
+        <meta-data android:name="com.google.android.gms.version" android:value="@integer/google_play_services_version" />
 	</application>
 	<uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
 	<uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
@@ -21,4 +24,12 @@
 	<uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
 	<permission android:name="com.eweware.phototoss.permission.C2D_MESSAGE" android:protectionLevel="signature" />
 	<uses-permission android:name="com.eweware.phototoss.permission.C2D_MESSAGE" />
+	<!-- Google Maps for Android v2 requires OpenGL ES v2 -->
+    <uses-feature android:glEsVersion="0x00020000" android:required="true" />
+    <!-- Allow the application to access Google web-based services. -->
+    <uses-permission android:name="com.google.android.providers.gsf.permission.READ_GSERVICES" />
+        <!-- Permission to receive remote notifications from Google Play Services -->
+    <!-- Notice here that we have the package name of our application as a prefix on the permissions. -->
+    <uses-permission android:name="com.eweware.phototoss.permission.MAPS_RECEIVE" />
+    <permission android:name="com.eweware.phototoss.permission.permission.MAPS_RECEIVE" android:protectionLevel="signature" />
 </manifest>
