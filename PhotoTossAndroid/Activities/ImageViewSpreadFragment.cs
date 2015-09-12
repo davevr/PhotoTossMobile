@@ -23,7 +23,6 @@ namespace PhotoToss.AndroidApp
 		private GoogleMap map;
 		private Button showMeBtn;
 		private Button showAllBtn;
-		private ListView spreadList;
 		private bool isUpdated { get; set;}
 		private PhotoRecord curRec;
 		private LatLngBounds markerBounds;
@@ -43,23 +42,35 @@ namespace PhotoToss.AndroidApp
 			var mapFragment = (SupportMapFragment) ChildFragmentManager.FindFragmentById(Resource.Id.map);
 			showMeBtn = fragment.FindViewById<Button> (Resource.Id.showMeBtn);
 			showAllBtn = fragment.FindViewById<Button> (Resource.Id.showAllBtn);
-			spreadList = fragment.FindViewById<ListView> (Resource.Id.spreadList);
 			mapFragment.GetMapAsync (this);
 			curRec = PhotoTossRest.Instance.CurrentImage;
 
 			showAllBtn.Click += (object sender, EventArgs e) => 
 			{
-				if (map != null) {
-
-					CameraUpdate theUpdate = CameraUpdateFactory.NewLatLngBounds(markerBounds, 0);
-					map.AnimateCamera (theUpdate);
-				}
+                ShowAll();
 
 			};
 
 			return fragment;
 		}
 
+        private void ShowAll()
+        {
+            if (map != null)
+            {
+
+                CameraUpdate theUpdate = CameraUpdateFactory.NewLatLngBounds(markerBounds, 0);
+                Activity.RunOnUiThread(() =>
+                {
+                    map.AnimateCamera(theUpdate);
+                });
+            }
+        }
+
+        private void ShowMe()
+        {
+
+        }
 		public void OnMapReady (GoogleMap googleMap)
 		{
 			map = googleMap;
@@ -79,7 +90,7 @@ namespace PhotoToss.AndroidApp
 		private void AddMarker(PhotoRecord theRec, string title)
 		{
 			float theHue;
-			if (curRec.tossid != 0) {
+			if (theRec.tossid != 0) {
 				theHue = BitmapDescriptorFactory.HueGreen;
 			}
 			else
@@ -92,11 +103,15 @@ namespace PhotoToss.AndroidApp
 			LatLng newLoc = GetPhotoLocation (theRec);
 
 			if (map != null) {
+                System.Console.WriteLine(string.Format("{0},{1}", newLoc.Latitude, newLoc.Longitude));
 				MarkerOptions markerOpt1 = new MarkerOptions();
 				markerOpt1.SetPosition(newLoc);
 				markerOpt1.SetTitle(title);
-				//markerOpt1.SetIcon (BitmapDescriptorFactory.DefaultMarker (theHue));
-				map.AddMarker (markerOpt1);
+                markerOpt1.SetIcon (BitmapDescriptorFactory.DefaultMarker (theHue));
+                Activity.RunOnUiThread(() =>
+                {
+                    map.AddMarker(markerOpt1);
+                });
 				markerBounds = markerBounds.Including (newLoc);
 			}
 
@@ -106,14 +121,14 @@ namespace PhotoToss.AndroidApp
 		{
 			double latLoc, longLoc;
 
-			if (curRec.tossid != 0) {
-				latLoc = curRec.receivedlat;
-				longLoc = curRec.receivedlong;
+			if (theRec.tossid != 0) {
+				latLoc = theRec.receivedlat;
+				longLoc = theRec.receivedlong;
 			}
 			else
 			{
-				latLoc = curRec.createdlat;
-				longLoc = curRec.createdlong;
+				latLoc = theRec.createdlat;
+				longLoc = theRec.createdlong;
 			}
 
 			if (latLoc < -90)
@@ -133,37 +148,51 @@ namespace PhotoToss.AndroidApp
 
 		private void DoInitialUpdate()
 		{
-			LatLng newLoc = GetPhotoLocation (curRec);
-			markerBounds = new LatLngBounds (newLoc, newLoc);
-
+            if (isUpdated)
+                return;
+            isUpdated = true;
+            LatLng baseMap = GetPhotoLocation(curRec);
+            LatLng southWest = new LatLng(baseMap.Latitude - 0.01, baseMap.Longitude - 0.01);
+            LatLng northEast = new LatLng(baseMap.Latitude + 0.01, baseMap.Longitude + 0.01);
+            markerBounds = new LatLngBounds(southWest, northEast);
 			AddMarker (curRec, "your image");
 
 			if (curRec.tossid != 0) {
 				PhotoTossRest.Instance.GetImageLineage (curRec.id, (parentList) => {
 					if ((parentList != null) && (parentList.Count > 0))
 					{
-						PolylineOptions polyOptions = new PolylineOptions();
+                        PolylineOptions polyOptions = new PolylineOptions().Visible(true).InvokeWidth(10).InvokeColor(Android.Graphics.Color.Green);
 						polyOptions.Add(GetPhotoLocation(curRec));
-						int parentCount = 1;
+                        int parentCount = 1;
 						string parentString;
 
 						foreach(PhotoRecord curImage in parentList)
 						{
-							polyOptions.Add(GetPhotoLocation(curImage));
+                            LatLng curLoc = GetPhotoLocation(curImage);
+                            polyOptions.Add(curLoc);
 							if (parentCount == parentList.Count)
 								parentString = "original image";
 							else
 								parentString = "parent #" + parentCount++;
-							AddMarker(curImage, parentString);
+
+                            AddMarker(curImage, parentString);
 
 						}
-						//polyOptions.InvokeColor(Android.Graphics.Color.Red.ToArgb());
-						map.AddPolyline(polyOptions);
+
+                        Activity.RunOnUiThread(() =>
+                        {
+                            map.AddPolyline(polyOptions);
+                            ShowAll();
+                        });
+                      
 
 					}
 
 				});
-			}
+			} else
+            {
+                ShowAll();
+            }
 
 		}
 
