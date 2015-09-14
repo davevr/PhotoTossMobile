@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content">
+    <TextView
+        android:text="Toss Title"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/tossTitleView"
+        android:layout_gravity="center_horizontal" />
+    <TextView
+        android:text="toss date"
+        android:textAppearance="?android:attr/textAppearanceSmall"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/tossDateView"
+        android:layout_gravity="center_horizontal" />
+    <FrameLayout
+        android:layout_width="136dp"
+        android:layout_height="136dp">
+        <ImageView
+            android:src="@drawable/ic_camera"
+            android:layout_width="128dp"
+            android:layout_height="128dp"
+            android:id="@+id/tossImage" />
+        <ImageView
+            android:src="@drawable/unknown_octopus"
+            android:layout_width="32dp"
+            android:layout_height="32dp"
+            android:id="@+id/userImage"
+            android:layout_gravity="bottom|right" />
+    </FrameLayout>
+</LinearLayout>

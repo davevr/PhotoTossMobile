@@ -217,6 +217,9 @@
     <None Include="Assets\AboutAssets.txt" />
     <None Include="packages.config" />
     <AndroidResource Include="Resources\layout\Main.axml" />
+    <AndroidResource Include="Resources\layout\MapInfoView.axml">
+      <SubType>AndroidResource</SubType>
+    </AndroidResource>
     <None Include="_external\ByteSmith.WindowsAzure.Messaging.Android.dll" />
     <AndroidResource Include="Resources\layout\SettingsFragment.axml" />
     <AndroidResource Include="Resources\layout\AboutFragment.axml" />
@@ -332,8 +335,6 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Resources\drawable-mdpi\" />
-    <Folder Include="Resources\values-v19\" />
-    <Folder Include="Resources\values-v21\" />
   </ItemGroup>
   <ItemGroup>
     <AndroidAsset Include="Assets\fonts\RammettoOne-Regular.ttf" />

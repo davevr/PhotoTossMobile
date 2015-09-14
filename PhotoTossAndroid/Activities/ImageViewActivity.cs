@@ -85,7 +85,8 @@ namespace PhotoToss.AndroidApp
 
 		protected override void OnCreate (Bundle bundle)
 		{
-			base.OnCreate (bundle);
+            //Window.SetFlags(WindowManagerFlags.Fullscreen, WindowManagerFlags.Fullscreen);
+            base.OnCreate (bundle);
 
 			SetContentView (Resource.Layout.ImageViewActivity);
 

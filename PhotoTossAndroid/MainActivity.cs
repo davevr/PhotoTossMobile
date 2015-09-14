@@ -36,6 +36,7 @@ using PhotoToss.Core;
 using ByteSmith.WindowsAzure.Messaging;
 using Gcm.Client;
 
+using Android.Hardware.Camera2;
 
 using Environment = Android.OS.Environment;
 using Uri = Android.Net.Uri;
@@ -657,6 +658,7 @@ namespace PhotoToss.AndroidApp
 		}
 
 		private void CaptureImageFromCamera(Bitmap_callback callback) {
+
 			Bitmap tempImage = BitmapFactory.DecodeResource(Resources, Resource.Drawable.iconNoBorder);
 			callback (tempImage);
 		}

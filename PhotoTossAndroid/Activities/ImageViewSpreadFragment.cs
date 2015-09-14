@@ -13,12 +13,12 @@ using Android.Views;
 using Android.Widget;
 using Android.Gms.Maps;
 using Android.Gms.Maps.Model;
-
+using Android.Graphics;
 using PhotoToss.Core;
 
 namespace PhotoToss.AndroidApp
 {
-	public class ImageViewSpreadFragment : Android.Support.V4.App.Fragment, IOnMapReadyCallback
+	public class ImageViewSpreadFragment : Android.Support.V4.App.Fragment, Koush.IUrlImageViewCallback, IOnMapReadyCallback, GoogleMap.IInfoWindowAdapter, GoogleMap.IOnInfoWindowClickListener
 	{
 		private GoogleMap map;
 		private Button showMeBtn;
@@ -26,6 +26,12 @@ namespace PhotoToss.AndroidApp
 		private bool isUpdated { get; set;}
 		private PhotoRecord curRec;
 		private LatLngBounds markerBounds;
+        private View infoWindowView = null;
+        private ImageView catchImageView;
+        private ImageView userImageView;
+        private TextView titleView;
+        private TextView dateView;
+        private Dictionary<string, PhotoRecord> markerMap = new Dictionary<string, PhotoRecord>();
 
 		public override void OnCreate (Bundle savedInstanceState)
 		{
@@ -38,8 +44,7 @@ namespace PhotoToss.AndroidApp
 		public override View OnCreateView (LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
 		{
 			View fragment = inflater.Inflate(Resource.Layout.ImageViewSpreadFragment, null);
-
-			var mapFragment = (SupportMapFragment) ChildFragmentManager.FindFragmentById(Resource.Id.map);
+            var mapFragment = (SupportMapFragment) ChildFragmentManager.FindFragmentById(Resource.Id.map);
 			showMeBtn = fragment.FindViewById<Button> (Resource.Id.showMeBtn);
 			showAllBtn = fragment.FindViewById<Button> (Resource.Id.showAllBtn);
 			mapFragment.GetMapAsync (this);
@@ -51,8 +56,20 @@ namespace PhotoToss.AndroidApp
 
 			};
 
+            CreateInfoWindow();
+
 			return fragment;
 		}
+
+        private void CreateInfoWindow()
+        {
+            infoWindowView = GetLayoutInflater(null).Inflate(Resource.Layout.MapInfoView, null);
+            catchImageView = infoWindowView.FindViewById<ImageView>(Resource.Id.tossImage);
+            userImageView = infoWindowView.FindViewById<ImageView>(Resource.Id.userImage);
+            titleView = infoWindowView.FindViewById<TextView>(Resource.Id.tossTitleView);
+            dateView = infoWindowView.FindViewById<TextView>(Resource.Id.tossDateView);
+
+        }
 
         private void ShowAll()
         {
@@ -69,11 +86,23 @@ namespace PhotoToss.AndroidApp
 
         private void ShowMe()
         {
+            if (map != null)
+            {
+                Activity.RunOnUiThread(() =>
+                {
+                    LatLng theLoc = new LatLng(MainActivity._lastLocation.Latitude, MainActivity._lastLocation.Longitude);
+                    CameraPosition thePos = new CameraPosition(theLoc, 16, 0, 0);
+                    CameraUpdate theUpdate = CameraUpdateFactory.NewCameraPosition(thePos);
 
+                    map.AnimateCamera(theUpdate);
+                });
+            }
         }
 		public void OnMapReady (GoogleMap googleMap)
 		{
 			map = googleMap;
+            map.SetInfoWindowAdapter(this);
+            map.SetOnInfoWindowClickListener(this);
 			LatLng theLoc = new LatLng (MainActivity._lastLocation.Latitude, MainActivity._lastLocation.Longitude);
 			CameraPosition thePos = new CameraPosition (theLoc, 16, 0, 0);
 			CameraUpdate theUpdate = CameraUpdateFactory.NewCameraPosition (thePos);
@@ -110,12 +139,38 @@ namespace PhotoToss.AndroidApp
                 markerOpt1.SetIcon (BitmapDescriptorFactory.DefaultMarker (theHue));
                 Activity.RunOnUiThread(() =>
                 {
-                    map.AddMarker(markerOpt1);
+                    Marker newMarker = map.AddMarker(markerOpt1);
+                    markerMap[newMarker.Id] = theRec;
                 });
 				markerBounds = markerBounds.Including (newLoc);
-			}
+                CacheImages(theRec);
+            }
 
 		}
+
+        private void CacheImages(PhotoRecord theRec)
+        {
+            if ((theRec.tosserid != 0) && (theRec.tosserid != PhotoTossRest.Instance.CurrentUser.id))
+            {
+                string userImageUrl = PhotoTossRest.Instance.GetUserProfileImage(theRec.tossername);
+                Koush.UrlImageViewHelper.LoadUrlDrawable(Activity, userImageUrl);
+            }
+
+            string imageUrl;
+
+
+            if (theRec.tossid == 0)
+            {
+                imageUrl = theRec.imageUrl;
+            }
+            else
+            {
+                imageUrl = theRec.catchUrl;
+            }
+
+            imageUrl += "=s128-c";
+            Koush.UrlImageViewHelper.LoadUrlDrawable(Activity, imageUrl);
+        }
 
 		private LatLng GetPhotoLocation(PhotoRecord theRec)
 		{
@@ -184,19 +239,122 @@ namespace PhotoToss.AndroidApp
                             map.AddPolyline(polyOptions);
                             ShowAll();
                         });
-                      
-
 					}
-
 				});
-			} else
+			}
+            else
             {
                 ShowAll();
             }
 
+            ShowImageChildren(curRec);
+
 		}
 
+        private void ShowImageChildren(PhotoRecord parentPhoto)
+        {
+            int catchCount = 1;
+            PhotoTossRest.Instance.GetImageTosses(parentPhoto.id, (tossList) =>
+            {
+                if ((tossList != null) && (tossList.Count > 0))
+                {
+                    foreach (TossRecord curToss in tossList)
+                    {
+                        PhotoTossRest.Instance.GetTossCatches(curToss.id, (catchList) =>
+                        {
+                            if ((catchList != null) && (catchList.Count > 0))
+                            {
+                                LatLng parentLoc = GetPhotoLocation(parentPhoto);
+                                foreach (PhotoRecord curCatch in catchList)
+                                {
+                                    LatLng catchLoc = GetPhotoLocation(curCatch);
+                                    // add a line from the parent to this catch
+                                    PolylineOptions polyOptions = new PolylineOptions().Visible(true).InvokeWidth(10).InvokeColor(Android.Graphics.Color.Red);
+                                    polyOptions.Add(parentLoc);
+                                    polyOptions.Add(catchLoc);
+                                    Activity.RunOnUiThread(() =>
+                                    {
+                                        map.AddPolyline(polyOptions);
+                                    });
+                                    // add a marker
+                                    string markerTitle = String.Format("catch #{0}", catchCount++);
+                                    System.Console.WriteLine(markerTitle);
+                                    AddMarker(curCatch, markerTitle);
+                                    ShowImageChildren(curCatch);
+                                }
+                            }
 
-	}
+                        });
+                    }
+
+                }
+            });
+        }
+
+        public void OnLoaded(ImageView theImage, Bitmap theBitmap, string theURL, bool p4)
+        {
+            SetRoundImage(theImage, theBitmap);
+        }
+
+        private void SetRoundImage(ImageView theImage, Bitmap theBitmap)
+        {
+            Activity.RunOnUiThread(() => {
+                CircleDrawable myCircle = new CircleDrawable(theBitmap);
+                theImage.SetImageDrawable(myCircle);
+            });
+        }
+
+        public View GetInfoContents(Marker theMarker)
+        {
+            if (infoWindowView != null)
+            {
+                titleView.Text = theMarker.Title;
+                PhotoRecord markerRecord = markerMap[theMarker.Id]; // to do - look up actual record
+                long tosserId = markerRecord.tosserid;
+                string tosserName;
+
+                if (tosserId == 0)
+                    tosserName = markerRecord.ownername;
+                else
+                    tosserName = markerRecord.tossername;
+
+                string userImageUrl = PhotoTossRest.Instance.GetUserProfileImage(markerRecord.tossername);
+
+                var theObj = Koush.DrawableCache.Instance.Get(userImageUrl);
+
+                if (theObj == null)
+                    Koush.UrlImageViewHelper.SetUrlDrawable(userImageView, userImageUrl, Resource.Drawable.unknown_octopus, this);
+                else
+                {
+                    Koush.UrlImageViewHelper.ZombieDrawable drawable = (Koush.UrlImageViewHelper.ZombieDrawable)theObj;
+                    SetRoundImage(userImageView, drawable.Bitmap);
+                }
+                string imageUrl;
+
+                if (markerRecord.tossid == 0)
+                    imageUrl = markerRecord.imageUrl;
+                else
+                    imageUrl = markerRecord.catchUrl;
+
+                Koush.UrlImageViewHelper.SetUrlDrawable(catchImageView, imageUrl + "=s128-c", Resource.Drawable.ic_camera);
+
+            }
+            return infoWindowView;
+        }
+
+        public View GetInfoWindow(Marker theMarker)
+        {
+            // use the default view
+            return null;
+        }
+
+        public void OnInfoWindowClick(Marker theMarker)
+        {
+
+        }
+
+    }
+
+  
 }
 
