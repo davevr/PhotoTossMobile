@@ -187,7 +187,7 @@ namespace PhotoToss.iOSApp
 						}
 
 						curCell.Rotation = Math.Round(curCell.Rotation, 2);
-						curCell.Rotation = targetRot;
+						curCell.Rotation = targetRot /2;
 						curCell.Transform = CGAffineTransform.MakeRotation ((nfloat)curCell.Rotation);
 					}
 
@@ -244,7 +244,8 @@ namespace PhotoToss.iOSApp
 		{
 			System.Console.WriteLine ("Refreshing Grid!");
 			PhotoTossRest.Instance.GetUserImages ((userImageList) => {
-				System.Console.WriteLine ("Got %d user images!", userImageList.Count);
+				if (userImageList == null)
+					userImageList = new List<PhotoRecord>();
 				TossedImageDataSource dataSource = new TossedImageDataSource();
 				dataSource.photoList = userImageList;
 				InvokeOnMainThread(() => {
