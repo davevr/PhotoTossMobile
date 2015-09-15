@@ -81,9 +81,10 @@ namespace PhotoToss.Core
                 {
                     List<PhotoRecord> imageList = response.Data;
 
-                    //imageList.Sort(objListOrder.OrderBy(o=>o.OrderDate).ToList();
+						if (imageList != null)
+							imageList = imageList.OrderByDescending(o => o.created).ToList();
 
-                    callback(imageList.OrderByDescending(o => o.created).ToList());
+                    callback(imageList);
                 }
                 else
                     callback(null);
