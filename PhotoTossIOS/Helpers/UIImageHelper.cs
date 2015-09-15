@@ -21,9 +21,14 @@ namespace PhotoToss.iOSApp
 			}
 		}
 
-        public static UIImage ScaleAndRotateImage(UIImage image)
+		public static UIImage ScaleAndRotateImage(UIImage image)
+		{
+			CGImage imgRef = image.CGImage;
+			return ScaleAndRotateImage (imgRef, image.Orientation);
+		}
+
+		public static UIImage ScaleAndRotateImage(CGImage imgRef, UIImageOrientation orient = UIImageOrientation.Up)
         {
-            CGImage imgRef = image.CGImage;
             float width = imgRef.Width;
             float height = imgRef.Height;
             CGAffineTransform transform = CGAffineTransform.MakeIdentity();
@@ -48,7 +53,6 @@ namespace PhotoToss.iOSApp
             float scaleRatio = (float)bounds.Width / width;
             CGSize imageSize = new CGSize(width, height);
             nfloat boundHeight;
-            UIImageOrientation orient = image.Orientation;
 
             switch (orient)
             {

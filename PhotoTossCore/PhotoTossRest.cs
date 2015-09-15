@@ -236,8 +236,10 @@ namespace PhotoToss.Core
 
             apiClient.ExecuteAsync(request, (response) =>
             {
-                _catchURL = response.Content;
-                callback(_catchURL);
+					if (response.StatusCode == HttpStatusCode.OK) {
+						_catchURL = response.Content;
+						callback(_catchURL);
+					}
             });
 
         }

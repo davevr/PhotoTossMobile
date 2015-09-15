@@ -19,17 +19,18 @@ using Facebook.LoginKit;
 using Facebook.CoreKit;
 using CoreMotion;
 using CoreLocation;
+using CoreImage;
 
 
 namespace PhotoToss.iOSApp
 {
 	public delegate void image_callback(UIImage theImage);
+	public delegate void stream_callback(System.IO.Stream theStream);
 
 	public partial class HomeViewController : JVMenuViewController, IUICollectionViewDelegate
 	{
 		public static AVCaptureSession session;
 		public static PhotoRecord CurrentPhotoRecord { get; set; }
-		OutputRecorder outputRecorder;
 		DispatchQueue queue;
 		private UIView loadingOverlay = null;
 		List<string> readPermissions = new List<string> { "public_profile" };
@@ -432,68 +433,65 @@ namespace PhotoToss.iOSApp
 			if (result != null) {
 				catchResult = result.Text;
 				CaptureOneFrame (FinalizeCatch);
+
 			}
 		}
 
-		private void CaptureOneFrame(image_callback callback)
+		private void CaptureOneFrame(stream_callback callback)
 		{
 			SetupCaptureSession (callback);
 		}
 
-		bool SetupCaptureSession (image_callback callback)
+		void SetupCaptureSession(stream_callback callback)
 		{
-			// configure the capture session for low resolution, change this if your code
-			// can cope with more data or volume
-			session = new AVCaptureSession () {
-				SessionPreset = AVCaptureSession.Preset1280x720
-			};
+			session = new AVCaptureSession();
+			var camera = AVCaptureDevice.DefaultDeviceWithMediaType(AVMediaType.Video);
+			var input = AVCaptureDeviceInput.FromDevice(camera);
+			session.BeginConfiguration ();
 
-			// create a device input and attach it to the session
-			var captureDevice = AVCaptureDevice.DefaultDeviceWithMediaType (AVMediaType.Video);
-			if (captureDevice == null){
-				Console.WriteLine ("No captureDevice - this won't work on the simulator, try a physical device");
-				return false;
-			}
-			//Configure for 15 FPS. Note use of LockForConigfuration()/UnlockForConfiguration()
-			NSError error = null;
-			captureDevice.LockForConfiguration(out error);
-			if(error != null)
-			{
-				Console.WriteLine(error);
-				captureDevice.UnlockForConfiguration();
-				return false;
-			}
-			if(UIDevice.CurrentDevice.CheckSystemVersion(7,0))
-				captureDevice.ActiveVideoMinFrameDuration = new CMTime (1,15);
-			captureDevice.UnlockForConfiguration();
+			session.AddInput(input);
 
-			var input = AVCaptureDeviceInput.FromDevice (captureDevice);
+			var output = new AVCaptureStillImageOutput() {OutputSettings = new NSDictionary(AVVideo.CodecKey, AVVideo.CodecJPEG)};
 
-			if (input == null){
-				Console.WriteLine ("No input - this won't work on the simulator, try a physical device");
-				return false;
-			}
-			session.AddInput (input);
+			session.AddOutput(output);
+			session.SessionPreset = AVCaptureSession.Preset1280x720;
+			session.CommitConfiguration ();
+			session.StartRunning();
+			AVCaptureConnection connection = output.Connections[0];
 
-			// create a VideoDataOutput and add it to the sesion
-			var settings = new CVPixelBufferAttributes { 
-				PixelFormatType = CVPixelFormatType.CV32BGRA
-			};
-			using (var output = new AVCaptureVideoDataOutput { WeakVideoSettings = settings.Dictionary }) {
-				queue = new CoreFoundation.DispatchQueue ("myQueue");
-				outputRecorder = new OutputRecorder ();
-				outputRecorder.callback = callback;
-				output.SetSampleBufferDelegate (outputRecorder, queue);
-				session.AddOutput (output);
+			if (session.Running) {
+				
+				CaptureImageWithMetadata (output, connection, callback);
 			}
 
-			session.StartRunning ();
-			return true;
 		}
 
-		public void FinalizeCatch(UIImage image)
+
+		private void CaptureImageWithMetadata(AVCaptureStillImageOutput output, AVCaptureConnection connection, stream_callback callback)
 		{
-			BeginInvokeOnMainThread (() => {
+			Invoke (() => {
+				output.CaptureStillImageAsynchronously (connection, (sampleBuffer, error) => {
+					var imageData = AVCaptureStillImageOutput.JpegStillToNSData(sampleBuffer);
+
+					System.IO.Stream theData = imageData.AsStream();// image = CIImage.FromData(imageData);
+					//UIImage newImage = UIImage.FromImage (image);
+
+					session.StopRunning ();
+					session.RemoveOutput ((AVCaptureOutput)session.Outputs.GetValue (0));
+					session.RemoveInput ((AVCaptureInput)session.Inputs.GetValue (0));
+					session.Dispose ();
+					session = null;
+
+					if (callback != null)
+						callback (theData);
+				});
+			}, .5);
+	
+		}
+			
+		public void FinalizeCatch(System.IO.Stream theData)
+		{
+			InvokeOnMainThread (() => {
 				ShowOverlay(View, "Tentacling those pixels...");
 				PhotoTossRest.Instance.GetCatchURL ((urlStr) => {
 					LocationHelper.StartLocationManager (CoreLocation.CLLocation.AccuracyBest);
@@ -501,7 +499,8 @@ namespace PhotoToss.iOSApp
 					LocationHelper.StopLocationManager ();
 					long tossId = long.Parse (catchResult.Substring (catchResult.LastIndexOf ("/") + 1));
 
-					PhotoTossRest.Instance.CatchToss (image.AsJPEG ().AsStream (), tossId, curLoc.Longitude, curLoc.Latitude, (newRec) => 
+
+					PhotoTossRest.Instance.CatchToss (theData, tossId, curLoc.Longitude, curLoc.Latitude, (newRec) => 
 						{
 							InvokeOnMainThread(() => 
 								{
@@ -532,49 +531,6 @@ namespace PhotoToss.iOSApp
 				obj.Dispose ();
 		}
 
-		public class OutputRecorder : AVCaptureVideoDataOutputSampleBufferDelegate
-		{
-			public image_callback callback { get; set;}
-			public override void DidOutputSampleBuffer (AVCaptureOutput captureOutput, CMSampleBuffer sampleBuffer, AVCaptureConnection connection)
-			{
-				try {
-					var image = ImageFromSampleBuffer (sampleBuffer);
-
-					session.StopRunning();
-					callback(image);
-				} catch (Exception e){
-					Console.WriteLine (e);
-				} finally {
-					sampleBuffer.Dispose ();
-				}
-			}
-
-			UIImage ImageFromSampleBuffer (CMSampleBuffer sampleBuffer)
-			{
-				// Get the CoreVideo image
-				using (var pixelBuffer = sampleBuffer.GetImageBuffer () as CVPixelBuffer) {
-					// Lock the base address
-					pixelBuffer.Lock (0);
-					// Get the number of bytes per row for the pixel buffer
-					var baseAddress = pixelBuffer.BaseAddress;
-					int bytesPerRow = (int) pixelBuffer.BytesPerRow;
-					int width = (int) pixelBuffer.Width;
-					int height = (int) pixelBuffer.Height;
-					var flags = CGBitmapFlags.PremultipliedFirst | CGBitmapFlags.ByteOrder32Little;
-					// Create a CGImage on the RGB colorspace from the configured parameter above
-					using (var cs = CGColorSpace.CreateDeviceRGB ()) {
-						using (var context = new CGBitmapContext (baseAddress, width, height, 8, bytesPerRow, cs, (CGImageAlphaInfo)flags)) {
-							using (CGImage cgImage = context.ToImage ()) {
-								pixelBuffer.Unlock (0);
-								return UIImage.FromImage (cgImage);
-							}
-						}
-					}
-				}
-			}
-
-
-		}
 
 
 	}
