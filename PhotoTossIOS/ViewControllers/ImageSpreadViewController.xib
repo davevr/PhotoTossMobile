@@ -1,73 +1,21 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="7706" systemVersion="14F27" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES">
-    <dependencies>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="7703"/>
-    </dependencies>
-    <objects>
-        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="ImageSpreadViewController">
-            <connections>
-                <outlet property="HistoryTable" destination="cx0-Mu-nw9" id="jxp-KU-r1L"/>
-                <outlet property="MapView" destination="udo-El-U2l" id="jqu-qY-tQ7"/>
-                <outlet property="ShowAllBtn" destination="c6u-DK-R2X" id="xYr-wj-k5Z"/>
-                <outlet property="ShowMeBtn" destination="l6O-IL-KJP" id="jh4-yZ-OeD"/>
-                <outlet property="view" destination="iN0-l3-epB" id="kCW-yf-GMq"/>
-            </connections>
-        </placeholder>
-        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
-        <view contentMode="scaleToFill" id="iN0-l3-epB">
-            <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
-            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-            <subviews>
-                <mapView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" mapType="standard" translatesAutoresizingMaskIntoConstraints="NO" id="udo-El-U2l">
-                    <rect key="frame" x="0.0" y="0.0" width="320" height="200"/>
-                    <constraints>
-                        <constraint firstAttribute="height" constant="200" id="bYs-Ei-rcw"/>
-                    </constraints>
-                </mapView>
-                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="l6O-IL-KJP">
-                    <rect key="frame" x="8" y="200" width="128" height="30"/>
-                    <constraints>
-                        <constraint firstAttribute="height" constant="30" id="kNN-ru-5tc"/>
-                        <constraint firstAttribute="width" constant="128" id="uEm-Xe-Z76"/>
-                    </constraints>
-                    <state key="normal" title="Show Me">
-                        <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
-                    </state>
-                </button>
-                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="c6u-DK-R2X">
-                    <rect key="frame" x="184" y="200" width="128" height="30"/>
-                    <constraints>
-                        <constraint firstAttribute="width" constant="128" id="IC8-tm-Rxw"/>
-                        <constraint firstAttribute="height" constant="30" id="xpp-iz-qta"/>
-                    </constraints>
-                    <state key="normal" title="Show All">
-                        <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
-                    </state>
-                </button>
-                <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" showsHorizontalScrollIndicator="NO" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="22" sectionFooterHeight="22" translatesAutoresizingMaskIntoConstraints="NO" id="cx0-Mu-nw9">
-                    <rect key="frame" x="0.0" y="230" width="320" height="296"/>
-                    <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                </tableView>
-            </subviews>
-            <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
-            <constraints>
-                <constraint firstItem="udo-El-U2l" firstAttribute="leading" secondItem="iN0-l3-epB" secondAttribute="leading" id="0qJ-lt-IZp"/>
-                <constraint firstAttribute="trailing" secondItem="cx0-Mu-nw9" secondAttribute="trailing" id="KJP-7h-1BD"/>
-                <constraint firstItem="cx0-Mu-nw9" firstAttribute="top" secondItem="udo-El-U2l" secondAttribute="bottom" constant="30" id="Qtv-LF-D7j"/>
-                <constraint firstAttribute="bottom" secondItem="cx0-Mu-nw9" secondAttribute="bottom" constant="42" id="ag4-Jm-4NQ"/>
-                <constraint firstAttribute="trailing" secondItem="udo-El-U2l" secondAttribute="trailing" id="hSs-oP-SI4"/>
-                <constraint firstItem="c6u-DK-R2X" firstAttribute="top" secondItem="udo-El-U2l" secondAttribute="bottom" id="pIE-hn-Ziz"/>
-                <constraint firstItem="l6O-IL-KJP" firstAttribute="top" secondItem="udo-El-U2l" secondAttribute="bottom" id="rJt-eT-1K5"/>
-                <constraint firstItem="l6O-IL-KJP" firstAttribute="leading" secondItem="iN0-l3-epB" secondAttribute="leading" constant="8" id="sbY-Uu-3NG"/>
-                <constraint firstItem="udo-El-U2l" firstAttribute="top" secondItem="iN0-l3-epB" secondAttribute="top" id="vEt-Lu-229"/>
-                <constraint firstItem="cx0-Mu-nw9" firstAttribute="leading" secondItem="iN0-l3-epB" secondAttribute="leading" id="w3I-Ds-Su7"/>
-                <constraint firstAttribute="trailing" secondItem="c6u-DK-R2X" secondAttribute="trailing" constant="8" id="zdD-YL-X09"/>
-            </constraints>
-        </view>
-    </objects>
-    <simulatedMetricsContainer key="defaultSimulatedMetrics">
-        <simulatedStatusBarMetrics key="statusBar"/>
-        <simulatedOrientationMetrics key="orientation"/>
-        <simulatedScreenMetrics key="destination" type="retina4"/>
-    </simulatedMetricsContainer>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="4510" systemVersion="13B42" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES">
+	<dependencies>
+		<plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="3742" />
+	</dependencies>
+	<objects>
+		<placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="ImageStatsViewController">
+			<connections>
+				<outlet property="view" destination="iN0-l3-epB" id="kCW-yf-GMq" />
+			</connections>
+		</placeholder>
+		<placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder" />
+		<view contentMode="scaleToFill" id="iN0-l3-epB">
+			<rect key="frame" x="0.0" y="0.0" width="320" height="568" />
+			<autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES" />
+			<color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite" />
+			<simulatedStatusBarMetrics key="simulatedStatusBarMetrics" />
+			<simulatedScreenMetrics key="simulatedDestinationMetrics" type="retina4" />
+		</view>
+	</objects>
 </document>

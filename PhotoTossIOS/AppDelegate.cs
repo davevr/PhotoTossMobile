@@ -7,6 +7,7 @@ using System;
 using System.Collections.Generic;
 using JVMenuPopover;
 using HockeyApp;
+using Google.Maps;
 
 namespace PhotoToss.iOSApp
 {
@@ -26,6 +27,8 @@ namespace PhotoToss.iOSApp
 		string appName = "PhotoToss";
 		string flurryID = "KTC993B58WKMR9WK66G3";
 		string hockeyID = "41121ea9fd8f6c879122bb728a2488d9";
+		const string MapsApiKey = "AIzaSyBG5fNmvfSfJSeX7x8cpmzHqgQ6pxkXeRY";
+
 		public static GoogleAnalytics   analytics = null;
 		public UINavigationController NavigationController {get; set;}
 
@@ -73,6 +76,7 @@ namespace PhotoToss.iOSApp
 					Setup.ThrowExceptionAsNative(e.Exception);
 			});
 
+			MapServices.ProvideAPIKey (MapsApiKey);
 
 			// This method verifies if you have been logged into the app before, and keep you logged in after you reopen or kill your app.
 			return ApplicationDelegate.SharedInstance.FinishedLaunching (app, options);

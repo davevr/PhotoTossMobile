@@ -8,17 +8,31 @@ using MapKit;
 using CoreLocation;
 using CoreGraphics;
 using PhotoToss.Core;
+using Google.Maps;
+using SDWebImage;
 
 namespace PhotoToss.iOSApp
 {
 	public partial class ImageSpreadViewController : UIViewController
 	{
-		private static List<PhotoRecord> parentList;
-		private static List<object> spreadList;
-		public static string kImageInfoCellName = "ImageInfoCell";
-		public static string kTossInfoCellName = "TossInfoCell";
+		private MapView mapView;
+		private MapDelegate mapDelegate;
+		private UIView infoWindowView = null;
+		private UIImageView catchImageView;
+		private UIImageView userImageView;
+		private UILabel titleView;
+		private UILabel dateView;
+		private Dictionary<string, PhotoRecord> markerMap = new Dictionary<string, PhotoRecord>();
+		private CoordinateBounds markerBounds;
+		private bool isUpdated = false;
+
 		public ImageSpreadViewController () : base ("ImageSpreadViewController", null)
 		{
+		}
+
+		public class PhotoWrapper : NSObject
+		{
+			public PhotoRecord record { get; set;}
 		}
 
 		public override void DidReceiveMemoryWarning ()
@@ -31,99 +45,134 @@ namespace PhotoToss.iOSApp
 
 		public override void ViewDidLoad ()
 		{
-			base.ViewDidLoad ();
-			//CGRect bounds = new CGRect (0, 0, UIScreen.MainScreen.Bounds.Width, UIScreen.MainScreen.Bounds.Width);
-			//MapView = new MKMapView (bounds);
-			//View.AddSubview (MapView);
-			
-			// Perform any additional setup after loading the view, typically from a nib.
-			if (HomeViewController.CurrentPhotoRecord != null) {
-				CLLocationCoordinate2D theLoc = new CLLocationCoordinate2D (HomeViewController.CurrentPhotoRecord.createdlat, HomeViewController.CurrentPhotoRecord.createdlong);
-				MapView.SetCenterCoordinate (theLoc, true);
-				MapView.AddAnnotations (new MKPointAnnotation (){
-					Title="Current Loc",
-					Coordinate = theLoc
+			isUpdated = false;
+			CGRect bounds = View.Frame;
+			bounds.Height -= 100;
+
+			View.Frame = bounds;
+			View.BackgroundColor = UIColor.White;
+			//View.AutoresizingMask = UIViewAutoresizing.FlexibleWidth | UIViewAutoresizing.FlexibleHeight;
+			SetupMap();
+			//Setup button to clear map
+			var btn = new UIButton(new CGRect(16, UIScreen.MainScreen.Bounds.Bottom - 152, 100, 30));
+			btn.Layer.BorderWidth = 1;
+			btn.Layer.CornerRadius = 0;
+			btn.SetTitleColor (UIColor.Blue, UIControlState.Normal);
+			btn.Layer.BorderColor = UIColor.Black.CGColor;
+			btn.SetTitle(@"Show Me", UIControlState.Normal);
+			btn.BackgroundColor = UIColor.White;
+			btn.TouchUpInside += (s, e) => {
+				ShowMe ();
+			};
+				
+			var btn2= new UIButton(new CGRect(UIScreen.MainScreen.Bounds.Width - (100 + 16),  UIScreen.MainScreen.Bounds.Bottom - 152, 100, 30));
+			btn2.Layer.BorderWidth = 1;
+			btn2.Layer.CornerRadius = 0;
+			btn2.Layer.BorderColor = UIColor.Black.CGColor;
+			btn2.SetTitleColor (UIColor.Blue, UIControlState.Normal);
+			btn2.SetTitle(@"Show All", UIControlState.Normal);
+			btn2.BackgroundColor = UIColor.White;
+			btn2.TouchUpInside += (s, e) =>
+			{
+				ShowAll();
+			};
+
+
+			mapView.AddSubview(btn);
+			mapView.AddSubview(btn2);
+			CreateInfoWindow();
+			DoInitialUpdate ();
+		}
+
+		private void AddMarker(PhotoRecord theRec, string title)
+		{
+			UIColor theHue;
+			if (theRec.tossid != 0) {
+				theHue = UIColor.Green;
+			}
+			else
+			{
+				theHue = UIColor.Red;
+			}
+			if (theRec == HomeViewController.CurrentPhotoRecord)
+				theHue = UIColor.Blue;
+
+			CLLocationCoordinate2D newLoc = GetPhotoLocation (theRec);
+
+			if (mapView != null) {
+				InvokeOnMainThread(() =>
+					{
+						var marker = Marker.FromPosition (newLoc);
+
+						marker.Title = title;
+						marker.Icon = Marker.MarkerImage (theHue);
+						marker.UserData = new PhotoWrapper () { record = theRec };
+
+						marker.Map = mapView;
+					});
+				markerBounds = markerBounds.Including (newLoc);
+				CacheImages(theRec);
+			}
+
+		}
+
+		private void CacheImages(PhotoRecord theRec)
+		{
+			if ((theRec.tosserid != 0) && (theRec.tosserid != PhotoTossRest.Instance.CurrentUser.id))
+			{
+				string userImageUrl = PhotoTossRest.Instance.GetUserProfileImage(theRec.tossername);
+				SDWebImageManager.SharedManager.Download (new NSUrl (userImageUrl), SDWebImageOptions.HighPriority, 
+					progressHandler: (recievedSize, expectedSize) => {
+					// Track progress...
+				},
+					completedHandler: (image, error, cacheType, finished, imageURL) => {
+						if (image != null) {
+							// do something with the image
+						}
+					});
+			}
+
+			string imageUrl;
+
+
+			if (theRec.tossid == 0)
+			{
+				imageUrl = theRec.imageUrl;
+			}
+			else
+			{
+				imageUrl = theRec.catchUrl;
+			}
+
+			imageUrl += "=s128-c";
+			SDWebImageManager.SharedManager.Download (new NSUrl (imageUrl), SDWebImageOptions.HighPriority, 
+				progressHandler: (recievedSize, expectedSize) => {
+					// Track progress...
+				},
+				completedHandler: (image, error, cacheType, finished, imageURL) => {
+					if (image != null) {
+						// do something with the image
+					}
 				});
 
+		}
+
+		private CLLocationCoordinate2D GetPhotoLocation(PhotoRecord theRec)
+		{
+			double latLoc, longLoc;
+
+			if (theRec.tossid != 0) {
+				latLoc = theRec.receivedlat;
+				longLoc = theRec.receivedlong;
+			}
+			else
+			{
+				latLoc = theRec.createdlat;
+				longLoc = theRec.createdlong;
 			}
 
-			HistoryTable.RegisterNibForCellReuse (UINib.FromName ("ImageInfoCell", NSBundle.MainBundle), kImageInfoCellName);
-			HistoryTable.RegisterNibForCellReuse (UINib.FromName ("TossInfoCell", NSBundle.MainBundle), kTossInfoCellName);
-			HistoryTable.RowHeight = UITableView.AutomaticDimension;
-			HistoryTable.EstimatedRowHeight = (nfloat)320.0;
-			HistoryTable.Source = new ImageSpreadTableSource (this);
-
-
-			ShowAllBtn.TouchUpInside += (object sender, EventArgs e) => {
-				ShowAnnotations();
-			};
-
-			ShowMeBtn.TouchUpInside += (object sender, EventArgs e) => {
-				LocationHelper.StartLocationManager (CoreLocation.CLLocation.AccuracyBest);
-				LocationHelper.LocationResult curLoc = LocationHelper.GetLocationResult ();
-				LocationHelper.StopLocationManager ();
-				ScrollToLoc(curLoc.Latitude, curLoc.Longitude);
-			};
-			LoadParents ();
-
-		}
-
-		public void ExpandTossRecord(TossRecord theRec)
-		{
-			LoadImagesForToss (theRec);
-		}
-
-		public void ExpandImageRecord(PhotoRecord theRec)
-		{
-			LoadTossesForImage (theRec);
-
-		}
-
-		private void ShowAnnotations()
-		{
-			InvokeOnMainThread (() => {
-				MapView.ShowAnnotations (MapView.Annotations, true);
-			});
-		}
-
-		public override void ViewDidAppear (bool animated)
-		{
-			base.ViewDidAppear (animated);
-			UpdateSizes ();
-		}
-
-		private nfloat GetCellSizes()
-		{
-			nfloat totalSize = 0;
-			for (nint section = 0; section < HistoryTable.Source.NumberOfSections(HistoryTable); section++) {
-				for (nint row = 0; row < HistoryTable.Source.RowsInSection (HistoryTable, section); row++) {
-					NSIndexPath newPath = NSIndexPath.FromItemSection (row, section);
-					totalSize += HistoryTable.Source.GetHeightForRow (HistoryTable, newPath);
-				}
-			}
-
-			return totalSize;
-		}
-
-		private void UpdateSizes()
-		{
-			/*
-			nfloat cellSizes = GetCellSizes ();
-			InvokeOnMainThread (() => {
-				nfloat cellCount = 128; // header height * 2
-				cellCount += cellSizes;
-				CGRect boundsRect = HistoryTable.Bounds;
-				boundsRect.Height = cellCount + 320;
-				HistoryTable.Bounds = boundsRect;
-
-			});
-	*/
-		}
-
-		public void ScrollToLoc(double latLoc, double longLoc)
-		{
 			if (latLoc < -90)
-			latLoc = 0;
+				latLoc = 0;
 			else if (latLoc > 90)
 				latLoc = 0;
 
@@ -131,442 +180,217 @@ namespace PhotoToss.iOSApp
 				longLoc = -180;
 			else if (longLoc > 0)
 				longLoc = 0;
-			
-			CLLocationCoordinate2D theLoc = new CLLocationCoordinate2D (latLoc, longLoc);
-			MKCoordinateRegion region;
-			MKCoordinateSpan span;
 
-			span.LatitudeDelta=0.01;
-			span.LongitudeDelta=0.01; 
+			CLLocationCoordinate2D newLoc = new CLLocationCoordinate2D (latLoc, longLoc);
 
-			region.Span=span;
-			region.Center=theLoc;
-
-			InvokeOnMainThread (() => {
-				MapView.SetRegion (region, true);
-				MapView.RegionThatFits (region);
-			});
-
+			return newLoc;
 		}
 
-		private void LoadParents()
+		private void DoInitialUpdate()
 		{
-			parentList = new List<PhotoRecord> ();
-			parentList.Add (HomeViewController.CurrentPhotoRecord);
-			PhotoTossRest.Instance.GetImageLineage(HomeViewController.CurrentPhotoRecord.id, (resultList) =>
-				{
-					if (resultList != null) {
-						parentList.InsertRange(1,resultList);
-					}
+			if (isUpdated)
+				return;
+			isUpdated = true;
+			CLLocationCoordinate2D baseMap = GetPhotoLocation(HomeViewController.CurrentPhotoRecord);
+			CLLocationCoordinate2D southWest = new CLLocationCoordinate2D(baseMap.Latitude - 0.01, baseMap.Longitude - 0.01);
+			CLLocationCoordinate2D northEast = new CLLocationCoordinate2D(baseMap.Latitude + 0.01, baseMap.Longitude + 0.01);
+			markerBounds = new CoordinateBounds(southWest, northEast);
+			AddMarker (HomeViewController.CurrentPhotoRecord, "your image");
 
-					InvokeOnMainThread(() => 
+			if (HomeViewController.CurrentPhotoRecord.tossid != 0) {
+				PhotoTossRest.Instance.GetImageLineage (HomeViewController.CurrentPhotoRecord.id, (parentList) => {
+					if ((parentList != null) && (parentList.Count > 0))
+					{
+						MutablePath newPath = new MutablePath();
+						newPath.AddCoordinate(GetPhotoLocation(HomeViewController.CurrentPhotoRecord));
+						int parentCount = 1;
+						string parentString;
+
+						foreach(PhotoRecord curImage in parentList)
 						{
-							HistoryTable.ReloadData();
-							UpdateSizes();
-							// add pins
-							if (resultList != null) 
+							CLLocationCoordinate2D curLoc = GetPhotoLocation(curImage);
+							newPath.AddCoordinate(curLoc);
+							if (parentCount == parentList.Count)
+								parentString = "original image";
+							else
+								parentString = "parent #" + parentCount++;
+
+							AddMarker(curImage, parentString);
+
+						}
+
+						InvokeOnMainThread(() =>
 							{
-								int parentCount = resultList.Count;
-
-								foreach (PhotoRecord curRec in resultList)
-								{
-									double latLoc = curRec.createdlat;
-									double longLoc = curRec.createdlong;
-									if (latLoc < -90)
-										latLoc = 0;
-									else if (latLoc > 90)
-										latLoc = 0;
-
-									if (longLoc < -180)
-										longLoc = -180;
-									else if (longLoc > 0)
-										longLoc = 0;
-									
-									CLLocationCoordinate2D theLoc = new CLLocationCoordinate2D (latLoc, longLoc);
-									MapView.AddAnnotations (new MKPointAnnotation (){
-										Title = parentCount == 1 ? "Original Toss" : "Toss #" + (parentCount - 1).ToString(),
-										Subtitle = "date/time",
-										Coordinate = theLoc
-									});
-									parentCount--;
-
-								}
-
-								ShowAnnotations();
-
-							}
-						});
-
-					LoadChildren();
-
+								Polyline newLine = Polyline.FromPath(newPath);
+								newLine.StrokeWidth = 5;
+								newLine.StrokeColor = UIColor.Green;
+								newLine.Map = mapView;
+								ShowAll();
+							});
+					}
 				});
+			}
+			else
+			{
+				ShowAll();
+			}
+
+			ShowImageChildren(HomeViewController.CurrentPhotoRecord);
+
 		}
 
-		private void LoadChildren()
+		private void ShowImageChildren(PhotoRecord parentPhoto)
 		{
-			spreadList = new List<object> ();
-			LoadTossesForImage (HomeViewController.CurrentPhotoRecord);
-		}
-
-		private void LoadTossesForImage(PhotoRecord curImage)
-		{
-			PhotoTossRest.Instance.GetImageTosses(curImage.id, (resultList) =>
+			int catchCount = 1;
+			PhotoTossRest.Instance.GetImageTosses(parentPhoto.id, (tossList) =>
 				{
-					if ((resultList != null) && (resultList.Count > 0)) {
-						int curLoc = spreadList.IndexOf(curImage) + 1;
-						spreadList.InsertRange(curLoc, resultList);
-						curImage.tossList = resultList;
-
-						InvokeOnMainThread(() => 
-							{
-								HistoryTable.ReloadData();
-								UpdateSizes();
-								// add pins
-								int tossCount = 1;
-								foreach (TossRecord curRec in resultList)
+					if ((tossList != null) && (tossList.Count > 0))
+					{
+						foreach (TossRecord curToss in tossList)
+						{
+							PhotoTossRest.Instance.GetTossCatches(curToss.id, (catchList) =>
 								{
-									double latLoc = curRec.shareLat;
-									double longLoc = curRec.shareLong;
-									if (latLoc < -90)
-										latLoc = 0;
-									else if (latLoc > 90)
-										latLoc = 0;
+									if ((catchList != null) && (catchList.Count > 0))
+									{
+										CLLocationCoordinate2D parentLoc = GetPhotoLocation(parentPhoto);
+										foreach (PhotoRecord curCatch in catchList)
+										{
+											CLLocationCoordinate2D catchLoc = GetPhotoLocation(curCatch);
+											MutablePath newPath = new MutablePath();
+											newPath.AddCoordinate(parentLoc);
+											newPath.AddCoordinate(catchLoc);
 
-									if (longLoc < -180)
-										longLoc = -180;
-									else if (longLoc > 0)
-										longLoc = 0;
-									
-									CLLocationCoordinate2D theLoc = new CLLocationCoordinate2D (latLoc, longLoc);
-									MapView.AddAnnotations (new MKPointAnnotation (){
-										Title = "Toss #" + tossCount.ToString(),
-										Subtitle = "date/time",
-										Coordinate = theLoc
-									});
-									tossCount++;
+											// add a line from the parent to this catch
+											InvokeOnMainThread(() =>
+												{
+													Polyline newLine = Polyline.FromPath(newPath);
+													newLine.StrokeWidth = 5;
+													newLine.StrokeColor = UIColor.Red;
+													newLine.Map = mapView;
+												});
+											// add a marker
+											string markerTitle = String.Format("catch #{0}", catchCount++);
+											AddMarker(curCatch, markerTitle);
+											ShowImageChildren(curCatch);
+										}
+									}
 
-								}
+								});
+						}
 
-								ShowAnnotations();
-							});
 					}
-					else {
-						curImage.tossList = new List<TossRecord>();
-						InvokeOnMainThread(() => 
-							{
-								HistoryTable.ReloadData();
-								UpdateSizes();
-							});
-					}
-
 				});
 		}
 
-		private void LoadImagesForToss(TossRecord curToss)
+		public UIView GetInfoContents(Marker theMarker)
 		{
-			PhotoTossRest.Instance.GetTossCatches(curToss.id, (resultList) =>
-				{
-					if ((resultList != null) && (resultList.Count > 0)) {
-						int curLoc = spreadList.IndexOf(curToss) + 1;
-						spreadList.InsertRange(curLoc, resultList);
-						curToss.catchList = resultList;
-
-						InvokeOnMainThread(() => 
-							{
-								HistoryTable.ReloadData();
-								UpdateSizes();
-								// add pins
-								int tossCount = 1;
-								foreach (PhotoRecord curRec in resultList)
-								{
-									double latLoc = curRec.receivedlat;
-									double longLoc = curRec.receivedlong;
-									if (latLoc < -90)
-										latLoc = 0;
-									else if (latLoc > 90)
-										latLoc = 0;
-
-									if (longLoc < -180)
-										longLoc = -180;
-									else if (longLoc > 0)
-										longLoc = 0;
-
-									CLLocationCoordinate2D theLoc = new CLLocationCoordinate2D (latLoc, longLoc);
-									MapView.AddAnnotations (new MKPointAnnotation (){
-										Title = "Toss #" + tossCount.ToString(),
-										Subtitle = "date/time",
-										Coordinate = theLoc
-									});
-									tossCount++;
-
-								}
-
-								ShowAnnotations();
-							});
-					}
-					else {
-						curToss.catchList = new List<PhotoRecord>();
-						InvokeOnMainThread(() => 
-							{
-								HistoryTable.ReloadData();
-								UpdateSizes();
-							});
-					}
-
-				});
-		}
-
-
-
-		private void ExpandItem(int theItem)
-		{
-			object curItem = spreadList [theItem];
-
-			if (curItem is PhotoRecord) {
-
-			} else if (curItem is TossRecord) {
-
-			}
-
-		}
-
-		public override bool PrefersStatusBarHidden ()
-		{
-			return true;
-		}
-
-		public class ImageSpreadTableSource : UITableViewSource
-		{
-			ImageSpreadViewController viewController = null;
-
-			public ImageSpreadTableSource (ImageSpreadViewController controller)
+			if (infoWindowView != null)
 			{
-				viewController = controller;
-			}
+				titleView.Text = theMarker.Title;
+				PhotoRecord markerRecord = ((PhotoWrapper)theMarker.UserData).record; // to do - look up actual record
+				long tosserId = markerRecord.tosserid;
+				string tosserName;
 
-			public override void RowSelected (UITableView tableView, NSIndexPath indexPath)
-			{
-				switch (indexPath.Section) {
-				case 0:
-					HandleParentSelected (tableView, indexPath.Item);
-					break;
-
-				case 1:
-					HandleSpreadSelected (tableView, indexPath.Item);
-					break;
-				}
-			}
-
-			private void HandleParentSelected(UITableView tableView, nint index)
-			{
-				PhotoRecord curRec = parentList[(int)index];
-				if (curRec.tossid == 0)
-					viewController.ScrollToLoc (curRec.createdlat, curRec.createdlong);
+				if (tosserId == 0)
+					tosserName = markerRecord.ownername;
 				else
-					viewController.ScrollToLoc (curRec.receivedlat, curRec.createdlong);
+					tosserName = markerRecord.tossername;
+
+				string userImageUrl = PhotoTossRest.Instance.GetUserProfileImage(markerRecord.tossername);
+
+				userImageView.SetImage(new NSUrl(userImageUrl), UIImage.FromBundle ("unknownperson"));
+
+				string imageUrl;
+
+				if (markerRecord.tossid == 0)
+					imageUrl = markerRecord.imageUrl;
+				else
+					imageUrl = markerRecord.catchUrl;
+
+				catchImageView.SetImage(new NSUrl(imageUrl + "=s128-c"), UIImage.FromBundle("placeholder"));
+				infoWindowView.Bounds = new CGRect (0, 0, 136, 168);
+				userImageView.Layer.CornerRadius = 16;
 
 			}
+			return infoWindowView;
+		}
 
-			private void HandleSpreadSelected(UITableView tableView, nint index)
+		private void ShowAll()
+		{
+			if (mapView != null)
 			{
-				object curRec = spreadList[(int)index];
-				if (curRec is PhotoRecord) {
-					PhotoRecord curPhotoRec = (PhotoRecord)curRec;
-					if (curPhotoRec.tossid == 0)
-						viewController.ScrollToLoc (curPhotoRec.createdlat, curPhotoRec.createdlong);
-					else
-						viewController.ScrollToLoc (curPhotoRec.receivedlat, curPhotoRec.createdlong);
-				} else {
-					TossRecord curTossRec = (TossRecord)curRec;
-					viewController.ScrollToLoc (curTossRec.shareLat, curTossRec.shareLong);
-				}
-
+				CameraUpdate.FitBounds (markerBounds);
+				CameraPosition pos = mapView.CameraForBounds (markerBounds, UIEdgeInsets.Zero);
+				InvokeOnMainThread (() => {
+					mapView.Animate(pos);
+				});
 			}
+		}
 
-
-			public override nint NumberOfSections (UITableView tableView)
+		private void ShowMe()
+		{
+			if (mapView != null)
 			{
-				return 2;
+				CLLocationCoordinate2D pos = mapView.MyLocation.Coordinate;
+				InvokeOnMainThread (() => {
+					mapView.Animate(pos);
+				});
 			}
+		}
 
-			public override string TitleForHeader (UITableView tableView, nint section)
+		private void SetupMap()
+		{
+			//Init Map wiht Camera
+			var camera = new CameraPosition(new CLLocationCoordinate2D(36.069082, -94.155976), 15, 30, 0);
+			mapView = MapView.FromCamera(CGRect.Empty, camera); 
+			mapView.MyLocationEnabled = true;
+			//Add button to zoom to location
+			mapView.Settings.MyLocationButton = true;
+			mapView.MapType = MapViewType.Normal;
+			mapView.Settings.SetAllGesturesEnabled(true);
+			//Init MapDelegate
+			mapDelegate = new MapDelegate() {controller = this};
+			mapView.Delegate = mapDelegate;
+			View = mapView;
+		}
+
+		private void CreateInfoWindow()
+		{
+			infoWindowView = new UIView (new CGRect (0, 0, 136, 168));
+			catchImageView = new UIImageView (new CGRect (0, 32, 128, 128));
+			userImageView = new UIImageView (new CGRect (104, 136, 32, 32));
+			userImageView.Layer.CornerRadius = 16;
+			titleView = new UILabel (new CGRect (0, 0, 128, 16));
+			titleView.Font = UIFont.BoldSystemFontOfSize (10);
+			dateView = new UILabel (new CGRect (0, 16, 128, 16));
+			dateView.Font = UIFont.ItalicSystemFontOfSize (8);
+			infoWindowView.AddSubviews (new UIView[] { catchImageView, userImageView, titleView, dateView });
+			titleView.Text = "this is the title";
+			titleView.TextAlignment = UITextAlignment.Center;
+			dateView.Text = "the date";
+			dateView.TextAlignment = UITextAlignment.Left;
+		}
+
+		public class MapDelegate : MapViewDelegate
+		{
+			public ImageSpreadViewController controller { get; set;}
+
+			public List<CLLocationCoordinate2D>	Locations = new List<CLLocationCoordinate2D>();
+
+			public override void DidTapInfoWindowOfMarker(MapView mapView, Marker marker)
 			{
-				switch (section) {
-				case 0:
-					return "Where it came from";
-					break;
-				case 1:
-					return "Where it went";
-					break;
-				}
-
-				return null;
+				
 			}
 
-
-
-			public override nint RowsInSection (UITableView tableview, nint section)
+			public override UIView MarkerInfoContents(MapView mapView, Marker marker)
 			{
-				nint count = 0;
-				switch (section)
-				{
-				case 0:
-					if (parentList != null)
-						count = parentList.Count;
-					break;
-				case 1:
-					if (spreadList != null)
-						count = spreadList.Count;
-					break;
-				}
-
-				return count;
-
+				return controller.GetInfoContents (marker);
 			}
 
-			private nint DeepTossCount(List<TossRecord> theTossList)
+			public void Clear()
 			{
-				nint theCount = 0;
-
-				if (theTossList != null)
-					theCount = theTossList.Count;
-
-				if (theCount > 0) {
-					foreach (TossRecord curToss in theTossList) {
-
-						if (curToss.catchList != null)
-							theCount += DeepImageCount (curToss.catchList);
-					}
-
-				}
-
-				return theCount;
-
+				Locations.Clear ();
 			}
-
-			private nint DeepImageCount(List<PhotoRecord> theImageList)
-			{
-				nint theCount = 0;
-
-				if (theImageList != null)
-					theCount = theImageList.Count;
-
-				if (theCount > 0) {
-					foreach (PhotoRecord curImage in theImageList) {
-
-						if (curImage.tossList != null)
-							theCount += DeepTossCount (curImage.tossList);
-					}
-
-				}
-
-				return theCount;
-
-			}
-
-
-			public override UITableViewCell GetCell (UITableView tableView, NSIndexPath indexPath)
-			{
-				UITableViewCell cell = null;
-
-				switch (indexPath.Section) {
-				case 0:
-					cell = GetLineageCell (tableView, indexPath);
-					break;
-
-				case 1:
-					cell = GetSpreadCell (tableView, indexPath);
-					break;
-				}
-
-				return cell;
-			}
-
-			private UITableViewCell GetLineageCell(UITableView tableView, NSIndexPath indexPath)
-			{
-				ImageInfoCell cell = (ImageInfoCell)tableView.DequeueReusableCell (kImageInfoCellName);
-
-
-				//---- if there are no cells to reuse, create a new one
-				if (cell == null) { 
-					cell = ImageInfoCell.Create (); // new  UITableViewCell(UITableViewCellStyle.Default, kImageInfoCellName); }
-				}
-
-				PhotoRecord item = (PhotoRecord)parentList [(int)indexPath.Item];
-
-				cell.ConformToRecord (item, viewController, false);
-
-				return cell;
-			}
-
-			private UITableViewCell GetSpreadCell(UITableView tableView, NSIndexPath indexPath)
-			{
-				UITableViewCell cell = null;
-				object curItem = spreadList [(int)indexPath.Item];
-
-				if (curItem is PhotoRecord) {
-					cell = GetSpreadPhotoCell (tableView, indexPath);
-				} else if (curItem is TossRecord) {
-					cell = GetSpreadTossCell (tableView, indexPath);
-				}
-
-				return cell;
-			}
-
-			private UITableViewCell GetSpreadPhotoCell(UITableView tableView, NSIndexPath indexPath)
-			{
-				ImageInfoCell cell = (ImageInfoCell)tableView.DequeueReusableCell (kImageInfoCellName);
-
-
-				//---- if there are no cells to reuse, create a new one
-				if (cell == null) { 
-					cell = ImageInfoCell.Create (); // new  UITableViewCell(UITableViewCellStyle.Default, kImageInfoCellName); }
-				}
-
-				PhotoRecord item = (PhotoRecord)spreadList [(int)indexPath.Item];
-
-				cell.ConformToRecord (item, viewController, true);
-
-				return cell;
-			}
-
-			private UITableViewCell GetSpreadTossCell(UITableView tableView, NSIndexPath indexPath)
-			{
-				TossInfoCell cell = (TossInfoCell)tableView.DequeueReusableCell (kTossInfoCellName);
-
-
-				//---- if there are no cells to reuse, create a new one
-				if (cell == null) { 
-					cell = TossInfoCell.Create (); // new  UITableViewCell(UITableViewCellStyle.Default, kImageInfoCellName); }
-				}
-
-				TossRecord item = (TossRecord)spreadList [(int)indexPath.Item];
-
-				cell.ConformToRecord (item, viewController);
-
-				return cell;
-			}
-
-			public override nfloat GetHeightForRow (UITableView tableView, NSIndexPath indexPath)
-			{
-				nfloat theHeight = 32;
-
-				switch (indexPath.Section) {
-				case 0:
-					theHeight = 370;
-					break;
-				case 1:
-					object theObj = spreadList [(int)indexPath.Item];
-					if (theObj is PhotoRecord)
-						theHeight = 370;
-					else
-						theHeight = 44;
-					break;
-				}
-
-				return theHeight;
-			}
-
 
 		}
 	}

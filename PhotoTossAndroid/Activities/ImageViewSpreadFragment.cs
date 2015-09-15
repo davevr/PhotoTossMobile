@@ -98,6 +98,7 @@ namespace PhotoToss.AndroidApp
                 });
             }
         }
+
 		public void OnMapReady (GoogleMap googleMap)
 		{
 			map = googleMap;
@@ -319,6 +320,8 @@ namespace PhotoToss.AndroidApp
                     tosserName = markerRecord.tossername;
 
                 string userImageUrl = PhotoTossRest.Instance.GetUserProfileImage(markerRecord.tossername);
+
+
 
                 var theObj = Koush.DrawableCache.Instance.Get(userImageUrl);
 

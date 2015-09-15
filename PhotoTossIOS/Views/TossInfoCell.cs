@@ -37,7 +37,7 @@ namespace PhotoToss.iOSApp
 
 		protected void HandleBtnTouch(object sender, EventArgs e)
 		{
-			controller.ExpandTossRecord (tossRec);
+			//controller.ExpandTossRecord (tossRec);
 		}
 
 		public void ConformToRecord(TossRecord theRec, ImageSpreadViewController theCont)

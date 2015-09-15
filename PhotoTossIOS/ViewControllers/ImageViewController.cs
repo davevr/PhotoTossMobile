@@ -21,7 +21,7 @@ namespace PhotoToss.iOSApp
 		
 			tab2 = new ImageSpreadViewController();
 			tab2.TabBarItem = new UITabBarItem ("Spread", UIImage.FromBundle ("SpreadIcon"), 1);
-			tab2.View.BackgroundColor = UIColor.Orange;
+			//tab2.View.BackgroundColor = UIColor.Orange;
 
 			tab3 = new ImageStatsViewController();
 			tab3.TabBarItem = new UITabBarItem ("Stats", UIImage.FromBundle ("StatsIcon"), 2);

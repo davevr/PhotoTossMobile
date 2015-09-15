@@ -12,39 +12,10 @@ namespace PhotoToss.iOSApp
 	[Register ("ImageSpreadViewController")]
 	partial class ImageSpreadViewController
 	{
-		[Outlet]
-		UIKit.UITableView HistoryTable { get; set; }
-
-		[Outlet]
-		MapKit.MKMapView MapView { get; set; }
-
-		[Outlet]
-		UIKit.UIButton ShowAllBtn { get; set; }
-
-		[Outlet]
-		UIKit.UIButton ShowMeBtn { get; set; }
 		
 		void ReleaseDesignerOutlets ()
 		{
-			if (HistoryTable != null) {
-				HistoryTable.Dispose ();
-				HistoryTable = null;
-			}
-
-			if (MapView != null) {
-				MapView.Dispose ();
-				MapView = null;
-			}
-
-			if (ShowMeBtn != null) {
-				ShowMeBtn.Dispose ();
-				ShowMeBtn = null;
-			}
-
-			if (ShowAllBtn != null) {
-				ShowAllBtn.Dispose ();
-				ShowAllBtn = null;
-			}
+			
 		}
 	}
 }
