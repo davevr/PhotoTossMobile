@@ -114,6 +114,9 @@
     <Reference Include="Calabash">
       <HintPath>..\packages\Xamarin.TestCloud.Agent.0.16.1\lib\Xamarin.iOS10\Calabash.dll</HintPath>
     </Reference>
+    <Reference Include="Microsoft.WindowsAzure.Messaging.iOS">
+      <HintPath>..\Components\azure-messaging-1.1.5.6\lib\ios-unified\Microsoft.WindowsAzure.Messaging.iOS.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <ImageAsset Include="Resources\Images.xcassets\AppIcons.appiconset\Contents.json">
@@ -335,6 +338,10 @@
     </XamarinComponentReference>
     <XamarinComponentReference Include="googlemapsios">
       <Version>1.9.2</Version>
+      <Visible>False</Visible>
+    </XamarinComponentReference>
+    <XamarinComponentReference Include="azure-messaging">
+      <Version>1.1.5.6</Version>
       <Visible>False</Visible>
     </XamarinComponentReference>
   </ItemGroup>

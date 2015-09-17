@@ -31,5 +31,6 @@
 	<!-- Permission to receive remote notifications from Google Play Services -->
 	<!-- Notice here that we have the package name of our application as a prefix on the permissions. -->
 	<uses-permission android:name="com.eweware.phototoss.permission.MAPS_RECEIVE" />
+	<uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
 	<permission android:name="com.eweware.phototoss.permission.permission.MAPS_RECEIVE" android:protectionLevel="signature" />
 </manifest>
