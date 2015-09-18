@@ -5,6 +5,7 @@ using Android.OS;
 using ByteSmith.WindowsAzure.Messaging;
 using Android.Graphics;
 using Android.Text;
+using Android.Net;
 
 namespace PhotoToss.AndroidApp
 {
@@ -95,9 +96,10 @@ namespace PhotoToss.AndroidApp
 			if (!String.IsNullOrEmpty (registrationId)) {
 				NativeRegistration = await Hub.RegisterNativeAsync (registrationId, keys);
 
-				var notificationNativeRegistration = new Notification (Resource.Drawable.ic_notify_white, "Native Registered");
+				var notificationNativeRegistration = new Notification (Resource.Drawable.ic_notify_white, "Welcome to PhotoToss!");
 				var pendingIntentNativeRegistration = PendingIntent.GetActivity (this, 0, new Intent (this, typeof(MainActivity)), 0);
-				notificationNativeRegistration.SetLatestEventInfo (this, "Native Reg. ID", NativeRegistration.RegistrationId, pendingIntentNativeRegistration);
+				notificationNativeRegistration.LargeIcon = BitmapFactory.DecodeResource (Resources, Resource.Drawable.ic_notify_color);
+				notificationNativeRegistration.SetLatestEventInfo (this, "Welcome to PhotoToss", "Have fun tossing!", pendingIntentNativeRegistration);
 				nMgr.Notify (_messageId, notificationNativeRegistration);
 				_messageId++;
 			}
@@ -112,9 +114,10 @@ namespace PhotoToss.AndroidApp
 				if (NativeRegistration != null)
 					await Hub.UnregisterAsync (NativeRegistration);
 
-				var notification = new Notification (Resource.Drawable.ic_notify_white, "Unregistered successfully.");
+				var notification = new Notification (Resource.Drawable.ic_notify_white, "Push Notifications Disabled");
 				var pendingIntent = PendingIntent.GetActivity (this, 0, new Intent (this, typeof(MainActivity)), 0);
-				notification.SetLatestEventInfo (this, "MyIntentService", "Unregistered successfully.", pendingIntent);
+				notification.LargeIcon = BitmapFactory.DecodeResource (Resources, Resource.Drawable.ic_notify_color);
+				notification.SetLatestEventInfo (this, "Push Notifications Disabled", "Re-enable in your profile.", pendingIntent);
 				nMgr.Notify (_messageId, notification);
 				_messageId++;
 			}
@@ -124,19 +127,65 @@ namespace PhotoToss.AndroidApp
 		{
 			string titleParam = intent.GetStringExtra ("title");
 			string contentParam = intent.GetStringExtra ("body");
+			string imageParam = intent.GetStringExtra ("image");
+			string imageIdParam = intent.GetStringExtra ("imageid");
+
+			if (titleParam == null)
+				titleParam = "News from PhotoToss";
+
+			if (contentParam == null)
+				contentParam = "";
+
+			if (imageIdParam == null)
+				imageIdParam = "0";
 
 
 			SpannedString titleStr = new SpannedString (titleParam);
 			SpannedString contentStr = new SpannedString (contentParam);
+			long imageId = long.Parse (imageIdParam);
+
 			var nMgr = (NotificationManager)GetSystemService (NotificationService);
 			var notification = new Notification (Resource.Drawable.ic_notify_white, titleStr);
-			notification.LargeIcon = BitmapFactory.DecodeResource(Resources, Resource.Drawable.ic_notify_color);
+			Bitmap iconBitmap;
+
+			if (imageParam == null)
+				iconBitmap = BitmapFactory.DecodeResource (Resources, Resource.Drawable.ic_notify_color);
+			else {
+				iconBitmap = GetImageBitmapFromUrl (imageParam);
+				if (iconBitmap == null)
+					iconBitmap = BitmapFactory.DecodeResource (Resources, Resource.Drawable.ic_notify_color);
+			}
+			
+			notification.LargeIcon = iconBitmap; 
 			notification.Icon = Resource.Drawable.ic_notify_white;
 			notification.TickerText = titleStr;
-			var pendingIntent = PendingIntent.GetActivity (this, 99, new Intent (this, typeof(MainActivity)), 0);
+			var newIntent = new Intent (this, typeof(MainActivity));
+			Bundle b = new Bundle ();
+			b.PutLong ("imageid", imageId);
+			newIntent.PutExtras (b);
+
+			var pendingIntent = PendingIntent.GetActivity (this, 99, newIntent, PendingIntentFlags.UpdateCurrent);
+
 			notification.SetLatestEventInfo (this, titleStr, contentStr, pendingIntent);
 			nMgr.Notify (_messageId, notification);
 			_messageId++;
 		}
+
+		private Bitmap GetImageBitmapFromUrl(string url)
+		{
+			Bitmap imageBitmap = null;
+
+			using (var webClient = new System.Net.WebClient())
+			{
+				var imageBytes = webClient.DownloadData(url);
+				if (imageBytes != null && imageBytes.Length > 0)
+				{
+					imageBitmap = BitmapFactory.DecodeByteArray(imageBytes, 0, imageBytes.Length);
+				}
+			}
+
+			return imageBitmap;
+		}
+
 	}
 }

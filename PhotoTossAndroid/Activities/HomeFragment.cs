@@ -297,9 +297,6 @@ namespace PhotoToss.AndroidApp
 					if (theObj == null) {
 						Koush.UrlImageViewHelper.SetUrlDrawable (userView, imageUrl, Resource.Drawable.unknown_octopus, this);
 						Android.Graphics.Drawables.Drawable theDrawable = userView.Drawable;
-						if (theDrawable != null) {
-							System.Console.WriteLine ("a draable!");
-						}
 					}
 					else {
 						Koush.UrlImageViewHelper.ZombieDrawable drawable = (Koush.UrlImageViewHelper.ZombieDrawable)theObj;

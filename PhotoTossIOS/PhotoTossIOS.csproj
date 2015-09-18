@@ -36,7 +36,7 @@
     <MtouchArch>ARMv7, ARM64</MtouchArch>
     <ConsolePause>false</ConsolePause>
     <CodesignKey>iPhone Distribution</CodesignKey>
-    <CodesignProvision>21a6b77d-15b9-4396-a5a7-e221593a4bc2</CodesignProvision>
+    <CodesignProvision>27c19418-a6c0-4182-92be-f1b7427ce9c6</CodesignProvision>
     <IpaPackageName>
     </IpaPackageName>
     <MtouchUseRefCounting>true</MtouchUseRefCounting>
@@ -67,7 +67,7 @@
     <MtouchProfiling>true</MtouchProfiling>
     <CodesignKey>iPhone Developer: David Vronay (WFXD25AJXF)</CodesignKey>
     <MtouchDebug>true</MtouchDebug>
-    <CodesignProvision>6b6bc9f7-1272-4667-8760-93c5d5504e7c</CodesignProvision>
+    <CodesignProvision>f026dc94-fe63-466a-baf5-904dfd78b7a8</CodesignProvision>
     <MtouchUseRefCounting>true</MtouchUseRefCounting>
     <IpaPackageName>
     </IpaPackageName>
@@ -111,11 +111,11 @@
     <Reference Include="GoogleMaps">
       <HintPath>..\Components\googlemapsios-1.9.2\lib\ios-unified\GoogleMaps.dll</HintPath>
     </Reference>
-    <Reference Include="Calabash">
-      <HintPath>..\packages\Xamarin.TestCloud.Agent.0.16.1\lib\Xamarin.iOS10\Calabash.dll</HintPath>
-    </Reference>
     <Reference Include="Microsoft.WindowsAzure.Messaging.iOS">
       <HintPath>..\Components\azure-messaging-1.1.5.6\lib\ios-unified\Microsoft.WindowsAzure.Messaging.iOS.dll</HintPath>
+    </Reference>
+    <Reference Include="Calabash">
+      <HintPath>..\packages\Xamarin.TestCloud.Agent.0.16.2\lib\Xamarin.iOS10\Calabash.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>

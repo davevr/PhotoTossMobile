@@ -8,6 +8,8 @@ using System.Collections.Generic;
 using JVMenuPopover;
 using HockeyApp;
 using Google.Maps;
+using WindowsAzure.Messaging;
+
 
 namespace PhotoToss.iOSApp
 {
@@ -47,6 +49,19 @@ namespace PhotoToss.iOSApp
 			#if ENABLE_TEST_CLOUD
 			Xamarin.Calabash.Start();
 			#endif
+
+			// Process any potential notification data from launch
+			ProcessNotification (options);
+
+			// Register for Notifications
+			var settings = UIUserNotificationSettings.GetSettingsForTypes (UIUserNotificationType.Sound |
+				UIUserNotificationType.Alert | UIUserNotificationType.Badge, null);
+
+			UIApplication.SharedApplication.RegisterUserNotificationSettings (settings);
+			UIApplication.SharedApplication.RegisterForRemoteNotifications ();
+			UIApplication.SharedApplication.ApplicationIconBadgeNumber = 0;
+
+
 
 			ConfigNavMenu ();
 			UINavigationBar.Appearance.TintColor = UIColor.Green;
@@ -140,6 +155,61 @@ namespace PhotoToss.iOSApp
 			Window.MakeKeyAndVisible();
 
 		}
+
+		void ProcessNotification(NSDictionary userInfo)
+		{
+			if (userInfo == null)
+				return;
+
+			Console.WriteLine ("Received Notification");
+
+			var apsKey = new NSString ("aps");
+
+			if (userInfo.ContainsKey (apsKey)) {
+
+				var alertKey = new NSString ("alert");
+
+				var aps = (NSDictionary)userInfo.ObjectForKey (apsKey);
+
+				if (aps.ContainsKey (alertKey)) {
+					var alert = (NSString)aps.ObjectForKey (alertKey);
+
+					//homeViewController.ProcessNotification (alert);
+
+					Console.WriteLine ("Notification: " + alert);
+				}
+			}
+		}
+
+		public override void RegisteredForRemoteNotifications (UIApplication app, NSData deviceToken)
+		{
+			// Connection string from your azure dashboard
+			var cs = SBConnectionString.CreateListenAccess(
+				new NSUrl("sb://phototossnotify-ns.servicebus.windows.net/"),
+				"FwWsviEIwwCK5vSg0kNiKcJs9GKuz70mXxYBGDYIvIU=");
+
+			// Register our info with Azure
+			var hub = new SBNotificationHub (cs, "phototossnotify");
+			hub.RegisterNativeAsync (deviceToken, null, err => {
+				if (err != null)
+					Console.WriteLine("Error: " + err.Description);
+				else
+					Console.WriteLine("Success");
+			});
+		}
+
+		public override void ReceivedRemoteNotification (UIApplication app, NSDictionary userInfo)
+		{
+			// Process a notification received while the app was already open
+			ProcessNotification (userInfo);
+		}
+
+		public override void DidRegisterUserNotificationSettings (UIApplication application, UIUserNotificationSettings notificationSettings)
+		{
+			UIApplication.SharedApplication.RegisterForRemoteNotifications ();
+		}
+
+
 
 		private void InitAnalytics()
 		{

@@ -35,9 +35,6 @@ using PhotoToss.Core;
 
 using ByteSmith.WindowsAzure.Messaging;
 using Gcm.Client;
-
-using Android.Hardware.Camera2;
-
 using Environment = Android.OS.Environment;
 using Uri = Android.Net.Uri;
 using Debug = System.Diagnostics.Debug;
@@ -60,7 +57,9 @@ using File = Java.IO.File;
 [assembly:MetaData ("com.facebook.sdk.ApplicationName", Value ="@string/app_name")]
 namespace PhotoToss.AndroidApp
 {
-	[Activity(Label = "PhotoToss", MainLauncher = true, Icon = "@drawable/iconnoborder", Theme = "@style/Theme.AppCompat.Light", ScreenOrientation=Android.Content.PM.ScreenOrientation.Portrait )]
+	[Activity(Label = "PhotoToss", MainLauncher = true, Icon = "@drawable/iconnoborder", 
+		Theme = "@style/Theme.AppCompat.Light", ScreenOrientation=Android.Content.PM.ScreenOrientation.Portrait ,
+		LaunchMode=Android.Content.PM.LaunchMode.SingleTop )]
 	public class MainActivity : Android.Support.V7.App.AppCompatActivity, ILocationListener
 	{
 		private string[] mDrawerTitles = new string[] { "Home", "Leaderboards", "Profile", "Settings",  "About PhotoToss"};
@@ -93,7 +92,7 @@ namespace PhotoToss.AndroidApp
         public static GoogleAnalytics analytics = null;
 		MobileBarcodeScanner scanner;
 
-		public static Location	_lastLocation = new Location("passive");
+		public static Location	_lastLocation = new Location("active");
 		private LocationManager _locationManager;
 		ICallbackManager callbackManager;
 		public delegate void Image_callback(Image theResult);
@@ -170,6 +169,7 @@ namespace PhotoToss.AndroidApp
 		{
 			Window.SetFlags (WindowManagerFlags.Fullscreen, WindowManagerFlags.Fullscreen);
 			base.OnCreate(bundle);
+
 			InitAnalytics();
 			Flurry.Analytics.FlurryAgent.Init(this, flurryId);
 			FacebookSdk.SdkInitialize (this.ApplicationContext);
@@ -350,6 +350,7 @@ namespace PhotoToss.AndroidApp
 
 			string locationProvider = _locationManager.GetBestProvider(locationCriteria, true);
 			_locationManager.RequestLocationUpdates (locationProvider, 5 * 60 * 1000, 50.0f, this);
+			_lastLocation = _locationManager.GetLastKnownLocation (locationProvider);
 		}
 
 		// ILocationListener
@@ -945,6 +946,16 @@ namespace PhotoToss.AndroidApp
 			}
 
 			return imageBitmap;
+		}
+
+		protected override void OnNewIntent (Intent intent)
+		{
+			base.OnNewIntent (intent);
+			Bundle b = intent.Extras;
+			if (b != null) {
+				long imageId = b.GetLong ("imageid");
+				System.Console.WriteLine ("Launched with ref to: " + imageId);
+			}
 		}
 
 
