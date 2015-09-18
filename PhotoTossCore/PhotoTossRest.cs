@@ -305,16 +305,25 @@ namespace PhotoToss.Core
             });
         }
 
-        public void GetTossStatus(String_callback callback)
+        public void GetTossStatus(long tossId, PhotoRecordList_callback callback)
         {
             string fullURL = "toss/status";
 
             RestRequest request = new RestRequest(fullURL, Method.GET);
+			request.AddParameter("toss", tossId);
 
             apiClient.ExecuteAsync(request, (response) =>
             {
-                _uploadURL = response.Content;
-                callback(_uploadURL);
+				if (response.StatusCode == HttpStatusCode.OK)
+				{
+					List<PhotoRecord> tossList = response.Content.FromJson<List<PhotoRecord>>();
+					callback(tossList);
+				}
+				else
+				{
+					//error ocured during upload
+					callback(null);
+				}
             });
 
         }

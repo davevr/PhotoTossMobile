@@ -13,6 +13,9 @@ namespace PhotoToss.iOSApp
 	partial class TossViewController
 	{
 		[Outlet]
+		UIKit.UICollectionView CatchCollection { get; set; }
+
+		[Outlet]
 		UIKit.UIButton DoneBtn { get; set; }
 
 		[Outlet]
@@ -20,6 +23,11 @@ namespace PhotoToss.iOSApp
 		
 		void ReleaseDesignerOutlets ()
 		{
+			if (CatchCollection != null) {
+				CatchCollection.Dispose ();
+				CatchCollection = null;
+			}
+
 			if (DoneBtn != null) {
 				DoneBtn.Dispose ();
 				DoneBtn = null;

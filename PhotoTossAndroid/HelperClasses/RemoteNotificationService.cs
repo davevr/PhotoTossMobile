@@ -89,7 +89,7 @@ namespace PhotoToss.AndroidApp
 			if (String.IsNullOrEmpty (UserId))
 				keys = new [] { "android" };
 			else
-				keys = new [] { "user_" + UserId };
+				keys = new [] { "user_" + UserId, "android" };
 
 			var nMgr = (NotificationManager)GetSystemService (NotificationService);
 

@@ -204,21 +204,22 @@
     <ImageAsset Include="Resources\Images.xcassets\AppIcons.appiconset\appicon-152.png" />
   </ItemGroup>
   <ItemGroup>
-    <InterfaceDefinition Include="Resources\LaunchScreen.xib" />
-    <InterfaceDefinition Include="Main.storyboard" />
-    <InterfaceDefinition Include="ViewControllers\HomeViewController.xib" />
-    <InterfaceDefinition Include="ViewControllers\LeaderboardViewController.xib" />
-    <InterfaceDefinition Include="ViewControllers\ProfileViewController.xib" />
-    <InterfaceDefinition Include="ViewControllers\SettingsViewController.xib" />
-    <InterfaceDefinition Include="ViewControllers\AboutViewController.xib" />
     <InterfaceDefinition Include="Views\TossedImageCell.xib" />
-    <InterfaceDefinition Include="ViewControllers\ImageDetailController.xib" />
-    <InterfaceDefinition Include="ViewControllers\TossViewController.xib" />
-    <InterfaceDefinition Include="ViewControllers\ImageViewController.xib" />
-    <InterfaceDefinition Include="ViewControllers\ImageSpreadViewController.xib" />
-    <InterfaceDefinition Include="ViewControllers\ImageStatsViewController.xib" />
     <InterfaceDefinition Include="Views\ImageInfoCell.xib" />
     <InterfaceDefinition Include="Views\TossInfoCell.xib" />
+    <InterfaceDefinition Include="Base.lproj\ProfileViewController.xib" />
+    <InterfaceDefinition Include="Base.lproj\Main.storyboard" />
+    <InterfaceDefinition Include="Base.lproj\AboutViewController.xib" />
+    <InterfaceDefinition Include="Base.lproj\HomeViewController.xib" />
+    <InterfaceDefinition Include="Base.lproj\ImageDetailController.xib" />
+    <InterfaceDefinition Include="Base.lproj\ImageSpreadViewController.xib" />
+    <InterfaceDefinition Include="Base.lproj\ImageStatsViewController.xib" />
+    <InterfaceDefinition Include="Base.lproj\ImageViewController.xib" />
+    <InterfaceDefinition Include="Base.lproj\LeaderboardViewController.xib" />
+    <InterfaceDefinition Include="Base.lproj\SettingsViewController.xib" />
+    <InterfaceDefinition Include="Base.lproj\TossViewController.xib" />
+    <InterfaceDefinition Include="Base.lproj\LaunchScreen.xib" />
+    <InterfaceDefinition Include="Views\TossProgressCell.xib" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Info.plist" />
@@ -305,6 +306,11 @@
     <Compile Include="Views\ImageInfoCell.designer.cs">
       <DependentUpon>ImageInfoCell.cs</DependentUpon>
     </Compile>
+    <Compile Include="Collections\TossStatusDataSource.cs" />
+    <Compile Include="Views\TossProgressCell.cs" />
+    <Compile Include="Views\TossProgressCell.designer.cs">
+      <DependentUpon>TossProgressCell.cs</DependentUpon>
+    </Compile>
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\iOS\Xamarin.iOS.CSharp.targets" />
   <ItemGroup>
@@ -362,6 +368,21 @@
     <BundleResource Include="Resources\placeholder.png" />
     <BundleResource Include="Resources\placeholder%402x.png" />
     <BundleResource Include="Resources\unknownperson%402x.png" />
+    <BundleResource Include="Resources\en.lproj\Localizable.strings" />
+    <BundleResource Include="Resources\es.lproj\Localizable.strings" />
+    <BundleResource Include="Resources\fr.lproj\Localizable.strings" />
+    <BundleResource Include="Resources\zh-Hans.lproj\Localizable.strings" />
+    <BundleResource Include="Resources\de.lproj\Localizable.strings" />
+    <BundleResource Include="Resources\en.lproj\ProfileViewController.strings" />
+    <BundleResource Include="Resources\es.lproj\ProfileViewController.strings" />
   </ItemGroup>
   <ItemGroup />
+  <ItemGroup>
+    <Folder Include="Resources\en.lproj\" />
+    <Folder Include="Base.lproj\" />
+    <Folder Include="Resources\es.lproj\" />
+    <Folder Include="Resources\de.lproj\" />
+    <Folder Include="Resources\zh-Hans.lproj\" />
+    <Folder Include="Resources\fr.lproj\" />
+  </ItemGroup>
 </Project>

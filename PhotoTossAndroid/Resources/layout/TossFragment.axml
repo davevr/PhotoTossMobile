@@ -11,16 +11,29 @@
         android:layout_width="fill_parent"
         android:adjustViewBounds="true"
         android:id="@+id/aztekView"
+        android:layout_height="320dp"
+        android:layout_alignParentTop="true"
+        android:layout_margin="0dp" />
+    <GridView
+        android:layout_width="fill_parent"
+        android:adjustViewBounds="true"
+        android:id="@+id/catchView"
         android:layout_height="0dp"
         android:layout_weight="1"
         android:layout_alignParentTop="true"
-        android:layout_margin="8dp" />
+        android:layout_marginLeft="8dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginRight="8dp"
+        android:layout_marginBottom="0dp" />
     <Button
         android:text="Cancel Toss"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/tossButton"
         android:background="@color/PT_light_teal"
-        android:layout_margin="16dp"
-        android:layout_gravity="bottom" />
+        android:layout_gravity="bottom"
+        android:layout_marginLeft="16dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginRight="16dp"
+        android:layout_marginBottom="16dp" />
 </LinearLayout>

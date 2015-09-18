@@ -1,12 +1,13 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="7706" systemVersion="14F27" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="8191" systemVersion="14F27" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES">
     <dependencies>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="7703"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="8154"/>
         <capability name="Aspect ratio constraints" minToolsVersion="5.1"/>
     </dependencies>
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="TossViewController">
             <connections>
+                <outlet property="CatchCollection" destination="DY4-mG-bPF" id="6NN-9K-Smm"/>
                 <outlet property="DoneBtn" destination="ytp-PI-YSc" id="VBe-pb-UjC"/>
                 <outlet property="TossImageView" destination="RI5-qF-ews" id="9Mk-Nq-yQM"/>
                 <outlet property="view" destination="iN0-l3-epB" id="kCW-yf-GMq"/>
@@ -24,31 +25,39 @@
                     </constraints>
                 </imageView>
                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="ytp-PI-YSc">
-                    <rect key="frame" x="102" y="501" width="120" height="30"/>
+                    <rect key="frame" x="8" y="530" width="304" height="30"/>
                     <color key="backgroundColor" red="0.0" green="1" blue="0.086479052200000003" alpha="1" colorSpace="calibratedRGB"/>
                     <constraints>
                         <constraint firstAttribute="height" constant="30" id="nSy-e2-62i"/>
-                        <constraint firstAttribute="width" constant="120" id="xg5-jk-SGJ"/>
                     </constraints>
                     <color key="tintColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
                     <state key="normal" title="Done">
                         <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                     </state>
                 </button>
+                <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" dataMode="none" translatesAutoresizingMaskIntoConstraints="NO" id="DY4-mG-bPF">
+                    <rect key="frame" x="0.0" y="328" width="320" height="194"/>
+                    <collectionViewFlowLayout key="collectionViewLayout" minimumLineSpacing="10" minimumInteritemSpacing="10" id="Hrg-F7-Ymj">
+                        <size key="itemSize" width="50" height="50"/>
+                        <size key="headerReferenceSize" width="0.0" height="0.0"/>
+                        <size key="footerReferenceSize" width="0.0" height="0.0"/>
+                        <inset key="sectionInset" minX="0.0" minY="0.0" maxX="0.0" maxY="0.0"/>
+                    </collectionViewFlowLayout>
+                </collectionView>
             </subviews>
             <color key="backgroundColor" white="0.33333333333333331" alpha="1" colorSpace="calibratedWhite"/>
             <constraints>
+                <constraint firstItem="DY4-mG-bPF" firstAttribute="top" secondItem="RI5-qF-ews" secondAttribute="bottom" constant="8" id="AS1-rd-uMc"/>
+                <constraint firstItem="ytp-PI-YSc" firstAttribute="leading" secondItem="iN0-l3-epB" secondAttribute="leading" constant="8" id="D4v-Jl-JW0"/>
                 <constraint firstItem="RI5-qF-ews" firstAttribute="top" secondItem="iN0-l3-epB" secondAttribute="top" id="Khm-Gj-iwB"/>
+                <constraint firstAttribute="trailing" secondItem="DY4-mG-bPF" secondAttribute="trailing" id="LH5-Bu-LkT"/>
+                <constraint firstItem="ytp-PI-YSc" firstAttribute="top" secondItem="DY4-mG-bPF" secondAttribute="bottom" constant="8" id="Mci-zC-8Nu"/>
                 <constraint firstItem="RI5-qF-ews" firstAttribute="leading" secondItem="iN0-l3-epB" secondAttribute="leading" id="NCn-dQ-gb3"/>
-                <constraint firstAttribute="bottom" secondItem="ytp-PI-YSc" secondAttribute="bottom" constant="37" id="P4D-kN-es1"/>
+                <constraint firstAttribute="bottom" secondItem="ytp-PI-YSc" secondAttribute="bottom" constant="8" id="P4D-kN-es1"/>
                 <constraint firstAttribute="trailing" secondItem="RI5-qF-ews" secondAttribute="trailing" id="VPa-OY-4Lf"/>
-                <constraint firstAttribute="centerX" secondItem="ytp-PI-YSc" secondAttribute="centerX" constant="-2" id="lxH-FA-NF6"/>
+                <constraint firstAttribute="trailing" secondItem="ytp-PI-YSc" secondAttribute="trailing" constant="8" id="vw5-qY-JcE"/>
+                <constraint firstItem="DY4-mG-bPF" firstAttribute="leading" secondItem="iN0-l3-epB" secondAttribute="leading" id="wbh-m0-p6E"/>
             </constraints>
         </view>
     </objects>
-    <simulatedMetricsContainer key="defaultSimulatedMetrics">
-        <simulatedStatusBarMetrics key="statusBar"/>
-        <simulatedOrientationMetrics key="orientation"/>
-        <simulatedScreenMetrics key="destination" type="retina4"/>
-    </simulatedMetricsContainer>
 </document>

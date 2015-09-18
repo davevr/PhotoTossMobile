@@ -3644,32 +3644,32 @@ namespace PhotoToss.AndroidApp
 		public partial class Id
 		{
 			
-			// aapt resource value: 0x7f0c00c1
-			public const int AddTagBtn = 2131493057;
+			// aapt resource value: 0x7f0c00c2
+			public const int AddTagBtn = 2131493058;
 			
-			// aapt resource value: 0x7f0c00ce
-			public const int CatchButton = 2131493070;
+			// aapt resource value: 0x7f0c00cf
+			public const int CatchButton = 2131493071;
 			
-			// aapt resource value: 0x7f0c00c9
-			public const int ImageDetailMenu = 2131493065;
+			// aapt resource value: 0x7f0c00ca
+			public const int ImageDetailMenu = 2131493066;
 			
 			// aapt resource value: 0x7f0c0081
 			public const int ItemName = 2131492993;
 			
-			// aapt resource value: 0x7f0c00cc
-			public const int MainMenu = 2131493068;
-			
-			// aapt resource value: 0x7f0c00c0
-			public const int NewTagText = 2131493056;
-			
 			// aapt resource value: 0x7f0c00cd
-			public const int PhotoButton = 2131493069;
+			public const int MainMenu = 2131493069;
 			
-			// aapt resource value: 0x7f0c00ca
-			public const int TossButton = 2131493066;
+			// aapt resource value: 0x7f0c00c1
+			public const int NewTagText = 2131493057;
 			
-			// aapt resource value: 0x7f0c00c2
-			public const int UploadBtn = 2131493058;
+			// aapt resource value: 0x7f0c00ce
+			public const int PhotoButton = 2131493070;
+			
+			// aapt resource value: 0x7f0c00cb
+			public const int TossButton = 2131493067;
+			
+			// aapt resource value: 0x7f0c00c3
+			public const int UploadBtn = 2131493059;
 			
 			// aapt resource value: 0x7f0c00a8
 			public const int action0 = 2131493032;
@@ -3764,8 +3764,8 @@ namespace PhotoToss.AndroidApp
 			// aapt resource value: 0x7f0c0060
 			public const int buttonPanel = 2131492960;
 			
-			// aapt resource value: 0x7f0c00c7
-			public const int buttonZxingFlash = 2131493063;
+			// aapt resource value: 0x7f0c00c8
+			public const int buttonZxingFlash = 2131493064;
 			
 			// aapt resource value: 0x7f0c00a5
 			public const int buttons = 2131493029;
@@ -3782,11 +3782,14 @@ namespace PhotoToss.AndroidApp
 			// aapt resource value: 0x7f0c00a9
 			public const int cancel_action = 2131493033;
 			
-			// aapt resource value: 0x7f0c00be
-			public const int captionText = 2131493054;
+			// aapt resource value: 0x7f0c00bf
+			public const int captionText = 2131493055;
 			
 			// aapt resource value: 0x7f0c0009
 			public const int cast_notification_id = 2131492873;
+			
+			// aapt resource value: 0x7f0c00bd
+			public const int catchView = 2131493053;
 			
 			// aapt resource value: 0x7f0c0045
 			public const int center = 2131492933;
@@ -3824,8 +3827,8 @@ namespace PhotoToss.AndroidApp
 			// aapt resource value: 0x7f0c007d
 			public const int com_facebook_tooltip_bubble_view_top_pointer = 2131492989;
 			
-			// aapt resource value: 0x7f0c00c8
-			public const int contentFrame = 2131493064;
+			// aapt resource value: 0x7f0c00c9
+			public const int contentFrame = 2131493065;
 			
 			// aapt resource value: 0x7f0c005b
 			public const int contentPanel = 2131492955;
@@ -3845,8 +3848,8 @@ namespace PhotoToss.AndroidApp
 			// aapt resource value: 0x7f0c009e
 			public const int default_control_frame = 2131493022;
 			
-			// aapt resource value: 0x7f0c00cb
-			public const int deleteBtn = 2131493067;
+			// aapt resource value: 0x7f0c00cc
+			public const int deleteBtn = 2131493068;
 			
 			// aapt resource value: 0x7f0c001c
 			public const int dialog = 2131492892;
@@ -3950,8 +3953,8 @@ namespace PhotoToss.AndroidApp
 			// aapt resource value: 0x7f0c00bc
 			public const int linearLayout1 = 2131493052;
 			
-			// aapt resource value: 0x7f0c00c5
-			public const int linearLayout2 = 2131493061;
+			// aapt resource value: 0x7f0c00c6
+			public const int linearLayout2 = 2131493062;
 			
 			// aapt resource value: 0x7f0c000a
 			public const int listMode = 2131492874;
@@ -4013,8 +4016,8 @@ namespace PhotoToss.AndroidApp
 			// aapt resource value: 0x7f0c003d
 			public const int page = 2131492925;
 			
-			// aapt resource value: 0x7f0c00c3
-			public const int pager = 2131493059;
+			// aapt resource value: 0x7f0c00c4
+			public const int pager = 2131493060;
 			
 			// aapt resource value: 0x7f0c0057
 			public const int parentPanel = 2131492951;
@@ -4178,8 +4181,8 @@ namespace PhotoToss.AndroidApp
 			// aapt resource value: 0x7f0c0084
 			public const int tabs = 2131492996;
 			
-			// aapt resource value: 0x7f0c00bf
-			public const int tagsField = 2131493055;
+			// aapt resource value: 0x7f0c00c0
+			public const int tagsField = 2131493056;
 			
 			// aapt resource value: 0x7f0c0037
 			public const int terrain = 2131492919;
@@ -4199,11 +4202,11 @@ namespace PhotoToss.AndroidApp
 			// aapt resource value: 0x7f0c0079
 			public const int textView1 = 2131492985;
 			
-			// aapt resource value: 0x7f0c00c4
-			public const int textView2 = 2131493060;
+			// aapt resource value: 0x7f0c00c5
+			public const int textView2 = 2131493061;
 			
-			// aapt resource value: 0x7f0c00c6
-			public const int textView3 = 2131493062;
+			// aapt resource value: 0x7f0c00c7
+			public const int textView3 = 2131493063;
 			
 			// aapt resource value: 0x7f0c00a1
 			public const int text_wrapper = 2131493025;
@@ -4229,8 +4232,8 @@ namespace PhotoToss.AndroidApp
 			// aapt resource value: 0x7f0c0058
 			public const int topPanel = 2131492952;
 			
-			// aapt resource value: 0x7f0c00bd
-			public const int tossButton = 2131493053;
+			// aapt resource value: 0x7f0c00be
+			public const int tossButton = 2131493054;
 			
 			// aapt resource value: 0x7f0c0095
 			public const int tossDateView = 2131493013;
@@ -4520,19 +4523,22 @@ namespace PhotoToss.AndroidApp
 			public const int TossFragment = 2130903108;
 			
 			// aapt resource value: 0x7f030045
-			public const int UploadActivity = 2130903109;
+			public const int TossProgressCell = 2130903109;
 			
 			// aapt resource value: 0x7f030046
-			public const int ViewPager = 2130903110;
+			public const int UploadActivity = 2130903110;
 			
 			// aapt resource value: 0x7f030047
-			public const int ZxingOverlay = 2130903111;
+			public const int ViewPager = 2130903111;
 			
 			// aapt resource value: 0x7f030048
-			public const int zxingscanneractivitylayout = 2130903112;
+			public const int ZxingOverlay = 2130903112;
 			
 			// aapt resource value: 0x7f030049
-			public const int zxingscannerfragmentlayout = 2130903113;
+			public const int zxingscanneractivitylayout = 2130903113;
+			
+			// aapt resource value: 0x7f03004a
+			public const int zxingscannerfragmentlayout = 2130903114;
 			
 			static Layout()
 			{
@@ -4582,11 +4588,26 @@ namespace PhotoToss.AndroidApp
 		public partial class String
 		{
 			
+			// aapt resource value: 0x7f060067
+			public const int About_Menu = 2131099751;
+			
 			// aapt resource value: 0x7f06005b
 			public const int ApplicationName = 2131099739;
 			
 			// aapt resource value: 0x7f06005a
 			public const int Hello = 2131099738;
+			
+			// aapt resource value: 0x7f060063
+			public const int Home_Menu = 2131099747;
+			
+			// aapt resource value: 0x7f060064
+			public const int Leaderboard_Menu = 2131099748;
+			
+			// aapt resource value: 0x7f060065
+			public const int Profile_Menu = 2131099749;
+			
+			// aapt resource value: 0x7f060066
+			public const int Settings_Menu = 2131099750;
 			
 			// aapt resource value: 0x7f06000a
 			public const int abc_action_bar_home_description = 2131099658;

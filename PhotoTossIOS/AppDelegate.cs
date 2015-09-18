@@ -33,6 +33,7 @@ namespace PhotoToss.iOSApp
 
 		public static GoogleAnalytics   analytics = null;
 		public UINavigationController NavigationController {get; set;}
+		private NSDictionary savedOptions = null;
 
 		public override bool FinishedLaunching (UIApplication app, NSDictionary options)
 		{
@@ -51,17 +52,8 @@ namespace PhotoToss.iOSApp
 			#endif
 
 			// Process any potential notification data from launch
-			ProcessNotification (options);
-
-			// Register for Notifications
-			var settings = UIUserNotificationSettings.GetSettingsForTypes (UIUserNotificationType.Sound |
-				UIUserNotificationType.Alert | UIUserNotificationType.Badge, null);
-
-			UIApplication.SharedApplication.RegisterUserNotificationSettings (settings);
-			UIApplication.SharedApplication.RegisterForRemoteNotifications ();
-			UIApplication.SharedApplication.ApplicationIconBadgeNumber = 0;
-
-
+			if (options != null)
+				savedOptions = options;
 
 			ConfigNavMenu ();
 			UINavigationBar.Appearance.TintColor = UIColor.Green;
@@ -111,34 +103,34 @@ namespace PhotoToss.iOSApp
 				{
 					//View exisiting view controller, will be reused everytime the item is selected
 					Icon = UIImage.FromBundle(@"home-48"),
-					Title = @"Home",
+					Title = NSBundle.MainBundle.LocalizedString("Home_Menu","Home_Menu"),
 					ViewController = rootController,
 				},
 				new JVMenuViewControllerItem()
 				{
 					//New view controller, will be reused everytime the item is selected
 					Icon = UIImage.FromBundle(@"business_contact-48"),
-					Title = @"Leaderboards",
+					Title = NSBundle.MainBundle.LocalizedString("Leaderboards_Menu","Leaderboards_Menu"),
 					ViewController = new LeaderboardViewController()
 				},
 				new JVMenuViewControllerItem()
 				{
 					//New view controller, will be reused everytime the item is selected
 					Icon = UIImage.FromBundle(@"ask_question-48"),
-					Title = @"Profile",
+					Title = NSBundle.MainBundle.LocalizedString("Profile_Menu","Profile_Menu"),
 					ViewController = new ProfileViewController()
 				},
 				new JVMenuViewControllerItem()
 				{
 					//New view controller, will be reused everytime the item is selected
 					Icon = UIImage.FromBundle(@"settings-48"),
-					Title = @"Settings",
+					Title = NSBundle.MainBundle.LocalizedString("Settings_Menu","Settings_Menu"),
 					ViewController = new SettingsViewController()
 				},
 				new JVMenuViewControllerItem()
 				{
 					Icon = UIImage.FromBundle(@"about-48"),
-					Title = @"About PhotoToss",
+					Title =NSBundle.MainBundle.LocalizedString("About_Menu","About_Menu"),
 					ViewController = new AboutViewController()
 				},
 			};
@@ -156,7 +148,7 @@ namespace PhotoToss.iOSApp
 
 		}
 
-		void ProcessNotification(NSDictionary userInfo)
+		public void ProcessNotification(NSDictionary userInfo)
 		{
 			if (userInfo == null)
 				return;
@@ -189,8 +181,11 @@ namespace PhotoToss.iOSApp
 				"FwWsviEIwwCK5vSg0kNiKcJs9GKuz70mXxYBGDYIvIU=");
 
 			// Register our info with Azure
+			string[] keyStrings = new string[] {"ios", "user_" + PhotoTossRest.Instance.CurrentUser.id.ToString()};
+			NSSet keys = new NSSet(keyStrings);
 			var hub = new SBNotificationHub (cs, "phototossnotify");
-			hub.RegisterNativeAsync (deviceToken, null, err => {
+
+			hub.RegisterNativeAsync (deviceToken, keys, err => {
 				if (err != null)
 					Console.WriteLine("Error: " + err.Description);
 				else
@@ -209,7 +204,20 @@ namespace PhotoToss.iOSApp
 			UIApplication.SharedApplication.RegisterForRemoteNotifications ();
 		}
 
+		public void RegisterForPushNotifications()
+		{
+			// Register for Notifications
+			InvokeOnMainThread (() => {
+				var settings = UIUserNotificationSettings.GetSettingsForTypes (UIUserNotificationType.Sound |
+				              UIUserNotificationType.Alert | UIUserNotificationType.Badge, null);
 
+				UIApplication.SharedApplication.RegisterUserNotificationSettings (settings);
+				UIApplication.SharedApplication.RegisterForRemoteNotifications ();
+				UIApplication.SharedApplication.ApplicationIconBadgeNumber = 0;
+				if (savedOptions != null)
+					ProcessNotification (savedOptions);
+			});
+		}
 
 		private void InitAnalytics()
 		{

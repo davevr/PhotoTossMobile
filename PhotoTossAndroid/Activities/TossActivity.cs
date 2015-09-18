@@ -13,9 +13,7 @@ using Android.Widget;
 using ZXing;
 using ZXing.Rendering;
 using PhotoToss.Core;
-
-
-//using SatelliteMenu;
+using System.Timers;
 
 
 namespace PhotoToss.AndroidApp
@@ -25,8 +23,14 @@ namespace PhotoToss.AndroidApp
     {
         Button tossBtn;
 		ImageView imageView;
+		GridView CatchView;
+
 		public static int itemWidth = 320;
 		Android.Util.DisplayMetrics	metrics;
+		Timer	tossTimer;
+		int secondsLeft;
+		int lastCount;
+		long currentTossId;
 
 
         protected override void OnCreate(Bundle bundle)
@@ -48,11 +52,12 @@ namespace PhotoToss.AndroidApp
 
             tossBtn = FindViewById<Button>(Resource.Id.tossButton);
 			imageView = FindViewById<ImageView>(Resource.Id.aztekView);
-
+			CatchView = FindViewById<GridView> (Resource.Id.catchView);
+			CatchView.Adapter = new TossStatusAdapter(this);
 
             tossBtn.Click +=  delegate
             {
-				Finish();
+				EndToss();
 
 
             };
@@ -83,25 +88,131 @@ namespace PhotoToss.AndroidApp
                     }
                 };
                 
-				string baseURL = "http://phototoss.com/share/";
-				string guid = theToss.id.ToString();
-				string url = baseURL + guid;
-				url = "http://phototoss.com/toss/" + guid;
+				currentTossId = theToss.id;
+				string guid = currentTossId.ToString ();
+				string url = "http://phototoss.com/toss/" + guid;
 
 
 				var bitMap = writer.Write(url);
-
+				lastCount = 0;
 				imageView.SetImageBitmap(bitMap);
+				StartTossTimer();
 			});
 
 
 		}
-    
 
+		private void StartTossTimer()
+		{
+			tossTimer = new Timer ();
+			tossTimer.Interval = 1000;
+			tossTimer.AutoReset = true;
+			tossTimer.Elapsed += HandleTossTimerTick;
+			secondsLeft = 60;
+			tossTimer.Start ();
+		}
+
+		private void HandleTossTimerTick(object sender, ElapsedEventArgs e)
+		{
+			secondsLeft--;
+			if (secondsLeft < 0) {
+				EndToss ();
+			} else {
+				PhotoTossRest.Instance.GetTossCatches (currentTossId, (catchList) => {
+					RunOnUiThread(() => 
+						{
+							if ((catchList != null) && (catchList.Count != lastCount))
+								UpdateTosses(catchList);
+							tossBtn.Text = String.Format ("Done (ending in {0} seconds)", secondsLeft);
+						});
+				});
+			}
+		}
+
+		private void UpdateTosses(List<PhotoRecord> catchList)
+		{
+			((TossStatusAdapter)CatchView.Adapter).PhotoRecordList = catchList; 
+			((TossStatusAdapter)CatchView.Adapter).NotifyDataSetChanged();
+			CatchView.InvalidateViews ();
+			lastCount = catchList.Count;
+		}
+
+		private void EndToss()
+		{
+			StopTossTimer ();
+			Finish();
+		}
+
+		private void StopTossTimer()
+		{
+			tossTimer.Stop ();
+
+		}
         private int ConvertPixelsToDp(float pixelValue)
         {
             var dp = (int)((pixelValue) / Resources.DisplayMetrics.Density);
             return dp;
         }
+
+
+		public class TossStatusAdapter : BaseAdapter
+		{
+			private readonly Context context;
+			private int profileWidth = 64;
+			public  List<PhotoRecord> PhotoRecordList { get; set; }
+
+			public TossStatusAdapter(Context c)
+			{
+				context = c;
+
+			}
+
+			public override int Count
+			{
+				get 
+				{
+					if (PhotoRecordList != null)
+						return PhotoRecordList.Count; 
+					else
+						return 0;
+				}
+			}
+
+			public override Java.Lang.Object GetItem(int position)
+			{
+				return null;
+			}
+
+			public override long GetItemId(int position)
+			{
+				return 0;
+			}
+
+
+			public override View GetView(int position, View convertView, ViewGroup parent)
+			{
+				View curView;
+				PhotoRecord curRec = PhotoRecordList[position];
+				ImageView imageView;
+
+				if (convertView == null)
+				{
+					curView = ((TossActivity)context).LayoutInflater.Inflate(Resource.Layout.TossProgressCell,null);
+				}
+				else
+				{
+					curView = (ImageView)convertView;
+				}
+				imageView = curView.FindViewById<ImageView>(Resource.Id.imageView);
+				Koush.UrlImageViewHelper.SetUrlDrawable (imageView, PhotoTossRest.Instance.GetUserProfileImage (curRec.ownername));
+
+
+				return curView;
+			}
+
+
+
+
+		}
     }
 }

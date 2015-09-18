@@ -239,6 +239,11 @@
     <AndroidResource Include="Resources\values-v21\dimens.xml" />
     <AndroidResource Include="Resources\values-v21\styles.xml" />
     <AndroidResource Include="Resources\drawable\bg_3.png" />
+    <AndroidResource Include="Resources\values-de\Strings.xml" />
+    <AndroidResource Include="Resources\values-es\Strings.xml" />
+    <AndroidResource Include="Resources\values-fr\Strings.xml" />
+    <AndroidResource Include="Resources\values-zh\Strings.xml" />
+    <AndroidResource Include="Resources\layout\TossProgressCell.axml" />
   </ItemGroup>
   <ItemGroup>
     <AndroidResource Include="Resources\values\Strings.xml" />
@@ -335,6 +340,10 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Resources\drawable-mdpi\" />
+    <Folder Include="Resources\values-es\" />
+    <Folder Include="Resources\values-de\" />
+    <Folder Include="Resources\values-zh\" />
+    <Folder Include="Resources\values-fr\" />
   </ItemGroup>
   <ItemGroup>
     <AndroidAsset Include="Assets\fonts\RammettoOne-Regular.ttf" />

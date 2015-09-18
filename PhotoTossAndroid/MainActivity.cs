@@ -62,7 +62,7 @@ namespace PhotoToss.AndroidApp
 		LaunchMode=Android.Content.PM.LaunchMode.SingleTop )]
 	public class MainActivity : Android.Support.V7.App.AppCompatActivity, ILocationListener
 	{
-		private string[] mDrawerTitles = new string[] { "Home", "Leaderboards", "Profile", "Settings",  "About PhotoToss"};
+		private string[] mDrawerTitles;
 		private DrawerLayout mDrawerLayout;
 		private ListView mDrawerList;
 		private MyDrawerToggle mDrawerToggle;
@@ -180,6 +180,14 @@ namespace PhotoToss.AndroidApp
 			bodyFace = Typeface.CreateFromAsset(Assets, "fonts/SourceCodePro-Regular.ttf");
 
 			// set up drawer
+			mDrawerTitles = new string[] { 
+				Resources.GetText (Resource.String.Home_Menu), 
+				Resources.GetText (Resource.String.Leaderboard_Menu),
+				Resources.GetText (Resource.String.Profile_Menu),
+				Resources.GetText (Resource.String.Settings_Menu),
+				Resources.GetText (Resource.String.About_Menu)
+			};
+
 			mDrawerLayout = FindViewById<DrawerLayout>(Resource.Id.drawer_layout);
 			mDrawerList = FindViewById<ListView>(Resource.Id.left_drawer);
 			// Set the adapter for the list view

@@ -10,9 +10,9 @@
         <string name="cancelled">Cancelled</string>
     <string name="permission_not_granted">Unable to perform selected action because permissions were not granted.</string>
     <!--- top nav drawer items -->
-	<string name="Home_Menu">Home</string>
-	<string name="Leaderboard_Menu">Leaderboard</string>
-	<string name="Profile_Menu">Profile</string>
-	<string name="Settings_Menu">Settings</string>
-	<string name="About_Menu">About PhotoToss</string>
+	<string name="Home_Menu">Home (fr)</string>
+	<string name="Leaderboard_Menu">Leaderboard (fr)</string>
+	<string name="Profile_Menu">Profile (fr)</string>
+	<string name="Settings_Menu">Settings (fr)</string>
+	<string name="About_Menu">About PhotoToss (fr)</string>
 </resources>

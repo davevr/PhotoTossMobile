@@ -6,11 +6,19 @@ using UIKit;
 using CoreGraphics;
 using PhotoToss.Core;
 using ZXing.Mobile;
+using System.Timers;
+using System.Collections.Generic;
 
 namespace PhotoToss.iOSApp
 {
 	public partial class TossViewController : UIViewController
 	{
+		Timer	tossTimer;
+		int secondsLeft;
+		int lastCount;
+		long currentTossId;
+		public static string kTossCellName = "TossProgressCell";
+
 		public TossViewController () : base ("TossViewController", null)
 		{
 		}
@@ -30,11 +38,22 @@ namespace PhotoToss.iOSApp
 			// Perform any additional setup after loading the view, typically from a nib.
 			DoneBtn.TouchUpInside += (object sender, EventArgs e) => 
 			{
-				DismissViewController(true, () => {
-					// do nothing for now
-				});
+				EndToss();
 
 			};
+
+			CatchCollection.RegisterNibForCell(UINib.FromName("TossProgressCell", NSBundle.MainBundle), kTossCellName);
+			CatchCollection.SetCollectionViewLayout (new UICollectionViewFlowLayout () {
+				SectionInset = new UIEdgeInsets (8,8,8,8),
+				ItemSize = new CGSize(50,50),
+				ScrollDirection = UICollectionViewScrollDirection.Vertical,
+				MinimumInteritemSpacing = 4, // minimum spacing between cells
+				MinimumLineSpacing = 4 // minimum spacing between rows if ScrollDirection is Vertical or between columns if Horizontal
+			}, true);
+
+			TossStatusDataSource dataSource = new TossStatusDataSource();
+			dataSource.photoList = new List<PhotoRecord>();
+			CatchCollection.DataSource = dataSource;
 		}
 
 		public override void ViewDidAppear (bool animated)
@@ -55,19 +74,68 @@ namespace PhotoToss.iOSApp
 						Margin = 1
 					}
 				};
-
-				string baseURL = "http://phototoss.com/share/";
-				string guid = theToss.id.ToString ();
-				string url = baseURL + guid;
-				url = "http://phototoss.com/toss/" + guid;
+				currentTossId = theToss.id;
+				string guid = currentTossId.ToString ();
+				string url = "http://phototoss.com/toss/" + guid;
 
 
 				var bitMap = writer.Write (url);
+				lastCount = 0;
 				InvokeOnMainThread(() => 
 					{
 						TossImageView.Image = bitMap;
+						StartTossTimer();
 					});
 			});
+		}
+
+		private void StartTossTimer()
+		{
+			tossTimer = new Timer ();
+			tossTimer.Interval = 1000;
+			tossTimer.AutoReset = true;
+			tossTimer.Elapsed += HandleTossTimerTick;
+			secondsLeft = 60;
+			tossTimer.Start ();
+		}
+
+		private void HandleTossTimerTick(object sender, ElapsedEventArgs e)
+		{
+			secondsLeft--;
+			if (secondsLeft < 0) {
+				EndToss ();
+			} else {
+				PhotoTossRest.Instance.GetTossCatches (currentTossId, (catchList) => {
+				//PhotoTossRest.Instance.GetTossStatus (currentTossId, (catchList) => {
+					
+					InvokeOnMainThread (() => {
+						if ((catchList != null) && (catchList.Count != lastCount))
+							UpdateTosses(catchList);
+						DoneBtn.SetTitle(String.Format ("Done (ending in {0} seconds)", secondsLeft), UIControlState.Normal);
+					});
+				});
+			}
+		}
+
+		private void UpdateTosses(List<PhotoRecord> catchList)
+		{
+			((TossStatusDataSource)CatchCollection.DataSource).photoList = catchList; 
+			CatchCollection.ReloadData ();
+			lastCount = catchList.Count;
+		}
+
+		private void EndToss()
+		{
+			StopTossTimer ();
+			DismissViewController(true, () => {
+				// do nothing for now
+			});
+		}
+
+		private void StopTossTimer()
+		{
+			tossTimer.Stop ();
+		
 		}
 
 		public override bool PrefersStatusBarHidden ()

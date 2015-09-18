@@ -213,6 +213,7 @@ namespace PhotoToss.iOSApp
 					var userInfo = result as NSDictionary;
 
 					PhotoToss.Core.PhotoTossRest.Instance.FacebookLogin (userInfo["id"].ToString(), AccessToken.CurrentAccessToken.TokenString, (theUser) => {
+						((AppDelegate)UIApplication.SharedApplication.Delegate).RegisterForPushNotifications();
 							RefreshGrid(() => 
 							{
 								HideOverlay();
