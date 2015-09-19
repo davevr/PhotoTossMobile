@@ -201,7 +201,7 @@ namespace PhotoToss.AndroidApp
 				}
 				else
 				{
-					curView = (ImageView)convertView;
+					curView = convertView;
 				}
 				imageView = curView.FindViewById<ImageView>(Resource.Id.imageView);
 				Koush.UrlImageViewHelper.SetUrlDrawable (imageView, PhotoTossRest.Instance.GetUserProfileImage (curRec.ownername));

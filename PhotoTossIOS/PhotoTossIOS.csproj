@@ -200,8 +200,12 @@
     <ImageAsset Include="Resources\Images.xcassets\TossIcon.imageset\ic_toss.png">
       <InProject>false</InProject>
     </ImageAsset>
-    <ImageAsset Include="Resources\Images.xcassets\AppIcons.appiconset\appicon-76.png" />
-    <ImageAsset Include="Resources\Images.xcassets\AppIcons.appiconset\appicon-152.png" />
+    <ImageAsset Include="Resources\Images.xcassets\AppIcons.appiconset\appicon-76.png">
+      <InProject>false</InProject>
+    </ImageAsset>
+    <ImageAsset Include="Resources\Images.xcassets\AppIcons.appiconset\appicon-152.png">
+      <InProject>false</InProject>
+    </ImageAsset>
   </ItemGroup>
   <ItemGroup>
     <InterfaceDefinition Include="Views\TossedImageCell.xib" />
