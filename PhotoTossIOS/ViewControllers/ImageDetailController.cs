@@ -12,11 +12,11 @@ namespace PhotoToss.iOSApp
 {
 	public partial class ImageDetailController : UIViewController
 	{
+		public UIImage CurrentImage { get; set; }
+
 		public ImageDetailController () : base ("ImageDetailController", null)
 		{
 		}
-
-
 
 
 		public override void DidReceiveMemoryWarning ()
@@ -42,6 +42,7 @@ namespace PhotoToss.iOSApp
 		private void ImageLoadComplete(UIImage image, NSError theErr, SDImageCacheType cacheType, NSUrl theURL )
 		{
 			ResizeImage();
+			CurrentImage = image;
 		}
 
 

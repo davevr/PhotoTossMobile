@@ -391,7 +391,7 @@ namespace PhotoToss.iOSApp
 
 					PhotoTossRest.Instance.GetUploadURL((uploadStr) =>
 						{
-							UIImage thumbnail = CropImage(imageForUploading, new CGRect(0,0,64,64));
+							UIImage thumbnail = UIImageHelper.ScaleAndCrop(imageForUploading, 64);
 
 							PhotoTossRest.Instance.UploadImageThumb(thumbnail.AsPNG().AsStream (), theRecord.id, (theStr) =>
 									{

@@ -21,6 +21,72 @@ namespace PhotoToss.iOSApp
 			}
 		}
 
+		public static UIImage MaxResizeImage(UIImage sourceImage, float maxWidth, float maxHeight)
+		{
+			var sourceSize = sourceImage.Size;
+			var maxResizeFactor = Math.Max(maxWidth / sourceSize.Width, maxHeight / sourceSize.Height);
+			if (maxResizeFactor > 1) return sourceImage;
+			var width = maxResizeFactor * sourceSize.Width;
+			var height = maxResizeFactor * sourceSize.Height;
+			UIGraphics.BeginImageContext(new CGSize(width, height));
+			sourceImage.Draw(new CGRect(0, 0, width, height));
+			var resultImage = UIGraphics.GetImageFromCurrentImageContext();
+			UIGraphics.EndImageContext();
+			return resultImage;
+		}
+
+		// resize the image (without trying to maintain aspect ratio)
+		public static UIImage ResizeImage(UIImage sourceImage, float width, float height)
+		{
+			UIGraphics.BeginImageContext(new CGSize(width, height));
+			sourceImage.Draw(new CGRect(0, 0, width, height));
+			var resultImage = UIGraphics.GetImageFromCurrentImageContext();
+			UIGraphics.EndImageContext();
+			return resultImage;
+		}
+
+		// crop the image, without resizing
+		public static UIImage CropImage(UIImage sourceImage, int crop_x, int crop_y, int width, int height)
+		{
+			var imgSize = sourceImage.Size;
+			UIGraphics.BeginImageContext(new CGSize(width, height));
+			var context = UIGraphics.GetCurrentContext();
+			var clippedRect = new CGRect(0, 0, width, height);
+			context.ClipToRect(clippedRect);
+			var drawRect = new CGRect(-crop_x, -crop_y, imgSize.Width, imgSize.Height);
+			sourceImage.Draw(drawRect);
+			var modifiedImage = UIGraphics.GetImageFromCurrentImageContext();
+			UIGraphics.EndImageContext();
+			return modifiedImage;
+		}
+
+		public static UIImage ScaleAndCrop(UIImage sourceImage, nfloat maxSize) {
+			var sourceSize = sourceImage.Size;
+			var maxResizeFactor = Math.Min(maxSize / sourceSize.Width, maxSize / sourceSize.Height);
+			if (maxResizeFactor > 1) 
+				return sourceImage;
+			
+			var width = maxResizeFactor * sourceSize.Width;
+			var height = maxResizeFactor * sourceSize.Height;
+			UIGraphics.BeginImageContext(new CGSize(width, height));
+			sourceImage.Draw(new CGRect(0, 0, width, height));
+			var resultImage = UIGraphics.GetImageFromCurrentImageContext();
+			UIGraphics.EndImageContext();
+
+			// now crop it
+			nfloat xOffset = (resultImage.Size.Width - maxSize) / 2;
+			nfloat yOffset = (resultImage.Size.Height - maxSize) / 2;
+
+			if ((xOffset != 0) || (yOffset != 0)) {
+				UIGraphics.BeginImageContext(new CGSize(maxSize, maxSize));
+				sourceImage.Draw(new CGRect(-xOffset, -yOffset,resultImage.Size.Width, resultImage.Size.Height));
+				var cropImage = UIGraphics.GetImageFromCurrentImageContext();
+				UIGraphics.EndImageContext();
+				return cropImage;
+			}
+				else return resultImage;
+		}
+
 		public static UIImage ScaleAndRotateImage(UIImage image)
 		{
 			CGImage imgRef = image.CGImage;

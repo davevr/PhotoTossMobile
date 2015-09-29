@@ -65,9 +65,7 @@ namespace PhotoToss.iOSApp
 						});
 				}
 			});
-			UIBarButtonItem deleteBtn;
-
-			deleteBtn = new UIBarButtonItem (UIImage.FromBundle ("DeleteIcon"), UIBarButtonItemStyle.Plain, (sender, e) => {
+			UIBarButtonItem deleteBtn = new UIBarButtonItem (UIImage.FromBundle ("DeleteIcon"), UIBarButtonItemStyle.Plain, (sender, e) => {
 				// to do - delete the item
 				var alert = UIAlertController.Create ("Remove Photo", "How do you want to remove this photo?", UIAlertControllerStyle.Alert);
 
@@ -84,10 +82,20 @@ namespace PhotoToss.iOSApp
 
 			});
 
+			UIBarButtonItem shareBtn = new UIBarButtonItem (UIBarButtonSystemItem.Action, (sender, eventArg) => 
+				{
+					NSUrl newURL = new NSUrl(string.Format("http://phototoss-server-01.appspot.com/image/{0}", HomeViewController.CurrentPhotoRecord.id));
+					var activityViewController = new UIActivityViewController(new NSObject[] {newURL, tab1.CurrentImage }, null)
+					{
+
+					};
+					PresentViewController(activityViewController, true, null);
+				});
+
 
 
 			//NavigationItem.RightBarButtonItem = tossBtn;
-			NavigationItem.RightBarButtonItems = new UIBarButtonItem[] {deleteBtn, tossBtn};
+			NavigationItem.RightBarButtonItems = new UIBarButtonItem[] {shareBtn, deleteBtn, tossBtn};
 
 		}
 
