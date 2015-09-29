@@ -9,6 +9,9 @@ namespace PhotoToss.iOSApp
 {
 	public partial class ImageViewController : UITabBarController
 	{
+		public delegate void ImageDeletedDelegate(PhotoRecord theImage);
+		public event ImageDeletedDelegate ImageDeleted;
+
 		private ImageDetailController tab1;
 		private ImageSpreadViewController tab2;
 		private ImageStatsViewController tab3;
@@ -62,9 +65,29 @@ namespace PhotoToss.iOSApp
 						});
 				}
 			});
+			UIBarButtonItem deleteBtn;
 
-			NavigationItem.RightBarButtonItem = tossBtn;
+			deleteBtn = new UIBarButtonItem (UIImage.FromBundle ("DeleteIcon"), UIBarButtonItemStyle.Plain, (sender, e) => {
+				// to do - delete the item
+				var alert = UIAlertController.Create ("Remove Photo", "How do you want to remove this photo?", UIAlertControllerStyle.Alert);
 
+				alert.AddAction (UIAlertAction.Create ("just remove mine", UIAlertActionStyle.Destructive, action => 
+					{
+						this.RemoveImage();
+					}));
+				alert.AddAction (UIAlertAction.Create ("all tosses as well", UIAlertActionStyle.Destructive, action => 
+					{
+						this.RemoveAllTosses();
+					}));
+				alert.AddAction (UIAlertAction.Create("cancel", UIAlertActionStyle.Cancel, null));
+				PresentViewController (alert, animated: true, completionHandler: null);
+
+			});
+
+
+
+			//NavigationItem.RightBarButtonItem = tossBtn;
+			NavigationItem.RightBarButtonItems = new UIBarButtonItem[] {deleteBtn, tossBtn};
 
 		}
 
@@ -72,6 +95,33 @@ namespace PhotoToss.iOSApp
 		public override bool PrefersStatusBarHidden ()
 		{
 			return true;
+		}
+
+		public void RemoveImage()
+		{
+			PhotoRecord deadImage = HomeViewController.CurrentPhotoRecord;
+			PhotoTossRest.Instance.RemoveImage (HomeViewController.CurrentPhotoRecord.id, false, (theResult) => {
+				HomeViewController.CurrentPhotoRecord = null;
+				InvokeOnMainThread(() => {
+					NavigationController.PopViewController (true);
+					if (ImageDeleted != null)
+						ImageDeleted(deadImage);
+				});
+			});
+		}
+
+		public void RemoveAllTosses()
+		{
+			PhotoRecord deadImage = HomeViewController.CurrentPhotoRecord;
+			PhotoTossRest.Instance.RemoveImage(HomeViewController.CurrentPhotoRecord.id, true, (theResult) => {
+				HomeViewController.CurrentPhotoRecord = null;
+				InvokeOnMainThread(() => {
+					NavigationController.PopViewController (true);
+					if (ImageDeleted != null)
+						ImageDeleted(deadImage);
+				});
+
+			});
 		}
 
 	}

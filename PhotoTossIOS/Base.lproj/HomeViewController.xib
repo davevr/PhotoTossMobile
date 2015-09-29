@@ -1,13 +1,16 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="7706" systemVersion="14F27" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="8191" systemVersion="14F27" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES">
     <dependencies>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="7703"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="8154"/>
     </dependencies>
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="HomeViewController">
             <connections>
                 <outlet property="CameraBtn" destination="qRu-n0-uxZ" id="DZM-0u-jeh"/>
                 <outlet property="CatchBtn" destination="Kpk-Fh-FLK" id="r9N-Zl-954"/>
+                <outlet property="FakeHeader" destination="5Zu-a9-Mmp" id="IN0-tu-3kg"/>
+                <outlet property="Toolbar" destination="5vG-mr-EFE" id="9BL-hf-pYW"/>
+                <outlet property="TossTitle" destination="806-oT-wLw" id="fvv-Qj-vVk"/>
                 <outlet property="TossedImageCollectionView" destination="T9D-bN-5qV" id="xv1-IV-Xaz"/>
                 <outlet property="view" destination="iN0-l3-epB" id="kCW-yf-GMq"/>
             </connections>
@@ -17,22 +20,50 @@
             <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>
-                <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="backgroundImage.png" translatesAutoresizingMaskIntoConstraints="NO" id="asF-cu-g0e">
+                <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="background2" translatesAutoresizingMaskIntoConstraints="NO" id="asF-cu-g0e">
                     <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
                 </imageView>
-                <toolbar opaque="NO" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="5vG-mr-EFE">
-                    <rect key="frame" x="0.0" y="524" width="320" height="44"/>
+                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="5Zu-a9-Mmp">
+                    <rect key="frame" x="0.0" y="0.0" width="320" height="60"/>
+                    <color key="backgroundColor" red="0.0" green="0.61960784310000006" blue="0.56078431370000004" alpha="1" colorSpace="calibratedRGB"/>
+                    <constraints>
+                        <constraint firstAttribute="height" constant="60" id="wn6-DQ-HDg"/>
+                    </constraints>
+                </view>
+                <toolbar opaque="NO" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" translucent="NO" translatesAutoresizingMaskIntoConstraints="NO" id="5vG-mr-EFE">
+                    <rect key="frame" x="0.0" y="16" width="320" height="44"/>
                     <items>
+                        <barButtonItem width="42" style="plain" systemItem="fixedSpace" id="P2T-QK-x9f"/>
+                        <barButtonItem width="150" style="plain" id="2Hq-fY-72H">
+                            <view key="customView" contentMode="scaleToFill" id="w4E-lG-Rqu">
+                                <rect key="frame" x="58" y="6" width="150" height="33"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <subviews>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" usesAttributedText="YES" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="806-oT-wLw">
+                                        <rect key="frame" x="0.0" y="6" width="200" height="21"/>
+                                        <attributedString key="attributedText">
+                                            <fragment content="PhotoToss">
+                                                <attributes>
+                                                    <color key="NSColor" red="1" green="0.47450980392156861" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
+                                                    <font key="NSFont" size="17" name="RammettoOne-Regular"/>
+                                                    <paragraphStyle key="NSParagraphStyle" alignment="left" lineBreakMode="wordWrapping" baseWritingDirection="natural"/>
+                                                </attributes>
+                                            </fragment>
+                                        </attributedString>
+                                        <nil key="highlightedColor"/>
+                                    </label>
+                                </subviews>
+                            </view>
+                        </barButtonItem>
                         <barButtonItem style="plain" systemItem="flexibleSpace" id="Fr0-17-vHR"/>
                         <barButtonItem image="CameraIcon" style="plain" id="qRu-n0-uxZ" userLabel="CameraBtn"/>
-                        <barButtonItem width="42" style="plain" systemItem="fixedSpace" id="Nlp-ke-79j"/>
+                        <barButtonItem width="16" style="plain" systemItem="fixedSpace" id="Nlp-ke-79j"/>
                         <barButtonItem tag="1" image="CatchIcon" id="Kpk-Fh-FLK" userLabel="CatchBtn"/>
-                        <barButtonItem style="plain" systemItem="flexibleSpace" id="65H-rX-Qar"/>
                     </items>
-                    <color key="tintColor" cocoaTouchSystemColor="darkTextColor"/>
+                    <color key="tintColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
                 </toolbar>
                 <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" showsHorizontalScrollIndicator="NO" dataMode="none" translatesAutoresizingMaskIntoConstraints="NO" id="T9D-bN-5qV">
-                    <rect key="frame" x="0.0" y="0.0" width="320" height="524"/>
+                    <rect key="frame" x="0.0" y="60" width="320" height="508"/>
                     <color key="backgroundColor" red="1" green="1" blue="1" alpha="0.5" colorSpace="calibratedRGB"/>
                     <collectionViewFlowLayout key="collectionViewLayout" minimumLineSpacing="10" minimumInteritemSpacing="10" id="o9W-zZ-NWD">
                         <size key="itemSize" width="128" height="128"/>
@@ -45,17 +76,20 @@
             <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
             <gestureRecognizers/>
             <constraints>
+                <constraint firstItem="5vG-mr-EFE" firstAttribute="top" secondItem="iN0-l3-epB" secondAttribute="top" constant="16" id="2Zc-A0-KsE"/>
                 <constraint firstAttribute="trailing" secondItem="5vG-mr-EFE" secondAttribute="trailing" id="IoJ-FJ-uLm"/>
-                <constraint firstItem="T9D-bN-5qV" firstAttribute="top" secondItem="iN0-l3-epB" secondAttribute="top" id="MQn-93-cc6"/>
                 <constraint firstItem="asF-cu-g0e" firstAttribute="leading" secondItem="iN0-l3-epB" secondAttribute="leading" id="QbQ-Ux-HpW"/>
                 <constraint firstAttribute="trailing" secondItem="T9D-bN-5qV" secondAttribute="trailing" id="UfB-1Z-TzP"/>
                 <constraint firstAttribute="trailing" secondItem="asF-cu-g0e" secondAttribute="trailing" id="WrB-yK-DnV"/>
                 <constraint firstItem="5vG-mr-EFE" firstAttribute="leading" secondItem="iN0-l3-epB" secondAttribute="leading" id="YET-ca-R2f"/>
-                <constraint firstAttribute="bottom" secondItem="5vG-mr-EFE" secondAttribute="bottom" id="eIx-QB-Pho"/>
+                <constraint firstItem="T9D-bN-5qV" firstAttribute="top" secondItem="5vG-mr-EFE" secondAttribute="bottom" id="gXC-iW-sRs"/>
+                <constraint firstAttribute="bottom" secondItem="T9D-bN-5qV" secondAttribute="bottom" id="kdt-zq-cNr"/>
+                <constraint firstItem="5Zu-a9-Mmp" firstAttribute="top" secondItem="iN0-l3-epB" secondAttribute="top" id="mRA-z5-J2x"/>
+                <constraint firstItem="5Zu-a9-Mmp" firstAttribute="leading" secondItem="iN0-l3-epB" secondAttribute="leading" id="qib-Ze-roV"/>
                 <constraint firstItem="T9D-bN-5qV" firstAttribute="leading" secondItem="iN0-l3-epB" secondAttribute="leading" id="tjl-en-GFK"/>
                 <constraint firstAttribute="bottom" secondItem="asF-cu-g0e" secondAttribute="bottom" id="uTQ-IQ-Bm3"/>
+                <constraint firstAttribute="trailing" secondItem="5Zu-a9-Mmp" secondAttribute="trailing" id="vfc-26-e5Q"/>
                 <constraint firstItem="asF-cu-g0e" firstAttribute="top" secondItem="iN0-l3-epB" secondAttribute="top" id="y8N-l9-EK4"/>
-                <constraint firstItem="5vG-mr-EFE" firstAttribute="top" secondItem="T9D-bN-5qV" secondAttribute="bottom" id="zO5-dV-bfX"/>
             </constraints>
             <point key="canvasLocation" x="328" y="484"/>
         </view>
@@ -63,11 +97,6 @@
     <resources>
         <image name="CameraIcon" width="25" height="25"/>
         <image name="CatchIcon" width="25" height="25"/>
-        <image name="backgroundImage.png" width="512" height="512"/>
+        <image name="background2" width="512" height="512"/>
     </resources>
-    <simulatedMetricsContainer key="defaultSimulatedMetrics">
-        <simulatedStatusBarMetrics key="statusBar"/>
-        <simulatedOrientationMetrics key="orientation"/>
-        <simulatedScreenMetrics key="destination" type="retina4"/>
-    </simulatedMetricsContainer>
 </document>

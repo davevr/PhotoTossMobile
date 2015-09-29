@@ -206,6 +206,8 @@
     <ImageAsset Include="Resources\Images.xcassets\AppIcons.appiconset\appicon-152.png">
       <InProject>false</InProject>
     </ImageAsset>
+    <ImageAsset Include="Resources\Images.xcassets\DeleteIcon.imageset\Contents.json" />
+    <ImageAsset Include="Resources\Images.xcassets\DeleteIcon.imageset\ic_delete.png" />
   </ItemGroup>
   <ItemGroup>
     <InterfaceDefinition Include="Views\TossedImageCell.xib" />
@@ -254,7 +256,6 @@
     <Compile Include="..\PhotoTossCore\Utilities.cs">
       <Link>PhotoTossCore\Utilities.cs</Link>
     </Compile>
-    <Compile Include="ViewControllers\HomeViewController.cs" />
     <Compile Include="ViewControllers\HomeViewController.designer.cs">
       <DependentUpon>HomeViewController.cs</DependentUpon>
     </Compile>
@@ -315,6 +316,7 @@
     <Compile Include="Views\TossProgressCell.designer.cs">
       <DependentUpon>TossProgressCell.cs</DependentUpon>
     </Compile>
+    <Compile Include="ViewControllers\HomeViewController.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\iOS\Xamarin.iOS.CSharp.targets" />
   <ItemGroup>
@@ -379,6 +381,18 @@
     <BundleResource Include="Resources\de.lproj\Localizable.strings" />
     <BundleResource Include="Resources\en.lproj\ProfileViewController.strings" />
     <BundleResource Include="Resources\es.lproj\ProfileViewController.strings" />
+    <BundleResource Include="Resources\background.png" />
+    <BundleResource Include="Resources\background2.png" />
+    <BundleResource Include="Resources\Fonts\SourceCodePro-Black.ttf" />
+    <BundleResource Include="Resources\Fonts\SourceCodePro-Bold.ttf" />
+    <BundleResource Include="Resources\Fonts\SourceCodePro-ExtraLight.ttf" />
+    <BundleResource Include="Resources\Fonts\SourceCodePro-Light.ttf" />
+    <BundleResource Include="Resources\Fonts\SourceCodePro-Medium.ttf" />
+    <BundleResource Include="Resources\Fonts\SourceCodePro-Regular.ttf" />
+    <BundleResource Include="Resources\Fonts\SourceCodePro-Semibold.ttf" />
+    <BundleResource Include="Resources\Fonts\RammettoOne-Regular.ttf">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </BundleResource>
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>
@@ -388,5 +402,6 @@
     <Folder Include="Resources\de.lproj\" />
     <Folder Include="Resources\zh-Hans.lproj\" />
     <Folder Include="Resources\fr.lproj\" />
+    <Folder Include="Resources\Fonts\" />
   </ItemGroup>
 </Project>

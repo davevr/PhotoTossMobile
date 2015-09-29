@@ -121,7 +121,7 @@ namespace PhotoToss.iOSApp
 		{
 			if (AccessToken.CurrentAccessToken != null) {
 				if (PhotoTossRest.Instance.CurrentUser == null) {
-					ShowOverlay (View, "Connecting to the Tosstaplex...");
+					ShowOverlay (View, "Connecting to the PhotoToss...");
 					var request = new GraphRequest ("/me?fields=name,id", null, AccessToken.CurrentAccessToken.TokenString, null, "GET");
 					request.Start ((connection, result, error) => {
 						// Handle if something went wrong with the request

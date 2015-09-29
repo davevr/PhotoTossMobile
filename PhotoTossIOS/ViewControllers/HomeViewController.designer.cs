@@ -19,10 +19,24 @@ namespace PhotoToss.iOSApp
 		UIKit.UIBarButtonItem CatchBtn { get; set; }
 
 		[Outlet]
+		UIKit.UIView FakeHeader { get; set; }
+
+		[Outlet]
+		UIKit.UIToolbar Toolbar { get; set; }
+
+		[Outlet]
 		UIKit.UICollectionView TossedImageCollectionView { get; set; }
+
+		[Outlet]
+		UIKit.UILabel TossTitle { get; set; }
 		
 		void ReleaseDesignerOutlets ()
 		{
+			if (TossTitle != null) {
+				TossTitle.Dispose ();
+				TossTitle = null;
+			}
+
 			if (CameraBtn != null) {
 				CameraBtn.Dispose ();
 				CameraBtn = null;
@@ -31,6 +45,16 @@ namespace PhotoToss.iOSApp
 			if (CatchBtn != null) {
 				CatchBtn.Dispose ();
 				CatchBtn = null;
+			}
+
+			if (FakeHeader != null) {
+				FakeHeader.Dispose ();
+				FakeHeader = null;
+			}
+
+			if (Toolbar != null) {
+				Toolbar.Dispose ();
+				Toolbar = null;
 			}
 
 			if (TossedImageCollectionView != null) {

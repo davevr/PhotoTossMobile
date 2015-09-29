@@ -44,6 +44,7 @@ namespace PhotoToss.iOSApp
 		public static string kTossCellName = "TossedImageCell";
 		private List<double> dataList = new List<double> ();
 		private string catchResult;
+		public nfloat kCellSize;
 
 
 		public HomeViewController () : base ()
@@ -62,7 +63,9 @@ namespace PhotoToss.iOSApp
 		public override void ViewDidLoad ()
 		{
 			base.ViewDidLoad ();
-			
+			AutomaticallyAdjustsScrollViewInsets = false;
+			TossedImageCollectionView.ContentInset = new UIEdgeInsets (-40, 0, 0, 0);
+
 			// Perform any additional setup after loading the view, typically from a nib.
 			CameraBtn.Clicked += (object sender, EventArgs e) => {
 				DoTakePicture ();
@@ -72,13 +75,24 @@ namespace PhotoToss.iOSApp
 				DoCatchPicture ();
 			};
 
+			nfloat marginSize = 24;
+			nfloat screenSize = UIScreen.MainScreen.Bounds.Width;
+			nfloat availableSize = screenSize - marginSize * 3;
+			kCellSize = availableSize / 2;
+			if (kCellSize > 155) {
+				// must be iPhone 6 plus....
+				availableSize = screenSize - marginSize * 4;
+				kCellSize = availableSize / 3;
+			}
+
+
 			// set up collection view
 			TossedImageCollectionView.RegisterNibForCell(UINib.FromName("TossedImageCell", NSBundle.MainBundle), kTossCellName);
 			TossedImageCollectionView.SetCollectionViewLayout (new UICollectionViewFlowLayout () {
-				SectionInset = new UIEdgeInsets (50,16,20,16),
-				ItemSize = new CGSize(120,120),
+				SectionInset = new UIEdgeInsets (0,marginSize,0,marginSize),
+				ItemSize = new CGSize(kCellSize, kCellSize),
 				ScrollDirection = UICollectionViewScrollDirection.Vertical,
-				MinimumInteritemSpacing = 8, // minimum spacing between cells
+				MinimumInteritemSpacing = marginSize, // minimum spacing between cells
 				MinimumLineSpacing = 16 // minimum spacing between rows if ScrollDirection is Vertical or between columns if Horizontal
 			}, true);
 
@@ -98,7 +112,13 @@ namespace PhotoToss.iOSApp
 				motionManager = null;
 			}
 
+			Toolbar.ClipsToBounds = true;
+			FakeHeader.Layer.ShadowOffset = new CGSize (1, 5);
+			FakeHeader.Layer.ShadowColor = new CGColor (0, 0, 0);
+			FakeHeader.Layer.ShadowOpacity = 0.5f;
 
+			TossTitle.AttributedText = new NSAttributedString("PhotoToss", UIFont.FromName("RammettoOne-Regular", 17),
+				UIColor.FromRGB(255,121,0));
 		}
 
 		[Export ("collectionView:didSelectItemAtIndexPath:")]
@@ -108,9 +128,15 @@ namespace PhotoToss.iOSApp
 
 			ImageViewController imageViewer = new ImageViewController ();
 			if (imageViewer != null) {
-				
+				imageViewer.ImageDeleted += HandleImageDeleted;
 				this.NavigationController.PushViewController (imageViewer, true);
 			}
+		}
+
+		public void HandleImageDeleted (PhotoRecord deadImage)
+		{
+			RemoveDeadImage (deadImage);
+
 		}
 
 		public override void ViewDidAppear (bool animated)
@@ -200,7 +226,7 @@ namespace PhotoToss.iOSApp
 		private void CompleteSignin ()
 		{
 			if (AccessToken.CurrentAccessToken != null) {
-				ShowOverlay (View, "Connecting to the Tosstopolis...");
+				ShowOverlay (View, "Connecting to PhotoToss...");
 				var request = new GraphRequest ("/me?fields=name,id", null, AccessToken.CurrentAccessToken.TokenString, null, "GET");
 				request.Start ((connection, result, error) => {
 					// Handle if something went wrong with the request
@@ -352,7 +378,7 @@ namespace PhotoToss.iOSApp
 		private void FileChooseFinished(object sender, UIImagePickerMediaPickedEventArgs eventArgs)
 		{
 			// NOTE:  when this is called, the photo is still on the screen
-			ShowOverlay(((UIImagePickerController) sender).View, "Uploading Image to the Tosstoplex...");
+			ShowOverlay(((UIImagePickerController) sender).View, "Uploading To PhotoToss...");
 			LocationHelper.StartLocationManager (CoreLocation.CLLocation.AccuracyBest);
 			LocationHelper.LocationResult curLoc = LocationHelper.GetLocationResult ();
 			LocationHelper.StopLocationManager ();
@@ -525,6 +551,15 @@ namespace PhotoToss.iOSApp
 			NSIndexPath path = NSIndexPath.FromRowSection (0, 0);
 			TossedImageCollectionView.ScrollToItem (path, UICollectionViewScrollPosition.Top, true);
 		}
+
+		private void RemoveDeadImage(PhotoRecord newRec)
+		{
+			((TossedImageDataSource)TossedImageCollectionView.DataSource).photoList.Remove (newRec);
+			TossedImageCollectionView.ReloadData ();
+			NSIndexPath path = NSIndexPath.FromRowSection (0, 0);
+			TossedImageCollectionView.ScrollToItem (path, UICollectionViewScrollPosition.Top, true);
+		}
+
 
 		private static void TryDispose (IDisposable obj)
 		{

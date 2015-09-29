@@ -139,6 +139,20 @@ namespace PhotoToss.Core
 				});
 		}
 
+		public void RemoveImage(long imageId, bool tossesAlso, String_callback callback)
+		{
+			string fullURL = "image";
+
+			RestRequest request = new RestRequest(fullURL, Method.DELETE);
+			request.AddParameter("imageid", imageId);
+			request.AddParameter("tosses", tossesAlso);
+
+			apiClient.ExecuteAsync(request, (response) =>
+				{
+					callback(response.Content);
+				});
+		}
+
 		public void GetTossCatches(long tossId, PhotoRecordList_callback callback)
 		{
 			string fullURL = "toss/catches";
