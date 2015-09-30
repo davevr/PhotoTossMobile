@@ -49,6 +49,8 @@ namespace PhotoToss.iOSApp
 
 		public HomeViewController () : base ()
 		{
+			AutomaticallyAdjustsScrollViewInsets = false;
+
 		}
 
 		public override void DidReceiveMemoryWarning ()
@@ -63,17 +65,7 @@ namespace PhotoToss.iOSApp
 		public override void ViewDidLoad ()
 		{
 			base.ViewDidLoad ();
-			AutomaticallyAdjustsScrollViewInsets = false;
-			TossedImageCollectionView.ContentInset = new UIEdgeInsets (-40, 0, 0, 0);
-
-			// Perform any additional setup after loading the view, typically from a nib.
-			CameraBtn.Clicked += (object sender, EventArgs e) => {
-				DoTakePicture ();
-			};
-
-			CatchBtn.Clicked += (object sender, EventArgs e) => {
-				DoCatchPicture ();
-			};
+			//TossedImageCollectionView.ContentInset = new UIEdgeInsets (-40, 0, 0, 0);
 
 			nfloat marginSize = 24;
 			nfloat screenSize = UIScreen.MainScreen.Bounds.Width;
@@ -112,14 +104,27 @@ namespace PhotoToss.iOSApp
 				motionManager = null;
 			}
 
-			Toolbar.ClipsToBounds = true;
+
 			FakeHeader.Layer.ShadowOffset = new CGSize (1, 5);
 			FakeHeader.Layer.ShadowColor = new CGColor (0, 0, 0);
 			FakeHeader.Layer.ShadowOpacity = 0.5f;
 
 			TossTitle.AttributedText = new NSAttributedString("PhotoToss", UIFont.FromName("RammettoOne-Regular", 17),
 				UIColor.FromRGB(255,121,0));
+
+			var catchBtn = new UIBarButtonItem(UIImage.FromBundle("CatchIcon"),UIBarButtonItemStyle.Plain,  (sender, e) => {
+				DoCatchPicture();
+			});
+
+			var cameraBtn = new UIBarButtonItem(UIImage.FromBundle("CameraIcon"),UIBarButtonItemStyle.Plain,  (sender, e) => {
+				DoTakePicture();
+			});
+
+			this.NavigationItem.RightBarButtonItems = new UIBarButtonItem[] {catchBtn, cameraBtn};
+
 		}
+
+
 
 		[Export ("collectionView:didSelectItemAtIndexPath:")]
 		public void ItemSelected (UIKit.UICollectionView collectionView, Foundation.NSIndexPath indexPath)

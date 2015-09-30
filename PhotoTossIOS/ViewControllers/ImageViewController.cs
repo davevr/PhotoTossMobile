@@ -92,11 +92,10 @@ namespace PhotoToss.iOSApp
 					PresentViewController(activityViewController, true, null);
 				});
 
-
-
-			//NavigationItem.RightBarButtonItem = tossBtn;
+			tossBtn.TintColor = UIColor.Black;
+			deleteBtn.TintColor = UIColor.Black;
+			shareBtn.TintColor = UIColor.Black;
 			NavigationItem.RightBarButtonItems = new UIBarButtonItem[] {shareBtn, deleteBtn, tossBtn};
-
 		}
 
 
