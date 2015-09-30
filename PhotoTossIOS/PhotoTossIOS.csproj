@@ -210,9 +210,6 @@
     <ImageAsset Include="Resources\Images.xcassets\DeleteIcon.imageset\ic_delete.png" />
   </ItemGroup>
   <ItemGroup>
-    <InterfaceDefinition Include="Views\TossedImageCell.xib" />
-    <InterfaceDefinition Include="Views\ImageInfoCell.xib" />
-    <InterfaceDefinition Include="Views\TossInfoCell.xib" />
     <InterfaceDefinition Include="Base.lproj\ProfileViewController.xib" />
     <InterfaceDefinition Include="Base.lproj\Main.storyboard" />
     <InterfaceDefinition Include="Base.lproj\AboutViewController.xib" />
@@ -225,7 +222,10 @@
     <InterfaceDefinition Include="Base.lproj\SettingsViewController.xib" />
     <InterfaceDefinition Include="Base.lproj\TossViewController.xib" />
     <InterfaceDefinition Include="Base.lproj\LaunchScreen.xib" />
-    <InterfaceDefinition Include="Views\TossProgressCell.xib" />
+    <InterfaceDefinition Include="Base.lproj\ImageInfoCell.xib" />
+    <InterfaceDefinition Include="Base.lproj\TossedImageCell.xib" />
+    <InterfaceDefinition Include="Base.lproj\TossInfoCell.xib" />
+    <InterfaceDefinition Include="Base.lproj\TossProgressCell.xib" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Info.plist" />
