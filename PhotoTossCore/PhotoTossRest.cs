@@ -144,8 +144,8 @@ namespace PhotoToss.Core
 			string fullURL = "image";
 
 			RestRequest request = new RestRequest(fullURL, Method.DELETE);
-			request.AddParameter("imageid", imageId);
-			request.AddParameter("tosses", tossesAlso);
+			request.AddParameter("id", imageId);
+			request.AddParameter("all", tossesAlso);
 
 			apiClient.ExecuteAsync(request, (response) =>
 				{
