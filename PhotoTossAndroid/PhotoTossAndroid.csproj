@@ -255,6 +255,8 @@
     <AndroidResource Include="Resources\values-fr\Strings.xml" />
     <AndroidResource Include="Resources\values-zh\Strings.xml" />
     <AndroidResource Include="Resources\layout\TossProgressCell.axml" />
+    <AndroidResource Include="Resources\drawable-hdpi\ic_share_black.png" />
+    <AndroidResource Include="Resources\drawable\background2.png" />
   </ItemGroup>
   <ItemGroup>
     <AndroidResource Include="Resources\values\Strings.xml" />

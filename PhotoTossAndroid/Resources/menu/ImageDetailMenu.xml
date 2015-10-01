@@ -7,12 +7,24 @@
         android:icon="@drawable/ic_toss"
         app:showAsAction="always"
         android:orderInCategory="0"
-        android:title="toss it!">
+        android:title="@string/menuitem_toss">
   </item>
   <item android:id="@+id/deleteBtn"
       android:icon="@drawable/ic_delete_black_48dp"
       app:showAsAction="always"
       android:orderInCategory="1"
-      android:title="trash it!">
+      android:title="@string/menuitem_delete">
+      <menu>
+        <item android:id="@+id/delete_mine"
+              android:title="@string/menuitem_delete_mine" />
+        <item android:id="@+id/delete_all"
+              android:title="@string/menuitem_delete_all" />
+    	</menu>
+  </item>
+  <item android:id="@+id/shareBtn"
+      app:showAsAction="always"
+      android:orderInCategory="2"
+      android:title="@string/menuitem_share"
+      app:actionProviderClass="android.support.v7.widget.ShareActionProvider">
   </item>
 </menu>

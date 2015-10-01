@@ -21,6 +21,9 @@ using Android.Text;
 using Android.Text.Style;
 using Android.Content.PM;
 
+using PhotoToss.Core;
+
+
 
 namespace PhotoToss.AndroidApp
 {
@@ -31,6 +34,9 @@ namespace PhotoToss.AndroidApp
 		public static ImageViewDetailFragment detailFragment;
 		public static ImageViewSpreadFragment spreadFragment;
 		public static ImageViewStatsFragment statsFragment;
+
+
+		private Android.Support.V7.Widget.ShareActionProvider actionProvider = null;
 
 		private PagerSlidingTabStrip tabs;
 
@@ -169,6 +175,27 @@ namespace PhotoToss.AndroidApp
 
 		}
 
+		public override bool OnPrepareOptionsMenu (IMenu menu)
+		{
+			if (actionProvider == null)
+			{
+				PhotoRecord curImage = PhotoTossRest.Instance.CurrentImage;
+				string blahURL = curImage.ShareURL;
+				var shareItem = menu.FindItem(Resource.Id.shareBtn);
+				var nativeAction = MenuItemCompat.GetActionProvider(shareItem);
+				actionProvider = nativeAction.JavaCast<Android.Support.V7.Widget.ShareActionProvider>();
+				var intent = new Intent(Intent.ActionSend);
+				intent.SetType("text/plain");
+				intent.AddFlags(ActivityFlags.ClearWhenTaskReset);
+				intent.PutExtra(Intent.ExtraTitle, "Shared from PhotoToss");
+				intent.PutExtra(Intent.ExtraText, blahURL);
+				actionProvider.SetShareIntent(intent);
+
+			}
+
+			return base.OnPrepareOptionsMenu (menu);
+		}
+
 		public override bool OnOptionsItemSelected(IMenuItem item)
 		{
 			switch (item.ItemId)
@@ -176,8 +203,11 @@ namespace PhotoToss.AndroidApp
 			case Resource.Id.TossButton:
 				this.StartActivity(typeof(TossActivity));
 				break;
-			case Resource.Id.deleteBtn:
-				Toast.MakeText (this, "Here is where delete would go...", ToastLength.Long).Show ();
+			case Resource.Id.delete_mine:
+				RemovePhotoFromMe ();
+				break;
+			case Resource.Id.delete_all:
+				RemovePhotoFromAll ();
 				break;
 			case 16908332:// the back button apparently...
 				{
@@ -187,6 +217,28 @@ namespace PhotoToss.AndroidApp
 
 			}
 			return base.OnOptionsItemSelected(item);
+		}
+
+		private void RemovePhotoFromMe()
+		{
+			PhotoTossRest.Instance.RemoveImage (PhotoTossRest.Instance.CurrentImage.id, false, (theResult) => {
+				Intent myIntent = new Intent (this, typeof(MainActivity));
+				myIntent.PutExtra ("dead", PhotoTossRest.Instance.CurrentImage.id);
+				SetResult (Result.Ok, myIntent);
+				PhotoTossRest.Instance.CurrentImage = null;
+				Finish();
+			});
+		}
+
+		private void RemovePhotoFromAll()
+		{
+			PhotoTossRest.Instance.RemoveImage (PhotoTossRest.Instance.CurrentImage.id, true, (theResult) => {
+				Intent myIntent = new Intent (this, typeof(MainActivity));
+				myIntent.PutExtra ("dead", PhotoTossRest.Instance.CurrentImage.id);
+				SetResult (Result.Ok, myIntent);
+				PhotoTossRest.Instance.CurrentImage = null;
+				Finish();
+			});
 		}
 
 		protected override void OnTitleChanged(Java.Lang.ICharSequence title, Color color)

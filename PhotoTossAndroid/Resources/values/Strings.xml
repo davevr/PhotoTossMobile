@@ -15,4 +15,11 @@
 	<string name="Profile_Menu">Profile</string>
 	<string name="Settings_Menu">Settings</string>
 	<string name="About_Menu">About PhotoToss</string>
+
+	<!--- Menu Items -->
+	<string name="menuitem_toss">toss it!</string>
+	<string name="menuitem_delete">remove it!</string>
+	<string name="menuitem_delete_mine">remove just mine</string>
+	<string name="menuitem_delete_all">remove from everyone</string>
+	<string name="menuitem_share">share it!</string>
 </resources>

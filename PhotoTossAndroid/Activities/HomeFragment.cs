@@ -52,7 +52,7 @@ namespace PhotoToss.AndroidApp
         void imageGrid_ItemClick(object sender, AdapterView.ItemClickEventArgs e)
         {
 			PhotoTossRest.Instance.CurrentImage = PhotoList [e.Position];
-            this.Activity.StartActivity(typeof(ImageViewActivity));
+            this.Activity.StartActivityForResult(typeof(ImageViewActivity), Utilities.IMAGE_DELETE_EVENT);
         }
 
         
@@ -113,7 +113,7 @@ namespace PhotoToss.AndroidApp
 			targetRot *= 1;//(180.0 / Math.PI);
 
 			Activity.RunOnUiThread(() => {
-				for (int i = imageGrid.FirstVisiblePosition; i <= imageGrid.LastVisiblePosition; i++)
+				for (int i = 0; i <= imageGrid.Count; i++)
 				{
 					View curCell = imageGrid.GetChildAt(i);
 
@@ -209,6 +209,18 @@ namespace PhotoToss.AndroidApp
                     imageGrid.SmoothScrollToPosition(0);
                 });
         }
+
+		public void RemoveImage(long deadId)
+		{
+			PhotoList.RemoveAll (x => x.id == deadId);
+			this.Activity.RunOnUiThread(() =>
+				{
+					imageGrid.Visibility = ViewStates.Visible;
+					((PhotoRecordAdapter)imageGrid.Adapter).NotifyDataSetChanged();
+					imageGrid.InvalidateViews();
+					imageGrid.SmoothScrollToPosition(0);
+				});
+		}
 
         public class PhotoRecordAdapter : BaseAdapter, Koush.IUrlImageViewCallback
         {

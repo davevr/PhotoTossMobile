@@ -10,6 +10,7 @@ namespace PhotoToss.Core
 		public const int PHOTO_CATCH_EVENT = 0x555;
 		public const int PHOTO_UPLOAD_SUCCESS = 0x666;
 		public const int PHOTO_CAPTURE_EVENT = 0x777;
+		public const int IMAGE_DELETE_EVENT = 0x888;
 
 		public Utilities ()
 		{

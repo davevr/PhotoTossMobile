@@ -84,8 +84,8 @@ namespace PhotoToss.iOSApp
 
 			UIBarButtonItem shareBtn = new UIBarButtonItem (UIBarButtonSystemItem.Action, (sender, eventArg) => 
 				{
-					NSUrl newURL = new NSUrl(string.Format("http://phototoss-server-01.appspot.com/image/{0}", HomeViewController.CurrentPhotoRecord.id));
-					var activityViewController = new UIActivityViewController(new NSObject[] {newURL, tab1.CurrentImage }, null)
+					NSUrl newURL = new NSUrl(HomeViewController.CurrentPhotoRecord.ShareURL);
+					var activityViewController = new UIActivityViewController(new NSObject[] {newURL }, null)
 					{
 
 					};

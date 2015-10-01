@@ -987,7 +987,9 @@ namespace PhotoToss.AndroidApp
                         DoPhotoUpload();
 					break;
 
-				
+				case Utilities.IMAGE_DELETE_EVENT:
+					homePage.RemoveImage (data.GetLongExtra ("dead", 0));
+					break;
 
 				default:
 					base.OnActivityResult (requestCode, resultCode, data);

@@ -524,7 +524,7 @@ namespace PhotoToss.iOSApp
 		public void FinalizeCatch(System.IO.Stream theData)
 		{
 			InvokeOnMainThread (() => {
-				ShowOverlay(View, "Tentacling those pixels...");
+				ShowOverlay(View, "Finishing the catch...");
 				PhotoTossRest.Instance.GetCatchURL ((urlStr) => {
 					LocationHelper.StartLocationManager (CoreLocation.CLLocation.AccuracyBest);
 					LocationHelper.LocationResult curLoc = LocationHelper.GetLocationResult ();

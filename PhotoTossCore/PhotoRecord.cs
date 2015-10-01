@@ -81,6 +81,11 @@ namespace PhotoToss.Core
             set { cachedCatchImage = value; }
         }
 
+		public string ShareURL {
+			get {
+				return string.Format ("http://phototoss-server-01.appspot.com/image/{0}", this.id.ToString ());
+			}
+		}
     }
 
    
