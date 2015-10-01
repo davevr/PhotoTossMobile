@@ -36,6 +36,7 @@ namespace PhotoToss.Core
         private string _userImageURL;
         private User _currentUser = null;
         public PhotoRecord CurrentImage { get; set; }
+		public string LastError {get; set;}
         
         public PhotoTossRest()
         {
@@ -75,6 +76,7 @@ namespace PhotoToss.Core
 
             apiClient.ExecuteAsync<List<PhotoRecord>>(request, (response) =>
             {
+					LastError = null;
                 if (response == null)
                     return;
                 if (response.StatusCode == HttpStatusCode.OK)
@@ -100,6 +102,7 @@ namespace PhotoToss.Core
 
 			apiClient.ExecuteAsync<List<PhotoRecord>>(request, (response) =>
 				{
+					LastError = null;
 					if (response == null)
 						return;
 					if (response.StatusCode == HttpStatusCode.OK)
@@ -124,6 +127,7 @@ namespace PhotoToss.Core
 
 			apiClient.ExecuteAsync<List<TossRecord>>(request, (response) =>
 				{
+					LastError = null;
 					if (response == null)
 						return;
 					if (response.StatusCode == HttpStatusCode.OK)
@@ -149,6 +153,7 @@ namespace PhotoToss.Core
 
 			apiClient.ExecuteAsync(request, (response) =>
 				{
+					LastError = null;
 					callback(response.Content);
 				});
 		}
@@ -162,6 +167,7 @@ namespace PhotoToss.Core
 
 			apiClient.ExecuteAsync<List<PhotoRecord>>(request, (response) =>
 				{
+					LastError = null;
 					if (response == null)
 						return;
 					if (response.StatusCode == HttpStatusCode.OK)
@@ -185,7 +191,7 @@ namespace PhotoToss.Core
             RestRequest request = new RestRequest(fullURL, Method.POST);
 
             apiClient.Execute(request);
-
+			LastError = null;
             _currentUser = null;
         }
 
@@ -201,6 +207,7 @@ namespace PhotoToss.Core
 
             apiClient.ExecuteAsync<User>(request, (response) =>
                 {
+					LastError = null;
                     User newUser = response.Data;
                     if (newUser != null)
                     {
@@ -222,6 +229,7 @@ namespace PhotoToss.Core
 
             apiClient.ExecuteAsync(request, (response) =>
             {
+					LastError = null;
                 _uploadURL = response.Content;
                 callback(_uploadURL);
             });
@@ -236,6 +244,7 @@ namespace PhotoToss.Core
 
             apiClient.ExecuteAsync(request, (response) =>
             {
+					LastError = null;
                 _userImageURL = response.Content;
                 callback(_userImageURL);
             });
@@ -250,6 +259,7 @@ namespace PhotoToss.Core
 
             apiClient.ExecuteAsync(request, (response) =>
             {
+					LastError = null;
 					if (response.StatusCode == HttpStatusCode.OK) {
 						_catchURL = response.Content;
 						callback(_catchURL);
@@ -269,6 +279,7 @@ namespace PhotoToss.Core
 
             apiClient.ExecuteAsync(request, (response) =>
             {
+					LastError = null;
                 _uploadURL = response.Content;
                 callback(_uploadURL);
             });
@@ -287,6 +298,7 @@ namespace PhotoToss.Core
 
             apiClient.ExecuteAsync<TossRecord>(request, (response) =>
             {
+					LastError = null;
                 callback(response.Data);
             });
         }
@@ -308,12 +320,14 @@ namespace PhotoToss.Core
             {
                 if (response.StatusCode == HttpStatusCode.OK)
                 {
+					LastError = null;
                     PhotoRecord newRec = response.Content.FromJson<PhotoRecord>();
                     callback(newRec);
                 }
                 else
                 {
                     //error ocured during upload
+					LastError = response.Content;
                     callback(null);
                 }
             });
@@ -328,6 +342,7 @@ namespace PhotoToss.Core
 
             apiClient.ExecuteAsync(request, (response) =>
             {
+					LastError = null;
 				if (response.StatusCode == HttpStatusCode.OK)
 				{
 					List<PhotoRecord> tossList = response.Content.FromJson<List<PhotoRecord>>();
@@ -358,6 +373,7 @@ namespace PhotoToss.Core
 
             onetimeClient.ExecuteAsync(request, (response) =>
             {
+					LastError = null;
                 if (response.StatusCode == HttpStatusCode.OK)
                 {
                     PhotoRecord newRec = response.Content.FromJson<PhotoRecord>();
@@ -385,6 +401,7 @@ namespace PhotoToss.Core
 
             onetimeClient.ExecuteAsync(request, (response) =>
             {
+					LastError = null;
                 if (response.StatusCode == HttpStatusCode.OK)
                 {
                     callback(response.Content);

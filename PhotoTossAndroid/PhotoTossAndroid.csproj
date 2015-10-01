@@ -38,17 +38,12 @@
     <ConsolePause>false</ConsolePause>
     <DefineConstants>ANDROID</DefineConstants>
     <DebugType>full</DebugType>
-    <AndroidLinkSkip>
-    </AndroidLinkSkip>
     <EmbedAssembliesIntoApk>True</EmbedAssembliesIntoApk>
-    <AndroidSupportedAbis>armeabi</AndroidSupportedAbis>
-    <AndroidStoreUncompressedFileExtensions>
-    </AndroidStoreUncompressedFileExtensions>
-    <MandroidI18n>
-    </MandroidI18n>
+    <AndroidSupportedAbis>armeabi-v7a</AndroidSupportedAbis>
     <JavaMaximumHeapSize>1G</JavaMaximumHeapSize>
     <Debugger>Xamarin</Debugger>
     <DevInstrumentationEnabled>False</DevInstrumentationEnabled>
+    <EnableProguard>true</EnableProguard>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="HockeyApp.Android">
@@ -363,5 +358,8 @@
     <AndroidAsset Include="Assets\fonts\SourceCodePro-Medium.ttf" />
     <AndroidAsset Include="Assets\fonts\SourceCodePro-Regular.ttf" />
     <AndroidAsset Include="Assets\fonts\SourceCodePro-Semibold.ttf" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProguardConfiguration Include="ProGuard_config.cfg" />
   </ItemGroup>
 </Project>

@@ -22,4 +22,8 @@
 	<string name="menuitem_delete_mine">remove just mine</string>
 	<string name="menuitem_delete_all">remove from everyone</string>
 	<string name="menuitem_share">share it!</string>
+
+	<!--- Error Codes from REST -->
+	<string name="duplicate_image">You already have that image.</string>
+	<string name="expired_toss">That toss has expired - try again!</string>
 </resources>

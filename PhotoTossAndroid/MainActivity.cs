@@ -318,6 +318,7 @@ namespace PhotoToss.AndroidApp
                             loginView.Visibility = ViewStates.Gone;
                             selectItem(0);
                             homePage.Refresh();
+									RegisterForPushNotifications();
                         });
 
                     }
@@ -336,6 +337,17 @@ namespace PhotoToss.AndroidApp
 
 		}
 
+		private void RegisterForPushNotifications()
+		{
+			const string senders = "865065760693";
+			var intent = new Intent("com.google.android.c2dm.intent.REGISTER");
+			intent.SetPackage("com.google.android.gsf");
+			intent.PutExtra("app", PendingIntent.GetBroadcast(this, 0, new Intent(), 0));
+			intent.PutExtra("userid", PhotoToss.Core.PhotoTossRest.Instance.CurrentUser.id.ToString());
+			intent.PutExtra("sender", senders);
+			StartService(intent);
+
+		}
 
 		void ShowAlert (string title, string msg, string buttonText = null)
 		{
@@ -932,7 +944,15 @@ namespace PhotoToss.AndroidApp
 						else
 						{
 							RunOnUiThread(()=> {
-								Toast.MakeText(this, "Catch failed.  Please try again.", ToastLength.Long).Show();
+								string lastErrStr = PhotoTossRest.Instance.LastError;
+								if (string.IsNullOrEmpty(lastErrStr))
+									lastErrStr = "Catch failed.  Please try again.";
+								else {
+									int theId = Resources.GetIdentifier(lastErrStr, "string", this.PackageName);
+									lastErrStr = Resources.GetString(theId);
+								}
+									
+								Toast.MakeText(this, lastErrStr, ToastLength.Long).Show();
 							});
 						}
 

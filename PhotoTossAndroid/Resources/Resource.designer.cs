@@ -4861,6 +4861,12 @@ namespace PhotoToss.AndroidApp
 			// aapt resource value: 0x7f06005c
 			public const int drawer_open = 2131099740;
 			
+			// aapt resource value: 0x7f06006d
+			public const int duplicate_image = 2131099757;
+			
+			// aapt resource value: 0x7f06006e
+			public const int expired_toss = 2131099758;
+			
 			// aapt resource value: 0x7f06005f
 			public const int facebook_app_name = 2131099743;
 			
