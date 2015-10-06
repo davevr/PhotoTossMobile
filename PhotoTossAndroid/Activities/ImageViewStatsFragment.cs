@@ -36,7 +36,7 @@ namespace PhotoToss.AndroidApp
 
 		public void Update()
 		{
-			PhotoTossRest.Instance.GetImageLineage (PhotoTossRest.Instance.CurrentImage.id, (theStats) => {
+			PhotoTossRest.Instance.GetImageStats (PhotoTossRest.Instance.CurrentImage.id, (theStats) => {
 
 				Console.WriteLine("Stats loaded!");
 			});

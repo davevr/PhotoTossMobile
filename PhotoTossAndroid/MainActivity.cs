@@ -1136,9 +1136,10 @@ namespace PhotoToss.AndroidApp
 			GcmClient.CheckDevice(this);
 			GcmClient.CheckManifest(this);
 
-			// Register for push notifications
-			//System.Diagnostics.Debug.WriteLine("Registering...");
-			GcmClient.Register(this, SENDER_ID);
+            // Register for push notifications
+            //System.Diagnostics.Debug.WriteLine("Registering...");
+            RemoteNotificationService.Initialize(this);
+            GcmClient.Register(this, SENDER_ID);
 		}
 
 		public static void DisplayAlert(Activity activity, string titleString, string descString)

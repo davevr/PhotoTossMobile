@@ -5,7 +5,7 @@ using Android.OS;
 using WindowsAzure.Messaging;
 using Android.Graphics;
 using Android.Text;
-using Android.Net;
+using Android.Support.V4.App;
 using Gcm;
 
 
@@ -19,8 +19,8 @@ namespace PhotoToss.AndroidApp
 		private NotificationHub Hub { get; set; }
 
 		static NotificationHub hub;
-
-		public static void Initialize(Context context)
+        private static int _messageId = 0;
+        public static void Initialize(Context context)
 		{
 			var cs = ConnectionString.CreateUsingSharedAccessKeyWithListenAccess (
 				new Java.Net.URI ("sb://" + MyBroadcastReceiver.HUB_NAME + "-ns.servicebus.windows.net/"),
@@ -43,7 +43,19 @@ namespace PhotoToss.AndroidApp
 			//Receive registration Id for sending GCM Push Notifications to
 
 			if (hub != null) {
-				var registration = hub.Register (registrationId, "TEST");
+                string[] keys;
+                string UserId = null;
+
+                if ((PhotoToss.Core.PhotoTossRest.Instance != null) &&
+                    (PhotoToss.Core.PhotoTossRest.Instance.CurrentUser != null))
+                    UserId = PhotoToss.Core.PhotoTossRest.Instance.CurrentUser.id.ToString();
+
+                if (String.IsNullOrEmpty(UserId))
+                    keys = new[] { "android" };
+                else
+                    keys = new[] { "user_" + UserId, "android" };
+
+                var registration = hub.Register (registrationId, keys);
 
 				Console.WriteLine ("Azure Registered: " + registration.PNSHandle + " -> " + registration.NotificationHubPath);
 			}
@@ -52,23 +64,57 @@ namespace PhotoToss.AndroidApp
 
 		protected override void OnUnRegistered (Context context, string registrationId)
 		{
-			if (hub != null)
-				hub.Unregister ();
+            if (hub != null)
+                hub.Unregister();
 		}
 
 		protected override void OnMessage (Context context, Intent intent)
 		{
 			Console.WriteLine ("Received Notification");
 
-			//Push Notification arrived - print out the keys/values
-			if (intent != null || intent.Extras != null) {
+            string titleParam = intent.GetStringExtra("title");
+            string contentParam = intent.GetStringExtra("body");
+            string imageParam = intent.GetStringExtra("image");
+            string imageIdParam = intent.GetStringExtra("imageid");
 
-				var keyset = intent.Extras.KeySet ();
+            if (titleParam == null)
+                titleParam = "News from PhotoToss";
 
-				foreach (var key in intent.Extras.KeySet())
-					Console.WriteLine ("Key: {0}, Value: {1}", key, intent.Extras.GetString(key));
-			}
-		}
+            if (contentParam == null)
+                contentParam = "";
+
+            if (imageIdParam == null)
+                imageIdParam = "0";
+
+
+            SpannedString titleStr = new SpannedString(titleParam);
+            SpannedString contentStr = new SpannedString(contentParam);
+            long imageId = long.Parse(imageIdParam);
+
+            var nMgr = (NotificationManager)GetSystemService(NotificationService);
+            Bitmap iconBitmap;
+
+            if (imageParam == null)
+                iconBitmap = BitmapFactory.DecodeResource(Resources, Resource.Drawable.ic_notify_color);
+            else
+            {
+                iconBitmap = GetImageBitmapFromUrl(imageParam);
+                if (iconBitmap == null)
+                    iconBitmap = BitmapFactory.DecodeResource(Resources, Resource.Drawable.ic_notify_color);
+            }
+
+            var newIntent = new Intent(this, typeof(MainActivity));
+            Bundle b = new Bundle();
+            b.PutLong("imageid", imageId);
+            newIntent.PutExtras(b);
+
+            var pendingIntent = PendingIntent.GetActivity(this, 99, newIntent, PendingIntentFlags.UpdateCurrent);
+            NotificationCompat.Builder builder = new NotificationCompat.Builder(this);
+            Notification notification = builder.SetSmallIcon(Resource.Drawable.ic_notify_white).SetLargeIcon(iconBitmap).SetTicker(titleStr).SetContentText(contentParam).SetContentTitle(titleStr).SetContentIntent(pendingIntent).Build();
+
+            nMgr.Notify(_messageId, notification);
+            _messageId++;
+        }
 
 		protected override bool OnRecoverableError (Context context, string errorId)
 		{
