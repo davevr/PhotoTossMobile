@@ -88,6 +88,15 @@ namespace PhotoToss.Core
 		}
     }
 
+	public class ImageStatsRecord 
+	{
+		public long imageid { get; set;}
+		public int numcopies { get; set;}
+		public int numtosses { get; set;}
+		public int numparents { get; set;}
+		public int numchildren { get; set;}
+	}
+
    
 
 }

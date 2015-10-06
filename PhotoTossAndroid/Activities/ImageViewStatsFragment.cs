@@ -12,6 +12,9 @@ using Android.Util;
 using Android.Views;
 using Android.Widget;
 
+using PhotoToss.Core;
+
+
 namespace PhotoToss.AndroidApp
 {
 	public class ImageViewStatsFragment : Android.Support.V4.App.Fragment
@@ -33,7 +36,10 @@ namespace PhotoToss.AndroidApp
 
 		public void Update()
 		{
+			PhotoTossRest.Instance.GetImageLineage (PhotoTossRest.Instance.CurrentImage.id, (theStats) => {
 
+				Console.WriteLine("Stats loaded!");
+			});
 		}
 	}
 }

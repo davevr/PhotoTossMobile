@@ -20,6 +20,7 @@ using Xamarin.Facebook;
 using Java.IO;
 using File = Java.IO.File;
 using Uri = Android.Net.Uri;
+using Gcm;
 
 namespace PhotoToss.AndroidApp
 {
@@ -52,10 +53,14 @@ namespace PhotoToss.AndroidApp
 			};
 
 			unregisterButton.Click += delegate {
+				/*
 				var intent = new Intent("com.google.android.c2dm.intent.UNREGISTER");
 				intent.SetPackage("com.google.android.gsf");
 				intent.PutExtra("app", PendingIntent.GetBroadcast(MainPage, 0, new Intent(), 0));
 				MainPage.StartService(intent);
+				*/
+				GcmClient.UnRegister(this.Activity);
+				//GcmClient.Register(this, SENDER_ID);
 			};
 
             Refresh();

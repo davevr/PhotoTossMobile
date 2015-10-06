@@ -23,6 +23,7 @@ namespace PhotoToss.Core
     public delegate void User_callback(User theResult);
     public delegate void String_callback(String theResult);
     public delegate void Toss_callback(TossRecord theResult);
+	public delegate void ImageStatsRecord_callback(ImageStatsRecord theResult);
 	public delegate void null_callback();
 
     public class PhotoTossRest
@@ -356,6 +357,30 @@ namespace PhotoToss.Core
             });
 
         }
+
+		public void GetImageStats(long imageId, ImageStatsRecord_callback callback)
+		{
+			string fullURL = "image/stats";
+
+			RestRequest request = new RestRequest(fullURL, Method.GET);
+			request.AddParameter("id", imageId);
+
+			apiClient.ExecuteAsync(request, (response) =>
+				{
+					LastError = null;
+					if (response.StatusCode == HttpStatusCode.OK)
+					{
+						ImageStatsRecord theStats = response.Content.FromJson<ImageStatsRecord>();
+						callback(theStats);
+					}
+					else
+					{
+						//error ocured during upload
+						callback(null);
+					}
+				});
+
+		}
 
 
 

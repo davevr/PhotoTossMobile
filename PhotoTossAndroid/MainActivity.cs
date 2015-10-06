@@ -318,7 +318,8 @@ namespace PhotoToss.AndroidApp
                             loginView.Visibility = ViewStates.Gone;
                             selectItem(0);
                             homePage.Refresh();
-									RegisterForPushNotifications();
+							//RegisterForPushNotifications();
+							RegisterWithGCM();
                         });
 
                     }
@@ -339,15 +340,26 @@ namespace PhotoToss.AndroidApp
 
 		private void RegisterForPushNotifications()
 		{
-			const string senders = "865065760693";
 			var intent = new Intent("com.google.android.c2dm.intent.REGISTER");
 			intent.SetPackage("com.google.android.gsf");
 			intent.PutExtra("app", PendingIntent.GetBroadcast(this, 0, new Intent(), 0));
 			intent.PutExtra("userid", PhotoToss.Core.PhotoTossRest.Instance.CurrentUser.id.ToString());
-			intent.PutExtra("sender", senders);
+			intent.PutExtra("sender", MainActivity.SENDER_ID);
 			StartService(intent);
 
 		}
+
+		/*
+		private void RegisterWithGCM()
+		{
+			// Check to ensure everything's set up right
+			GcmClient.CheckDevice(this);
+			GcmClient.CheckManifest(this);
+
+			// Register for push notifications
+			GcmClient.Register(this, MainActivity.SENDER_ID);
+		}
+		*/
 
 		void ShowAlert (string title, string msg, string buttonText = null)
 		{
@@ -1125,7 +1137,7 @@ namespace PhotoToss.AndroidApp
 			GcmClient.CheckManifest(this);
 
 			// Register for push notifications
-			System.Diagnostics.Debug.WriteLine("Registering...");
+			//System.Diagnostics.Debug.WriteLine("Registering...");
 			GcmClient.Register(this, SENDER_ID);
 		}
 

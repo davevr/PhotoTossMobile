@@ -2,16 +2,87 @@ using System;
 using Android.App;
 using Android.Content;
 using Android.OS;
-using ByteSmith.WindowsAzure.Messaging;
+using WindowsAzure.Messaging;
 using Android.Graphics;
 using Android.Text;
 using Android.Net;
+using Gcm;
+
 
 namespace PhotoToss.AndroidApp
 {
+	
 	[Service]
-	public class RemoteNotificationService : IntentService
+	public class RemoteNotificationService : GcmServiceBase
 	{
+		public static string RegistrationID { get; private set; }
+		private NotificationHub Hub { get; set; }
+
+		static NotificationHub hub;
+
+		public static void Initialize(Context context)
+		{
+			var cs = ConnectionString.CreateUsingSharedAccessKeyWithListenAccess (
+				new Java.Net.URI ("sb://" + MyBroadcastReceiver.HUB_NAME + "-ns.servicebus.windows.net/"),
+				MyBroadcastReceiver.HUB_LISTEN_SECRET);
+
+			hub = new NotificationHub (MyBroadcastReceiver.HUB_NAME, cs, context);
+		}
+
+		public static void Register(Context Context)
+		{
+			GcmClient.Register (Context, MyBroadcastReceiver.SENDER_IDS);
+		}
+
+		public RemoteNotificationService() : base(MyBroadcastReceiver.SENDER_IDS) 
+		{ 
+		}
+
+		protected override void OnRegistered (Context context, string registrationId)
+		{
+			//Receive registration Id for sending GCM Push Notifications to
+
+			if (hub != null) {
+				var registration = hub.Register (registrationId, "TEST");
+
+				Console.WriteLine ("Azure Registered: " + registration.PNSHandle + " -> " + registration.NotificationHubPath);
+			}
+
+		}
+
+		protected override void OnUnRegistered (Context context, string registrationId)
+		{
+			if (hub != null)
+				hub.Unregister ();
+		}
+
+		protected override void OnMessage (Context context, Intent intent)
+		{
+			Console.WriteLine ("Received Notification");
+
+			//Push Notification arrived - print out the keys/values
+			if (intent != null || intent.Extras != null) {
+
+				var keyset = intent.Extras.KeySet ();
+
+				foreach (var key in intent.Extras.KeySet())
+					Console.WriteLine ("Key: {0}, Value: {1}", key, intent.Extras.GetString(key));
+			}
+		}
+
+		protected override bool OnRecoverableError (Context context, string errorId)
+		{
+			//Some recoverable error happened
+			return true;
+		}
+
+		protected override void OnError (Context context, string errorId)
+		{
+			//Some more serious error happened
+		}
+
+
+		/*
 		static PowerManager.WakeLock _wakeLock;
 		static readonly object Lock = new object();
 
@@ -94,6 +165,7 @@ namespace PhotoToss.AndroidApp
 			var nMgr = (NotificationManager)GetSystemService (NotificationService);
 
 			if (!String.IsNullOrEmpty (registrationId)) {
+				
 				NativeRegistration = await Hub.RegisterNativeAsync (registrationId, keys);
 
 				var notificationNativeRegistration = new Notification (Resource.Drawable.ic_notify_white, "Welcome to PhotoToss!");
@@ -170,6 +242,7 @@ namespace PhotoToss.AndroidApp
 			nMgr.Notify (_messageId, notification);
 			_messageId++;
 		}
+		*/
 
 		private Bitmap GetImageBitmapFromUrl(string url)
 		{
