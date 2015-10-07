@@ -5,10 +5,112 @@
     android:layout_height="fill_parent"
     android:minWidth="25px"
     android:minHeight="25px">
-    <TextView
-        android:text="Stats will go here, eventually"
-        android:textAppearance="?android:attr/textAppearanceLarge"
+    <LinearLayout
+        android:orientation="horizontal"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/textView1" />
+        android:id="@+id/linearLayout1">
+        <TextView
+            android:text="--"
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:id="@+id/totalImageText"
+            android:width="150dp"
+            android:height="100dp"
+            android:textSize="36dp"
+            android:background="#ff1bd13d"
+            android:gravity="center"
+            android:layout_marginLeft="4dp"
+            android:layout_marginBottom="4dp" />
+        <TextView
+            android:text="Total number of people who have this image in PhotoToss"
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:id="@+id/textView3"
+            android:gravity="center_vertical"
+            android:layout_margin="4dp" />
+    </LinearLayout>
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/linearLayout1">
+        <TextView
+            android:text="--"
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:id="@+id/imageLineageText"
+            android:width="150dp"
+            android:height="100dp"
+            android:textSize="36dp"
+            android:background="#ff1bd13d"
+            android:gravity="center"
+            android:layout_marginLeft="4dp"
+            android:layout_marginBottom="4dp" />
+        <TextView
+            android:text="Number of people between you and the original photo"
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:id="@+id/textView3"
+            android:gravity="center_vertical"
+            android:layout_margin="4dp" />
+    </LinearLayout>
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/linearLayout1">
+        <TextView
+            android:text="--"
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:id="@+id/imageTossesText"
+            android:width="150dp"
+            android:height="100dp"
+            android:textSize="36dp"
+            android:background="#ff1bd13d"
+            android:gravity="center"
+            android:layout_marginLeft="4dp"
+            android:layout_marginBottom="4dp" />
+        <TextView
+            android:text="Number of times you have tossed it"
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:id="@+id/textView3"
+            android:gravity="center_vertical"
+            android:layout_margin="4dp" />
+    </LinearLayout>
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/linearLayout1">
+        <TextView
+            android:text="--"
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:id="@+id/imageCatchesText"
+            android:width="150dp"
+            android:height="100dp"
+            android:textSize="36dp"
+            android:background="#ff1bd13d"
+            android:gravity="center"
+            android:layout_marginLeft="4dp"
+            android:layout_marginBottom="4dp" />
+        <TextView
+            android:text="Number of people you gave this image to"
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:id="@+id/textView3"
+            android:gravity="center_vertical"
+            android:layout_margin="4dp" />
+    </LinearLayout>
 </LinearLayout>

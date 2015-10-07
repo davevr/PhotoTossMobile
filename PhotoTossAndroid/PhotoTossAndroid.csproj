@@ -253,6 +253,7 @@
     <AndroidResource Include="Resources\layout\TossProgressCell.axml" />
     <AndroidResource Include="Resources\drawable-hdpi\ic_share_black.png" />
     <AndroidResource Include="Resources\drawable\background2.png" />
+    <AndroidResource Include="Resources\layout\LeaderboardCell.axml" />
   </ItemGroup>
   <ItemGroup>
     <AndroidResource Include="Resources\values\Strings.xml" />

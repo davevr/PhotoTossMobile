@@ -27,4 +27,9 @@ namespace PhotoToss.Core
         }
 
     }
+
+	public class UserStatsRecord
+	{
+		public long userid {get; set;}
+	}
 }

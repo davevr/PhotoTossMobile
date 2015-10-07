@@ -24,6 +24,7 @@ namespace PhotoToss.Core
     public delegate void String_callback(String theResult);
     public delegate void Toss_callback(TossRecord theResult);
 	public delegate void ImageStatsRecord_callback(ImageStatsRecord theResult);
+	public delegate void UserStatsRecord_callback(UserStatsRecord theResult);
 	public delegate void null_callback();
 
     public class PhotoTossRest
@@ -371,6 +372,52 @@ namespace PhotoToss.Core
 					if (response.StatusCode == HttpStatusCode.OK)
 					{
 						ImageStatsRecord theStats = response.Content.FromJson<ImageStatsRecord>();
+						callback(theStats);
+					}
+					else
+					{
+						//error ocured during upload
+						callback(null);
+					}
+				});
+
+		}
+
+		public void GetGlobalStats(PhotoRecordList_callback callback)
+		{
+			string fullURL = "stats";
+
+			RestRequest request = new RestRequest(fullURL, Method.GET);
+
+			apiClient.ExecuteAsync(request, (response) =>
+				{
+					LastError = null;
+					if (response.StatusCode == HttpStatusCode.OK)
+					{
+						List<PhotoRecord> topTenList = response.Content.FromJson<List<PhotoRecord>>();
+						callback(topTenList);
+					}
+					else
+					{
+						//error ocured during upload
+						callback(null);
+					}
+				});
+
+		}
+
+		public void GetUserStats(UserStatsRecord_callback callback)
+		{
+			string fullURL = "user/stats";
+
+			RestRequest request = new RestRequest(fullURL, Method.GET);
+
+			apiClient.ExecuteAsync(request, (response) =>
+				{
+					LastError = null;
+					if (response.StatusCode == HttpStatusCode.OK)
+					{
+						UserStatsRecord theStats = response.Content.FromJson<UserStatsRecord>();
 						callback(theStats);
 					}
 					else

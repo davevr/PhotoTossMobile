@@ -110,7 +110,7 @@ namespace PhotoToss.AndroidApp
 
             var pendingIntent = PendingIntent.GetActivity(this, 99, newIntent, PendingIntentFlags.UpdateCurrent);
             NotificationCompat.Builder builder = new NotificationCompat.Builder(this);
-            Notification notification = builder.SetSmallIcon(Resource.Drawable.ic_notify_white).SetLargeIcon(iconBitmap).SetTicker(titleStr).SetContentText(contentParam).SetContentTitle(titleStr).SetContentIntent(pendingIntent).Build();
+            Notification notification = builder.SetSmallIcon(Resource.Drawable.ic_notify_white).SetLargeIcon(iconBitmap).SetTicker(titleStr).SetContentText(contentStr).SetContentTitle(titleStr).SetContentIntent(pendingIntent).Build();
 
             nMgr.Notify(_messageId, notification);
             _messageId++;
