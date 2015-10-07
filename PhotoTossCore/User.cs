@@ -31,5 +31,9 @@ namespace PhotoToss.Core
 	public class UserStatsRecord
 	{
 		public long userid {get; set;}
+		public int numtosses {get; set;}
+		public int numcatches {get; set;}
+		public int numimages {get; set;}
+		public int numoriginals {get; set;}
 	}
 }

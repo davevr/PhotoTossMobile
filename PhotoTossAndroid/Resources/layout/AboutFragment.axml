@@ -2,11 +2,78 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical"
     android:layout_width="fill_parent"
-    android:layout_height="fill_parent">
+    android:layout_height="fill_parent"
+    android:background="@drawable/background2">
+    <ImageView
+        android:src="@drawable/tosstopus"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/imageView1"
+        android:scaleType="fitStart"
+        android:adjustViewBounds="true"
+        android:layout_marginTop="64dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginRight="8dp"
+        android:layout_marginBottom="8dp" />
     <TextView
-        android:text="About Page"
+        android:text="physically mediated photo sharing"
         android:textAppearance="?android:attr/textAppearanceLarge"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/textView1" />
+        android:id="@+id/textView3"
+        android:layout_weight="1"
+        android:gravity="center_horizontal"
+        android:textStyle="italic|bold"
+        android:layout_marginBottom="16dp"
+        android:textColor="@color/PT_white" />
+    <TextView
+        android:text="Tosstopus wants to know:"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/textView5"
+        android:layout_weight="1"
+        android:gravity="center_horizontal"
+        android:textStyle="normal" />
+    <TextView
+        android:text="Have you tossed today?"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/textView6"
+        android:layout_weight="1"
+        android:gravity="center_horizontal"
+        android:textStyle="italic" />
+    <Button
+        android:text="Send Feedback"
+        android:layout_width="200dp"
+        android:layout_height="wrap_content"
+        android:id="@+id/reportBtn"
+        android:layout_margin="8dp"
+        android:background="@color/PT_dark_orange"
+        android:layout_gravity="center_horizontal" />
+    <Button
+        android:text="Review in App Store"
+        android:layout_width="200dp"
+        android:layout_height="wrap_content"
+        android:id="@+id/reviewBtn"
+        android:layout_margin="8dp"
+        android:background="@color/PT_dark_orange"
+        android:layout_gravity="center_horizontal" />
+    <Button
+        android:text="Tell Your Friends!"
+        android:layout_height="wrap_content"
+        android:id="@+id/shareBtn"
+        android:layout_margin="8dp"
+        android:background="@color/PT_dark_orange"
+        android:layout_width="200dp"
+        android:layout_gravity="center_horizontal" />
+    <TextView
+        android:text="© 2015 eweware, inc."
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/textView2"
+        android:gravity="center_horizontal"
+        android:layout_gravity="bottom" />
 </LinearLayout>

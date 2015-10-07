@@ -17,10 +17,6 @@ using Xamarin.Facebook.Login.Widget;
 using PhotoToss.Core;
 using Xamarin.Facebook;
 
-using Java.IO;
-using File = Java.IO.File;
-using Uri = Android.Net.Uri;
-using Gcm;
 
 namespace PhotoToss.AndroidApp
 {
@@ -31,38 +27,22 @@ namespace PhotoToss.AndroidApp
         public MainActivity MainPage { get; set; }
         private ProfilePictureView profileImage;
         private TextView nicknameText;
+		private TextView numTotalText;
+		private TextView numOriginalsText;
+		private TextView numCatchesText;
+		private TextView numTossesText;
 
         public override View OnCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
         {
             base.OnCreateView(inflater, container, savedInstanceState);
 
             var view = inflater.Inflate(Resource.Layout.ProfileFragment, container, false);
-			var registerButton = view.FindViewById<Button> (Resource.Id.registerButton);
-			var unregisterButton = view.FindViewById<Button> (Resource.Id.unregisterButton);
             nicknameText = view.FindViewById<TextView>(Resource.Id.txt_nickname);
             profileImage = view.FindViewById<ProfilePictureView>(Resource.Id.profilePicture);
-
-            registerButton.Click += delegate {
-				const string senders = "865065760693";
-				var intent = new Intent("com.google.android.c2dm.intent.REGISTER");
-				intent.SetPackage("com.google.android.gsf");
-				intent.PutExtra("app", PendingIntent.GetBroadcast(MainPage, 0, new Intent(), 0));
-				intent.PutExtra("userid", PhotoToss.Core.PhotoTossRest.Instance.CurrentUser.id.ToString());
-				intent.PutExtra("sender", senders);
-				MainPage.StartService(intent);
-			};
-
-			unregisterButton.Click += delegate {
-				/*
-				var intent = new Intent("com.google.android.c2dm.intent.UNREGISTER");
-				intent.SetPackage("com.google.android.gsf");
-				intent.PutExtra("app", PendingIntent.GetBroadcast(MainPage, 0, new Intent(), 0));
-				MainPage.StartService(intent);
-				*/
-				GcmClient.UnRegister(this.Activity);
-				//GcmClient.Register(this, SENDER_ID);
-			};
-
+			numTotalText = view.FindViewById<TextView> (Resource.Id.numTotalText);
+			numOriginalsText = view.FindViewById<TextView> (Resource.Id.numOriginalsText);
+			numCatchesText = view.FindViewById<TextView> (Resource.Id.numCatchesText);
+			numTossesText = view.FindViewById<TextView> (Resource.Id.numTossesText);
             Refresh();
 
             return view;
@@ -81,7 +61,24 @@ namespace PhotoToss.AndroidApp
                 nicknameText.Text = "";
             }
 
+			// update stats
+			PhotoTossRest.Instance.GetUserStats ((theStats) => {
+				UpdateUserStats (theStats);
+			});
+
         }
+
+		public void UpdateUserStats(UserStatsRecord theStats)
+		{
+			if (theStats != null) {
+				Activity.RunOnUiThread (() => {
+					numTossesText.Text = String.Format ("{0}", theStats.numtosses);
+					numCatchesText.Text = String.Format ("{0}", theStats.numcatches);
+					numOriginalsText.Text = String.Format ("{0}", theStats.numoriginals);
+					numTotalText.Text = String.Format ("{0}", theStats.numimages);
+				});
+			}
+		}
 
         public override void OnHiddenChanged(bool hidden)
         {

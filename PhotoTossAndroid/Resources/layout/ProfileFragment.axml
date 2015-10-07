@@ -1,46 +1,145 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:facebook="http://schemas.android.com/apk/res-auto"
-    android:orientation="vertical"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
     android:minWidth="25px"
     android:minHeight="25px">
-    <TextView
-        android:text="Profile Page"
-        android:textAppearance="?android:attr/textAppearanceLarge"
-        android:layout_width="match_parent"
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/textView1" />
-    <com.facebook.login.widget.ProfilePictureView
-        android:id="@+id/profilePicture"
-        android:layout_height="wrap_content"
-        android:layout_width="wrap_content"
-        android:gravity="center_horizontal"
-        android:layout_marginBottom="10dp"
-        facebook:com_facebook_preset_size="normal" />
-    <com.facebook.login.widget.LoginButton
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="5dp"
-        android:layout_gravity="center_horizontal"
-        facebook:com_facebook_confirm_logout="false"
-        facebook:com_facebook_tooltip_mode="never_display" />
-    <TextView
-        android:text="nickname"
-        android:textAppearance="?android:attr/textAppearanceMedium"
-        android:id="@+id/txt_nickname"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:gravity="center_horizontal" />
-    <Button
-        android:text="Register for Push"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/registerButton" />
-    <Button
-        android:text="Unregister"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/unregisterButton" />
-</LinearLayout>
+        android:minWidth="25px"
+        android:minHeight="25px">
+        <TextView
+            android:text="nickname"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:id="@+id/txt_nickname"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:gravity="center_horizontal" />
+        <com.facebook.login.widget.ProfilePictureView
+            android:id="@+id/profilePicture"
+            android:layout_height="wrap_content"
+            android:layout_width="wrap_content"
+            android:layout_marginBottom="10dp"
+            facebook:com_facebook_preset_size="normal"
+            android:layout_gravity="center_horizontal" />
+        <com.facebook.login.widget.LoginButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5dp"
+            android:layout_gravity="center_horizontal"
+            facebook:com_facebook_confirm_logout="false"
+            facebook:com_facebook_tooltip_mode="never_display" />
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/linearLayout1">
+            <TextView
+                android:text="--"
+                android:textAppearance="?android:attr/textAppearanceLarge"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:id="@+id/numTossesText"
+                android:width="150dp"
+                android:height="100dp"
+                android:textSize="36dp"
+                android:background="#ff1bd13d"
+                android:gravity="center"
+                android:layout_marginLeft="4dp"
+                android:layout_marginBottom="4dp" />
+            <TextView
+                android:text="Number of tosses you've made"
+                android:textAppearance="?android:attr/textAppearanceLarge"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:id="@+id/textView3"
+                android:gravity="center_vertical"
+                android:layout_margin="4dp" />
+        </LinearLayout>
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/linearLayout2">
+            <TextView
+                android:text="--"
+                android:textAppearance="?android:attr/textAppearanceLarge"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:id="@+id/numCatchesText"
+                android:width="150dp"
+                android:height="100dp"
+                android:textSize="36dp"
+                android:background="#ff1bd13d"
+                android:gravity="center"
+                android:layout_marginLeft="4dp"
+                android:layout_marginBottom="4dp" />
+            <TextView
+                android:text="Number of times your tosses have been caught"
+                android:textAppearance="?android:attr/textAppearanceLarge"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:id="@+id/textView4"
+                android:gravity="center_vertical"
+                android:layout_margin="4dp" />
+        </LinearLayout>
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/linearLayout3">
+            <TextView
+                android:text="--"
+                android:textAppearance="?android:attr/textAppearanceLarge"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:id="@+id/numOriginalsText"
+                android:width="150dp"
+                android:height="100dp"
+                android:textSize="36dp"
+                android:background="#ff1bd13d"
+                android:gravity="center"
+                android:layout_marginLeft="4dp"
+                android:layout_marginBottom="4dp" />
+            <TextView
+                android:text="Number of Images you've taken"
+                android:textAppearance="?android:attr/textAppearanceLarge"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:id="@+id/textView5"
+                android:gravity="center_vertical"
+                android:layout_margin="4dp" />
+        </LinearLayout>
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/linearLayout4">
+            <TextView
+                android:text="--"
+                android:textAppearance="?android:attr/textAppearanceLarge"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:id="@+id/numTotalText"
+                android:width="150dp"
+                android:height="100dp"
+                android:textSize="36dp"
+                android:background="#ff1bd13d"
+                android:gravity="center"
+                android:layout_marginLeft="4dp"
+                android:layout_marginBottom="4dp" />
+            <TextView
+                android:text="Number of images you have in your collection"
+                android:textAppearance="?android:attr/textAppearanceLarge"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:id="@+id/textView6"
+                android:gravity="center_vertical"
+                android:layout_margin="4dp" />
+        </LinearLayout>
+    </LinearLayout>
+</ScrollView>

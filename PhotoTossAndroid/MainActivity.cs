@@ -184,7 +184,7 @@ namespace PhotoToss.AndroidApp
 				Resources.GetText (Resource.String.Home_Menu), 
 				Resources.GetText (Resource.String.Leaderboard_Menu),
 				Resources.GetText (Resource.String.Profile_Menu),
-				Resources.GetText (Resource.String.Settings_Menu),
+				//Resources.GetText (Resource.String.Settings_Menu),
 				Resources.GetText (Resource.String.About_Menu)
 			};
 
@@ -561,7 +561,7 @@ namespace PhotoToss.AndroidApp
 				}
 				newPage = profilePage;
 				break;
-
+				/*
 			case 3: // Settings
 				if (settingsPage == null)
 				{
@@ -571,8 +571,8 @@ namespace PhotoToss.AndroidApp
 				}
 				newPage = settingsPage;
 				break;
-
-			case 4: // About
+*/
+			case 3: // About
 				if (aboutPage == null)
 				{
 					aboutPage = new AboutFragment();
