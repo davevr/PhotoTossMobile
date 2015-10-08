@@ -167,6 +167,12 @@
       <HintPath>..\packages\Refractored.PagerSlidingTabStrip.1.0.9\lib\MonoAndroid10\Refractored.PagerSlidingTabStrip.dll</HintPath>
     </Reference>
     <Reference Include="Mono.Android.Export" />
+    <Reference Include="PubNubMessaging">
+      <HintPath>_external\PubNubMessaging.dll</HintPath>
+    </Reference>
+    <Reference Include="Newtonsoft.Json.MonoDroid">
+      <HintPath>_external\Newtonsoft.Json.MonoDroid.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -228,7 +234,6 @@
     <AndroidResource Include="Resources\layout\MapInfoView.axml">
       <SubType>AndroidResource</SubType>
     </AndroidResource>
-    <None Include="_external\ByteSmith.WindowsAzure.Messaging.Android.dll" />
     <AndroidResource Include="Resources\layout\SettingsFragment.axml" />
     <AndroidResource Include="Resources\layout\AboutFragment.axml" />
     <AndroidResource Include="Resources\layout\ImageViewActivity.axml" />
@@ -257,6 +262,8 @@
     <AndroidResource Include="Resources\layout\LeaderboardCell.axml" />
     <AndroidResource Include="Resources\layout\PhotoLineageActivity.axml" />
     <AndroidResource Include="Resources\layout\PhotoLineageCell.axml" />
+    <None Include="_external\PubNubMessaging.dll" />
+    <None Include="_external\Newtonsoft.Json.MonoDroid.dll" />
   </ItemGroup>
   <ItemGroup>
     <AndroidResource Include="Resources\values\Strings.xml" />
@@ -353,6 +360,7 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Resources\drawable-mdpi\" />
+    <Folder Include="_external\" />
   </ItemGroup>
   <ItemGroup>
     <AndroidAsset Include="Assets\fonts\RammettoOne-Regular.ttf" />

@@ -1487,7 +1487,6 @@ namespace PhotoToss.AndroidApp
 			global::GooglePlayServices.Resource.Styleable.WalletFragmentStyle_maskedWalletDetailsLogoTextColor = global::PhotoToss.AndroidApp.Resource.Styleable.WalletFragmentStyle_maskedWalletDetailsLogoTextColor;
 			global::GooglePlayServices.Resource.Styleable.WalletFragmentStyle_maskedWalletDetailsTextAppearance = global::PhotoToss.AndroidApp.Resource.Styleable.WalletFragmentStyle_maskedWalletDetailsTextAppearance;
 			global::Gcm.Client.Resource.String.library_name = global::PhotoToss.AndroidApp.Resource.String.library_name;
-			global::ByteSmith.WindowsAzure.Messaging.Resource.String.library_name = global::PhotoToss.AndroidApp.Resource.String.library_name;
 			global::ZXing.Mobile.Resource.Id.contentFrame = global::PhotoToss.AndroidApp.Resource.Id.contentFrame;
 			global::ZXing.Mobile.Resource.Layout.zxingscanneractivitylayout = global::PhotoToss.AndroidApp.Resource.Layout.zxingscanneractivitylayout;
 			global::ZXing.Mobile.Resource.Layout.zxingscannerfragmentlayout = global::PhotoToss.AndroidApp.Resource.Layout.zxingscannerfragmentlayout;
@@ -1533,6 +1532,7 @@ namespace PhotoToss.AndroidApp
 			global::com.refractored.Resource.Styleable.PagerSlidingTabStrip_pstsTextStyle = global::PhotoToss.AndroidApp.Resource.Styleable.PagerSlidingTabStrip_pstsTextStyle;
 			global::com.refractored.Resource.Styleable.PagerSlidingTabStrip_pstsUnderlineColor = global::PhotoToss.AndroidApp.Resource.Styleable.PagerSlidingTabStrip_pstsUnderlineColor;
 			global::com.refractored.Resource.Styleable.PagerSlidingTabStrip_pstsUnderlineHeight = global::PhotoToss.AndroidApp.Resource.Styleable.PagerSlidingTabStrip_pstsUnderlineHeight;
+			global::PubNubMessaging.Resource.String.library_name = global::PhotoToss.AndroidApp.Resource.String.library_name;
 		}
 		
 		public partial class Animation
@@ -4777,53 +4777,53 @@ namespace PhotoToss.AndroidApp
 			// aapt resource value: 0x7f06001f
 			public const int cast_notification_disconnect = 2131099679;
 			
-			// aapt resource value: 0x7f060048
-			public const int com_facebook_image_download_unknown_error = 2131099720;
-			
 			// aapt resource value: 0x7f060049
-			public const int com_facebook_internet_permission_error_message = 2131099721;
+			public const int com_facebook_image_download_unknown_error = 2131099721;
 			
 			// aapt resource value: 0x7f06004a
-			public const int com_facebook_internet_permission_error_title = 2131099722;
+			public const int com_facebook_internet_permission_error_message = 2131099722;
 			
 			// aapt resource value: 0x7f06004b
-			public const int com_facebook_like_button_liked = 2131099723;
+			public const int com_facebook_internet_permission_error_title = 2131099723;
 			
 			// aapt resource value: 0x7f06004c
-			public const int com_facebook_like_button_not_liked = 2131099724;
+			public const int com_facebook_like_button_liked = 2131099724;
 			
 			// aapt resource value: 0x7f06004d
-			public const int com_facebook_loading = 2131099725;
+			public const int com_facebook_like_button_not_liked = 2131099725;
 			
 			// aapt resource value: 0x7f06004e
-			public const int com_facebook_loginview_cancel_action = 2131099726;
+			public const int com_facebook_loading = 2131099726;
 			
 			// aapt resource value: 0x7f06004f
-			public const int com_facebook_loginview_log_in_button = 2131099727;
+			public const int com_facebook_loginview_cancel_action = 2131099727;
 			
 			// aapt resource value: 0x7f060050
-			public const int com_facebook_loginview_log_in_button_long = 2131099728;
+			public const int com_facebook_loginview_log_in_button = 2131099728;
 			
 			// aapt resource value: 0x7f060051
-			public const int com_facebook_loginview_log_out_action = 2131099729;
+			public const int com_facebook_loginview_log_in_button_long = 2131099729;
 			
 			// aapt resource value: 0x7f060052
-			public const int com_facebook_loginview_log_out_button = 2131099730;
+			public const int com_facebook_loginview_log_out_action = 2131099730;
 			
 			// aapt resource value: 0x7f060053
-			public const int com_facebook_loginview_logged_in_as = 2131099731;
+			public const int com_facebook_loginview_log_out_button = 2131099731;
 			
 			// aapt resource value: 0x7f060054
-			public const int com_facebook_loginview_logged_in_using_facebook = 2131099732;
+			public const int com_facebook_loginview_logged_in_as = 2131099732;
 			
 			// aapt resource value: 0x7f060055
-			public const int com_facebook_send_button_text = 2131099733;
+			public const int com_facebook_loginview_logged_in_using_facebook = 2131099733;
 			
 			// aapt resource value: 0x7f060056
-			public const int com_facebook_share_button_text = 2131099734;
+			public const int com_facebook_send_button_text = 2131099734;
 			
 			// aapt resource value: 0x7f060057
-			public const int com_facebook_tooltip_default = 2131099735;
+			public const int com_facebook_share_button_text = 2131099735;
+			
+			// aapt resource value: 0x7f060058
+			public const int com_facebook_tooltip_default = 2131099736;
 			
 			// aapt resource value: 0x7f06002a
 			public const int common_android_wear_notification_needs_update_text = 2131099690;
@@ -4945,8 +4945,8 @@ namespace PhotoToss.AndroidApp
 			// aapt resource value: 0x7f06005f
 			public const int facebook_app_name = 2131099743;
 			
-			// aapt resource value: 0x7f060059
-			public const int library_name = 2131099737;
+			// aapt resource value: 0x7f060048
+			public const int library_name = 2131099720;
 			
 			// aapt resource value: 0x7f060069
 			public const int menuitem_delete = 2131099753;
@@ -4963,8 +4963,8 @@ namespace PhotoToss.AndroidApp
 			// aapt resource value: 0x7f060068
 			public const int menuitem_toss = 2131099752;
 			
-			// aapt resource value: 0x7f060058
-			public const int messenger_send_button_text = 2131099736;
+			// aapt resource value: 0x7f060059
+			public const int messenger_send_button_text = 2131099737;
 			
 			// aapt resource value: 0x7f060000
 			public const int mr_media_route_button_content_description = 2131099648;

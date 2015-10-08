@@ -33,7 +33,6 @@ using ZXing.Mobile;
 
 using PhotoToss.Core;
 
-using ByteSmith.WindowsAzure.Messaging;
 using Gcm.Client;
 using Environment = Android.OS.Environment;
 using Uri = Android.Net.Uri;
@@ -50,7 +49,7 @@ using Android.Content.Res;
 using Java.Nio;
 using Java.Lang;
 using CameraError = Android.Hardware.Camera2.CameraError;
-
+using PubNubMessaging.Core;
 
 using File = Java.IO.File;
 [assembly:MetaData ("com.facebook.sdk.ApplicationId", Value ="@string/app_id")]
@@ -103,7 +102,7 @@ namespace PhotoToss.AndroidApp
 		private static readonly SparseIntArray ORIENTATIONS = new SparseIntArray();
 		private Image_callback catchImageCallback;
 		private static Image savedImage = null;
-
+		public static Pubnub pubnub;
 
 
 		class MyDrawerToggle : Android.Support.V7.App.ActionBarDrawerToggle
@@ -286,6 +285,9 @@ namespace PhotoToss.AndroidApp
 			ORIENTATIONS.Append ((int)SurfaceOrientation.Rotation90, 0);
 			ORIENTATIONS.Append ((int)SurfaceOrientation.Rotation180, 270);
 			ORIENTATIONS.Append ((int)SurfaceOrientation.Rotation270, 180);
+
+			// init pubnub
+			pubnub = new Pubnub( "pub-c-910a2f43-9bdb-46e2-9174-0c25800ea8f9", "sub-c-0854b99c-6d53-11e5-945f-02ee2ddab7fe");
 
 		}
 
