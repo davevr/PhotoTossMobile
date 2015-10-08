@@ -32,6 +32,7 @@ namespace PhotoToss.AndroidApp
         private TextView titleView;
         private TextView dateView;
         private Dictionary<string, PhotoRecord> markerMap = new Dictionary<string, PhotoRecord>();
+		public static PhotoRecord CurrentMarkerRecord = null;
 
 		public override void OnCreate (Bundle savedInstanceState)
 		{
@@ -353,7 +354,9 @@ namespace PhotoToss.AndroidApp
 
         public void OnInfoWindowClick(Marker theMarker)
         {
+			CurrentMarkerRecord = markerMap[theMarker.Id];
 
+			this.Activity.StartActivity (typeof(PhotoLineageActivity));
         }
 
     }

@@ -217,6 +217,7 @@
     <Compile Include="Activities\ImageViewSpreadFragment.cs" />
     <Compile Include="Activities\ImageViewStatsFragment.cs" />
     <Compile Include="HelperClasses\TypefaceSpan.cs" />
+    <Compile Include="Activities\PhotoLineageActivity.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\AboutResources.txt" />
@@ -254,6 +255,8 @@
     <AndroidResource Include="Resources\drawable-hdpi\ic_share_black.png" />
     <AndroidResource Include="Resources\drawable\background2.png" />
     <AndroidResource Include="Resources\layout\LeaderboardCell.axml" />
+    <AndroidResource Include="Resources\layout\PhotoLineageActivity.axml" />
+    <AndroidResource Include="Resources\layout\PhotoLineageCell.axml" />
   </ItemGroup>
   <ItemGroup>
     <AndroidResource Include="Resources\values\Strings.xml" />

@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="fill_parent"
+    android:layout_height="wrap_content"
+    android:minWidth="25px"
+    android:minHeight="25px">
+    <LinearLayout
+        android:orientation="horizontal"
+        android:minWidth="25px"
+        android:minHeight="25px"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/linearLayout2">
+        <ImageView
+            android:src="@android:drawable/ic_menu_gallery"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:id="@+id/userImageView"
+            android:layout_margin="4dp" />
+        <TextView
+            android:text="caught Sept 1, 2014"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:id="@+id/tossDateText"
+            android:gravity="center_vertical" />
+    </LinearLayout>
+    <ImageView
+        android:src="@android:drawable/ic_menu_gallery"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/imageView"
+        android:layout_margin="4dp"
+        android:scaleType="fitStart"
+        android:adjustViewBounds="true" />
+    <EditText
+        android:text="what I think about this photo"
+        android:inputType="textMultiLine"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/photoText"
+        android:linksClickable="true"
+        android:autoLink="all"
+        android:textSize="12dp"
+        android:layout_marginLeft="24dp"
+        android:layout_marginRight="8dp"
+        android:layout_marginBottom="8dp"
+        android:hint="enter your thoughts on this image..." />
+    <TextView
+        android:text="Notes on this image"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/photoTextStatic"
+        android:linksClickable="true"
+        android:autoLink="all"
+        android:textSize="12dp"
+        android:layout_marginLeft="24dp"
+        android:layout_marginRight="8dp"
+        android:layout_marginBottom="8dp" />
+</LinearLayout>
