@@ -13,6 +13,7 @@ namespace PhotoToss.iOSApp
 	public partial class ImageDetailController : UIViewController
 	{
 		public UIImage CurrentImage { get; set; }
+		UIImageView LargeImageView {get; set;}
 
 		public ImageDetailController () : base ("ImageDetailController", null)
 		{
@@ -30,8 +31,11 @@ namespace PhotoToss.iOSApp
 		public override void ViewDidLoad ()
 		{
 			base.ViewDidLoad ();
-			LargeImageView.ContentMode = UIViewContentMode.ScaleToFill;
-			// Perform any additional setup after loading the view, typically from a nib.
+
+			LargeImageView = new UIImageView ();
+
+			ImageScroller.AddSubview (LargeImageView);
+
 			if ((LargeImageView != null) && (HomeViewController.CurrentPhotoRecord != null)) {
 				LargeImageView.SetImage(new NSUrl (HomeViewController.CurrentPhotoRecord.imageUrl + "=s1024"),
 					UIImage.FromBundle("placeholder"), ImageLoadComplete);
@@ -41,8 +45,13 @@ namespace PhotoToss.iOSApp
 
 		private void ImageLoadComplete(UIImage image, NSError theErr, SDImageCacheType cacheType, NSUrl theURL )
 		{
-			ResizeImage();
+			//ResizeImage();
 			CurrentImage = image;
+			ImageScroller.ContentSize = LargeImageView.Image.Size;
+			//Set the zoom properties:
+			ImageScroller.MaximumZoomScale = 3f;
+			ImageScroller.MinimumZoomScale = .1f;
+			ImageScroller.ViewForZoomingInScrollView += (UIScrollView sv) => { return LargeImageView; };
 		}
 
 
@@ -59,6 +68,7 @@ namespace PhotoToss.iOSApp
 			}
 		}
 
+		/*
 		private void ResizeImage ()
 		{
 			CGSize imageSize = LargeImageView.Image.Size;
@@ -67,6 +77,7 @@ namespace PhotoToss.iOSApp
 			ImageHeightConstraint.Constant = desiredHeight;
 			ImageScroller.ContentSize = new CGSize( LargeImageView.Bounds.Width, desiredHeight);
 		}
+		*/
 
 		public override bool PrefersStatusBarHidden ()
 		{
@@ -76,7 +87,7 @@ namespace PhotoToss.iOSApp
 		public override void DidRotate (UIInterfaceOrientation fromInterfaceOrientation)
 		{
 			base.DidRotate (fromInterfaceOrientation);
-			ResizeImage ();
+			//ResizeImage ();
 		}
 
 

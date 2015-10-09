@@ -13,29 +13,29 @@ namespace PhotoToss.iOSApp
 	partial class ImageDetailController
 	{
 		[Outlet]
-		UIKit.NSLayoutConstraint ImageHeightConstraint { get; set; }
+		UIKit.UITextField CaptionTextField { get; set; }
 
 		[Outlet]
 		UIKit.UIScrollView ImageScroller { get; set; }
 
 		[Outlet]
-		UIKit.UIImageView LargeImageView { get; set; }
+		UIKit.UIButton SendBtn { get; set; }
 		
 		void ReleaseDesignerOutlets ()
 		{
+			if (CaptionTextField != null) {
+				CaptionTextField.Dispose ();
+				CaptionTextField = null;
+			}
+
 			if (ImageScroller != null) {
 				ImageScroller.Dispose ();
 				ImageScroller = null;
 			}
 
-			if (ImageHeightConstraint != null) {
-				ImageHeightConstraint.Dispose ();
-				ImageHeightConstraint = null;
-			}
-
-			if (LargeImageView != null) {
-				LargeImageView.Dispose ();
-				LargeImageView = null;
+			if (SendBtn != null) {
+				SendBtn.Dispose ();
+				SendBtn = null;
 			}
 		}
 	}
