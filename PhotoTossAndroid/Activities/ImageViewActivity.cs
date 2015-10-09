@@ -197,7 +197,7 @@ namespace PhotoToss.AndroidApp
 			long imageId = PhotoTossRest.Instance.CurrentImage.originid;
 			if (imageId == 0)
 				imageId = PhotoTossRest.Instance.CurrentImage.id;
-			ChannelName = "image" + PhotoTossRest.Instance.CurrentImage.id.ToString ();
+			ChannelName = "image" + imageId.ToString ();
 			MainActivity.pubnub.Subscribe<string>(ChannelName, DisplaySubscribeReturnMessage, DisplaySubscribeConnectStatusMessage, DisplayErrorMessage);
 			MainActivity.pubnub.Presence<string>(ChannelName, DisplayPresenceReturnMessage, DisplayPresenceConnectStatusMessage, DisplayErrorMessage);
 			GetHistory ();
