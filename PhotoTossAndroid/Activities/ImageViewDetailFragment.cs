@@ -12,11 +12,12 @@ using Android.Util;
 using Android.Views;
 using Android.Widget;
 using PhotoToss.Core;
-
+using ImageViews.Photo;
+using Android.Graphics;
 
 namespace PhotoToss.AndroidApp
 {
-	public class ImageViewDetailFragment : Android.Support.V4.App.Fragment
+	public class ImageViewDetailFragment : Android.Support.V4.App.Fragment,  Koush.IUrlImageViewCallback
 	{
 		ImageView imageView;
 		public static int itemWidth = 320;
@@ -41,13 +42,29 @@ namespace PhotoToss.AndroidApp
 			itemWidth = Math.Max (screenWidth, screenHeight);
 
 			imageView = fragment.FindViewById<ImageView>(Resource.Id.imageView);
-			Koush.UrlImageViewHelper.SetUrlDrawable (imageView, curRec.imageUrl + "=s" + itemWidth.ToString(), Resource.Drawable.ic_camera);
+			Koush.UrlImageViewHelper.SetUrlDrawable (imageView, curRec.imageUrl + "=s" + itemWidth.ToString(), Resource.Drawable.ic_camera, this);
 
+			imageView.Click += (object sender, EventArgs e) => 
+			{
+				//OpenImageFullScreen();
+			};
 
 
 			return fragment;
 		}
 
+		public void OnLoaded(ImageView theImage, Bitmap theBitmap, string theURL, bool p4)
+		{
+			var attacher = new  PhotoViewAttacher(imageView);
+			attacher.MaximumScale = 5;
+			attacher.Update();
+		}
+
+		private void OpenImageFullScreen()
+		{
+			this.Activity.StartActivity (typeof(FullScreenImageView));
+
+		}
 
 			
 		public void Update()
