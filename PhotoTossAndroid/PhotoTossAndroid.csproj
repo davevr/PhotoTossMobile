@@ -269,6 +269,8 @@
     <AndroidResource Include="Resources\layout\ImageViewChatFragment.axml" />
     <AndroidResource Include="Resources\layout\NotifyTabView.axml" />
     <AndroidResource Include="Resources\drawable\RounderCorner.xml" />
+    <AndroidResource Include="Resources\drawable\mychatbackground.xml" />
+    <AndroidResource Include="Resources\drawable\otherchatbackground.xml" />
   </ItemGroup>
   <ItemGroup>
     <AndroidResource Include="Resources\values\Strings.xml" />

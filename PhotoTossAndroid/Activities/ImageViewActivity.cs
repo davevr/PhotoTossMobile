@@ -197,7 +197,7 @@ namespace PhotoToss.AndroidApp
 			long imageId = PhotoTossRest.Instance.CurrentImage.originid;
 			if (imageId == 0)
 				imageId = PhotoTossRest.Instance.CurrentImage.id;
-			ChannelName = "image" + PhotoTossRest.Instance.CurrentImage.id.ToString ();
+			ChannelName = "image" + imageId.ToString ();
 			MainActivity.pubnub.Subscribe<string>(ChannelName, DisplaySubscribeReturnMessage, DisplaySubscribeConnectStatusMessage, DisplayErrorMessage);
 			MainActivity.pubnub.Presence<string>(ChannelName, DisplayPresenceReturnMessage, DisplayPresenceConnectStatusMessage, DisplayErrorMessage);
 			GetHistory ();
@@ -207,7 +207,7 @@ namespace PhotoToss.AndroidApp
 
 		public void GetHistory()
 		{
-			MainActivity.pubnub.DetailedHistory<string>(ChannelName, 100, HistoryReturnMessage, DisplayErrorMessage);
+			MainActivity.pubnub.DetailedHistory<string>(ChannelName, 20, HistoryReturnMessage, DisplayErrorMessage);
 
 
 		}
@@ -216,13 +216,15 @@ namespace PhotoToss.AndroidApp
 		private void HistoryReturnMessage(string theMsg)
 		{
 			try {
-				List<string> topList = theMsg.FromJson<List<string>>();
-				string historyJSON = topList[0];
+				int startLoc = theMsg.IndexOf("[", 1);
+				int endLoc = theMsg.LastIndexOf("]",theMsg.Length - 2);
+				int strLen = (endLoc + 1) - startLoc;
+				string historyJSON = theMsg.Substring(startLoc, strLen);
 				Console.WriteLine ("[pubnub] history: " + historyJSON);
 				List<ChatTurn>	historyList = historyJSON.FromJson<List<ChatTurn>>();
 				if (historyList != null) {
 					chatFragment.InsertHistory(historyList);
-					IncrementMessageCount(historyList.Count);
+					ClearMessageCount();
 				}
 			} catch (Exception exp) {
 				Console.WriteLine ("[pubnub] history parse error: " + theMsg);

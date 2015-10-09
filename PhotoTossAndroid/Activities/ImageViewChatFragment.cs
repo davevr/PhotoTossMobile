@@ -199,10 +199,14 @@ namespace PhotoToss.AndroidApp
 				showImage = false;
 			} 
 
+			LinearLayout.LayoutParams layout = chatView.LayoutParameters as LinearLayout.LayoutParams;
 			if (curItem.userid == PhotoTossRest.Instance.CurrentUser.id) {
 				// current user - show to the reight
 				chatView.TextAlignment = TextAlignment.TextEnd;
 				chatView.Gravity = GravityFlags.Right;
+				layout.Gravity = GravityFlags.Right;
+				chatView.LayoutParameters = layout;
+				chatView.SetBackgroundResource (Resource.Drawable.mychatbackground);
 				if (showImage) {
 					ownImageView.Visibility = ViewStates.Visible;
 					Koush.UrlImageViewHelper.SetUrlDrawable (ownImageView, curItem.userimage, Resource.Drawable.unknown_octopus);
@@ -211,6 +215,11 @@ namespace PhotoToss.AndroidApp
 				// some other user - show to the left
 				chatView.TextAlignment = TextAlignment.TextStart;
 				chatView.Gravity = GravityFlags.Left;
+
+				layout.Gravity = GravityFlags.Left;
+				chatView.LayoutParameters = layout;
+
+				chatView.SetBackgroundResource (Resource.Drawable.otherchatbackground);
 				if (showImage) {
 					userImageView.Visibility = ViewStates.Visible;
 					Koush.UrlImageViewHelper.SetUrlDrawable (userImageView, curItem.userimage, Resource.Drawable.unknown_octopus);

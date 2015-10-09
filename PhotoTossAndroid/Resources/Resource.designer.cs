@@ -3619,26 +3619,32 @@ namespace PhotoToss.AndroidApp
 			// aapt resource value: 0x7f0200ad
 			public const int mr_ic_settings_light = 2130837677;
 			
-			// aapt resource value: 0x7f0200b4
-			public const int notification_template_icon_bg = 2130837684;
-			
 			// aapt resource value: 0x7f0200ae
-			public const int powered_by_google_dark = 2130837678;
+			public const int mychatbackground = 2130837678;
+			
+			// aapt resource value: 0x7f0200b6
+			public const int notification_template_icon_bg = 2130837686;
 			
 			// aapt resource value: 0x7f0200af
-			public const int powered_by_google_light = 2130837679;
+			public const int otherchatbackground = 2130837679;
 			
 			// aapt resource value: 0x7f0200b0
-			public const int psts_background_tab = 2130837680;
+			public const int powered_by_google_dark = 2130837680;
 			
 			// aapt resource value: 0x7f0200b1
-			public const int RounderCorner = 2130837681;
+			public const int powered_by_google_light = 2130837681;
 			
 			// aapt resource value: 0x7f0200b2
-			public const int tosstopus = 2130837682;
+			public const int psts_background_tab = 2130837682;
 			
 			// aapt resource value: 0x7f0200b3
-			public const int unknown_octopus = 2130837683;
+			public const int RounderCorner = 2130837683;
+			
+			// aapt resource value: 0x7f0200b4
+			public const int tosstopus = 2130837684;
+			
+			// aapt resource value: 0x7f0200b5
+			public const int unknown_octopus = 2130837685;
 			
 			static Drawable()
 			{
