@@ -22,7 +22,8 @@ namespace PhotoToss.AndroidApp
 		ImageView imageView;
 		public static int itemWidth = 320;
 		Android.Util.DisplayMetrics	metrics;
-
+		private EditText captionText;
+		private Button sendBtn;
 
 		public override void OnCreate (Bundle savedInstanceState)
 		{
@@ -36,19 +37,19 @@ namespace PhotoToss.AndroidApp
 			View fragment = inflater.Inflate(Resource.Layout.ImageViewDetailFragment, null);
 
 			PhotoRecord curRec = PhotoTossRest.Instance.CurrentImage;
-			metrics = Resources.DisplayMetrics;
-			int screenWidth = metrics.WidthPixels;
-			int screenHeight = metrics.HeightPixels;
-			itemWidth = Math.Max (screenWidth, screenHeight);
+
 
 			imageView = fragment.FindViewById<ImageView>(Resource.Id.imageView);
-			Koush.UrlImageViewHelper.SetUrlDrawable (imageView, curRec.imageUrl + "=s" + itemWidth.ToString(), Resource.Drawable.ic_camera, this);
+			Koush.UrlImageViewHelper.SetUrlDrawable (imageView, curRec.imageUrl + "=s2058", Resource.Drawable.ic_camera, this);
 
-			imageView.Click += (object sender, EventArgs e) => 
-			{
-				//OpenImageFullScreen();
+
+			captionText = fragment.FindViewById<EditText> (Resource.Id.turnText);
+			sendBtn = fragment.FindViewById<Button> (Resource.Id.sendTurnBtn);
+
+			sendBtn.Click += (object sender, EventArgs e) => {
+				UpdateCaptionText();
 			};
-
+			captionText.Text = curRec.caption;
 
 			return fragment;
 		}
@@ -59,19 +60,28 @@ namespace PhotoToss.AndroidApp
 			attacher.MaximumScale = 5;
 			attacher.Update();
 		}
-
-		private void OpenImageFullScreen()
-		{
-			this.Activity.StartActivity (typeof(FullScreenImageView));
-
-		}
-
 			
 		public void Update()
 		{
 
 		}
 
+		public void UpdateCaptionText()
+		{
+			string newText = captionText.Text;
+
+			if (string.Compare (newText, PhotoTossRest.Instance.CurrentImage.caption) != 0) {
+				sendBtn.Enabled = false;
+				captionText.Enabled = false;
+				PhotoTossRest.Instance.SetImageCaption (PhotoTossRest.Instance.CurrentImage.id, newText, (newRec) => {
+					Activity.RunOnUiThread(() =>
+						{
+							sendBtn.Enabled = true;
+							captionText.Enabled = true;
+						});
+				});
+			}
+		}
 	
 
 

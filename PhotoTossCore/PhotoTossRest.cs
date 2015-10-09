@@ -290,6 +290,23 @@ namespace PhotoToss.Core
             });
         }
 
+		public void SetImageCaption(long imageId, string caption, PhotoRecord_callback callback)
+		{
+			string fullURL = "image";
+
+			RestRequest request = new RestRequest(fullURL, Method.PUT);
+			request.AddParameter("id", imageId);
+			request.AddParameter("caption", caption);
+			apiClient.ExecuteAsync(request, (response) => {
+				if (response.StatusCode == HttpStatusCode.OK) {
+					PhotoRecord theRec = response.Content.FromJson<PhotoRecord>();
+					callback(theRec);
+				} else {
+					callback(null);
+				}
+			});
+		}
+
 
         public void StartToss(long imageId, int gameType, double longitude, double latitude, Toss_callback callback)
         {
