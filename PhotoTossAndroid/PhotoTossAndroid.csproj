@@ -50,8 +50,9 @@
     <Reference Include="HockeyApp.Android">
       <HintPath>..\Components\hockeyappandroid-3.5.0\lib\android\HockeyApp.Android.dll</HintPath>
     </Reference>
-    <Reference Include="RestSharp.MonoDroid">
-      <HintPath>..\Components\restsharp-105.0.1.0\lib\android\RestSharp.MonoDroid.dll</HintPath>
+    <Reference Include="RestSharp, Version=105.2.3.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\RestSharp.105.2.3\lib\MonoAndroid10\RestSharp.dll</HintPath>
+      <Private>True</Private>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Net.Http" />
@@ -62,6 +63,10 @@
     <Reference Include="System.Globalization" />
     <Reference Include="System.ObjectModel" />
     <Reference Include="System.Net.Primitives" />
+    <Reference Include="Xamarin.Facebook, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Xamarin.Facebook.Android.4.6.0.0\lib\MonoAndroid403\Xamarin.Facebook.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="Xamarin.GooglePlayServices.Base">
       <HintPath>..\packages\Xamarin.GooglePlayServices.Base.25.0.0.0\lib\MonoAndroid41\Xamarin.GooglePlayServices.Base.dll</HintPath>
     </Reference>
@@ -150,9 +155,6 @@
     <Reference Include="System.Xml.Linq" />
     <Reference Include="Flurry.Analytics.Android">
       <HintPath>..\packages\Flurry.Analytics.1.2.1\lib\MonoAndroid23\Flurry.Analytics.Android.dll</HintPath>
-    </Reference>
-    <Reference Include="Xamarin.Facebook">
-      <HintPath>..\packages\Xamarin.Facebook.Android.4.5.1.0\lib\MonoAndroid403\Xamarin.Facebook.dll</HintPath>
     </Reference>
     <Reference Include="zxing.portable">
       <HintPath>..\Components\zxing.net.mobile-1.5.1.0\lib\android\zxing.portable.dll</HintPath>
@@ -316,9 +318,17 @@
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Novell\Novell.MonoDroid.CSharp.targets" />
   <ItemGroup>
-    <XamarinComponentReference Include="restsharp">
-      <Version>105.0.1.0</Version>
+    <XamarinComponentReference Include="facebookandroid">
       <Visible>False</Visible>
+      <Version>4.6.0.0</Version>
+    </XamarinComponentReference>
+    <XamarinComponentReference Include="restsharp">
+      <Visible>False</Visible>
+      <Version>105.2.3</Version>
+    </XamarinComponentReference>
+    <XamarinComponentReference Include="urlimageviewhelper">
+      <Visible>False</Visible>
+      <Version>1.0.4.1</Version>
     </XamarinComponentReference>
     <XamarinComponentReference Include="xamandroidsupportv4-18">
       <Version>22.2.0.0</Version>
@@ -332,10 +342,6 @@
       <Version>3.9.61.3</Version>
       <Visible>False</Visible>
     </XamarinComponentReference>
-    <XamarinComponentReference Include="urlimageviewhelper">
-      <Version>1.0.4</Version>
-      <Visible>False</Visible>
-    </XamarinComponentReference>
     <XamarinComponentReference Include="azure-messaging">
       <Version>1.1.5.6</Version>
       <Visible>False</Visible>
@@ -346,10 +352,6 @@
     </XamarinComponentReference>
     <XamarinComponentReference Include="GCMClient">
       <Version>1.0</Version>
-      <Visible>False</Visible>
-    </XamarinComponentReference>
-    <XamarinComponentReference Include="facebookandroid">
-      <Version>4.5.1.0</Version>
       <Visible>False</Visible>
     </XamarinComponentReference>
     <XamarinComponentReference Include="zxing.net.mobile">
@@ -367,7 +369,6 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Resources\drawable-mdpi\" />
-    <Folder Include="_external\" />
   </ItemGroup>
   <ItemGroup>
     <AndroidAsset Include="Assets\fonts\RammettoOne-Regular.ttf" />
