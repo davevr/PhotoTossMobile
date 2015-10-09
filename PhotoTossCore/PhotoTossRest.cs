@@ -273,17 +273,20 @@ namespace PhotoToss.Core
 
 
 
-        public void GetImage(String_callback callback)
+        public void GetImageById(long imageId, PhotoRecord_callback callback)
         {
             string fullURL = "image";
 
             RestRequest request = new RestRequest(fullURL, Method.GET);
+			request.AddParameter("id", imageId);
 
-            apiClient.ExecuteAsync(request, (response) =>
-            {
-					LastError = null;
-                _uploadURL = response.Content;
-                callback(_uploadURL);
+            apiClient.ExecuteAsync(request, (response) => {
+				if (response.StatusCode == HttpStatusCode.OK) {
+					PhotoRecord theRec = response.Content.FromJson<PhotoRecord>();
+					callback(theRec);
+				} else {
+					callback(null);
+				}
             });
         }
 
