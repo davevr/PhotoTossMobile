@@ -22,18 +22,22 @@ using Android.Text.Style;
 using Android.Content.PM;
 
 using PhotoToss.Core;
-
+using PubNubMessaging.Core;
+using ServiceStack.Text;
 
 
 namespace PhotoToss.AndroidApp
 {
-	[Activity(Theme = "@style/AppSubTheme", ScreenOrientation = ScreenOrientation.Portrait)]	
+	[Activity(Theme = "@style/AppSubTheme", ScreenOrientation = ScreenOrientation.Portrait, WindowSoftInputMode = SoftInput.AdjustPan)]	
 	public class ImageViewActivity : Android.Support.V7.App.AppCompatActivity, ViewPager.IOnPageChangeListener
 	{
 		private Android.Support.V7.Widget.Toolbar toolbar = null;
 		public static ImageViewDetailFragment detailFragment;
 		public static ImageViewSpreadFragment spreadFragment;
 		public static ImageViewStatsFragment statsFragment;
+		public static ImageViewChatFragment chatFragment;
+		public static int NewMessageCount {get; set;}
+		public static string ChannelName {get; set;}
 
 
 		private Android.Support.V7.Widget.ShareActionProvider actionProvider = null;
@@ -42,9 +46,9 @@ namespace PhotoToss.AndroidApp
 
 		private ViewPager pager;
 
-		public class ImageViewPageAdapter : FragmentPagerAdapter
+		public class ImageViewPageAdapter : FragmentPagerAdapter, ICustomTabProvider
 		{
-			private string[] Titles = { "Image", "Spread", "Stats" };
+			private string[] Titles = { "Image", "Spread", "Chat" ,"Stats", };
 			Android.Support.V7.App.AppCompatActivity activity;
 
 			public ImageViewPageAdapter(Android.Support.V4.App.FragmentManager fm, Android.Support.V7.App.AppCompatActivity theActivity)
@@ -66,6 +70,22 @@ namespace PhotoToss.AndroidApp
 				}
 			}
 
+			 
+
+			public View GetCustomTabView (ViewGroup parent, int position)
+			{
+				var tabView = activity.LayoutInflater.Inflate (Resource.Layout.NotifyTabView, null);
+
+				var counter = tabView.FindViewById<TextView> (Resource.Id.counter);
+
+				if ((position != 2) || (ImageViewActivity.NewMessageCount == 0))
+					counter.Visibility = ViewStates.Gone;
+				else
+					counter.Text = ImageViewActivity.NewMessageCount.ToString ();
+
+				return tabView;
+			}
+
 			public override Android.Support.V4.App.Fragment GetItem(int position)
 			{
 				Android.Support.V4.App.Fragment theItem = null;
@@ -80,8 +100,15 @@ namespace PhotoToss.AndroidApp
 					break;
 
 				case 2:
+					theItem = ImageViewActivity.chatFragment;
+					break;
+
+				case 3:
 					theItem = ImageViewActivity.statsFragment;
 					break;
+
+
+
 
 				}
 				return theItem;
@@ -91,7 +118,9 @@ namespace PhotoToss.AndroidApp
 
 		protected override void OnCreate (Bundle bundle)
 		{
-            //Window.SetFlags(WindowManagerFlags.Fullscreen, WindowManagerFlags.Fullscreen);
+			//Window.SetFlags(WindowManagerFlags.Fullscreen, WindowManagerFlags.Fullscreen);
+			NewMessageCount = 0;
+
             base.OnCreate (bundle);
 
 			SetContentView (Resource.Layout.ImageViewActivity);
@@ -111,6 +140,7 @@ namespace PhotoToss.AndroidApp
 			detailFragment = new ImageViewDetailFragment();
 			spreadFragment = new ImageViewSpreadFragment();
 			statsFragment = new ImageViewStatsFragment();
+			chatFragment = new ImageViewChatFragment ();
 
 			pager = FindViewById<ViewPager>(Resource.Id.post_pager);
 			pager.Adapter = new ImageViewPageAdapter(this.SupportFragmentManager, this);
@@ -132,6 +162,180 @@ namespace PhotoToss.AndroidApp
 			int page = Intent.GetIntExtra("Page", 0);
 
 			pager.CurrentItem = page;
+
+		}
+
+
+		protected override void OnStart ()
+		{
+			base.OnStart ();
+			SubscribeToImageChannel ();
+		}
+
+		protected override void OnResume ()
+		{
+			base.OnResume ();
+			SubscribeToImageChannel ();
+		}
+
+		protected override void OnPause ()
+		{
+			base.OnPause ();
+			UnsubscribeFromImageChannel ();
+		}
+
+		protected override void OnStop ()
+		{
+			base.OnStop ();
+			UnsubscribeFromImageChannel ();
+		}
+
+
+
+		public void SubscribeToImageChannel()
+		{
+			long imageId = PhotoTossRest.Instance.CurrentImage.originid;
+			if (imageId == 0)
+				imageId = PhotoTossRest.Instance.CurrentImage.id;
+			ChannelName = "image" + PhotoTossRest.Instance.CurrentImage.id.ToString ();
+			MainActivity.pubnub.Subscribe<string>(ChannelName, DisplaySubscribeReturnMessage, DisplaySubscribeConnectStatusMessage, DisplayErrorMessage);
+			MainActivity.pubnub.Presence<string>(ChannelName, DisplayPresenceReturnMessage, DisplayPresenceConnectStatusMessage, DisplayErrorMessage);
+			GetHistory ();
+		}
+
+
+
+		public void GetHistory()
+		{
+			MainActivity.pubnub.DetailedHistory<string>(ChannelName, 100, HistoryReturnMessage, DisplayErrorMessage);
+
+
+		}
+
+
+		private void HistoryReturnMessage(string theMsg)
+		{
+			try {
+				List<string> topList = theMsg.FromJson<List<string>>();
+				string historyJSON = topList[0];
+				Console.WriteLine ("[pubnub] history: " + historyJSON);
+				List<ChatTurn>	historyList = historyJSON.FromJson<List<ChatTurn>>();
+				if (historyList != null) {
+					chatFragment.InsertHistory(historyList);
+					IncrementMessageCount(historyList.Count);
+				}
+			} catch (Exception exp) {
+				Console.WriteLine ("[pubnub] history parse error: " + theMsg);
+			}
+			MainActivity.pubnub.HereNow<string>(ChannelName, DisplayPresenceReturnMessage, DisplayErrorMessage);
+
+		}
+
+		private void DisplaySubscribeReturnMessage(string theMsg)
+		{
+			try {
+				string	jsonMsg = theMsg.Substring (theMsg.IndexOf ("{"), theMsg.IndexOf ("}"));
+				//string reparse = jsonMsg.FromJson<string>();
+				ChatTurn theTurn = jsonMsg.FromJson<ChatTurn> ();
+
+				if ((theTurn != null) && (chatFragment != null)) {
+					chatFragment.ShowTurn(theTurn);
+					IncrementMessageCount(1);
+				}
+			}
+			catch (Exception exp)
+			{
+				Console.WriteLine ("[pubnub] subscribe: invalid ChatTurn " + theMsg);
+			}
+		}
+
+		private void DisplayUnsubscribeReturnMessage(string theMsg)
+		{
+			Console.WriteLine ("[pubnub] unsubscribe: " + theMsg);
+		}
+
+
+		private void DisplayPresenceReturnMessage(string theMsg)
+		{
+			try {
+				string	jsonMsg = theMsg.Substring (theMsg.IndexOf ("{"), theMsg.IndexOf ("}"));
+				PresenceMessage msg = jsonMsg.FromJson<PresenceMessage>();
+				if ((msg != null) && (chatFragment != null))
+					chatFragment.UpdateCount(msg.occupancy);
+					
+			}
+			catch (Exception exp) {
+				Console.WriteLine ("[pubnub] presence err: " + theMsg);
+			}
+		}
+
+		public void IncrementMessageCount(int numMessages)
+		{
+			if (pager.CurrentItem != 2) {
+				NewMessageCount += numMessages;
+				UpdateMessageCountIndicator();
+			} else
+				NewMessageCount = 0;
+		}
+
+		public void ClearMessageCount()
+		{
+			NewMessageCount = 0;
+			UpdateMessageCountIndicator ();
+		}
+
+		private void UpdateMessageCountIndicator()
+		{
+			LinearLayout tabHolder = tabs.GetChildAt(0) as LinearLayout;
+			LinearLayout tab = tabHolder.GetChildAt (2) as LinearLayout;
+			if (tab != null) {
+				RunOnUiThread (() => {
+					
+					var counter = tab.FindViewById<TextView>(Resource.Id.counter);
+					if (NewMessageCount == 0)
+						counter.Visibility = ViewStates.Gone;
+					else {
+						counter.Visibility = ViewStates.Visible;
+						counter.Text = NewMessageCount.ToString();
+					}
+
+				});
+			}
+		}
+
+		private void DisplayPresenceConnectStatusMessage(string theMsg)
+		{
+			Console.WriteLine ("[pubnub] presence connect: " + theMsg);
+		}
+
+		private void DisplayPresenceDisconnectStatusMessage(string theMsg)
+		{
+			Console.WriteLine ("[pubnub] presence disconnect: " + theMsg);
+		}
+			
+
+		private void DisplaySubscribeConnectStatusMessage(string theMsg)
+		{
+			Console.WriteLine ("[pubnub] sub connect: " + theMsg);
+		}
+
+		private void DisplaySubscribeDisconnectStatusMessage(string theMsg)
+		{
+			Console.WriteLine ("sub disconnect: " + theMsg);
+		}
+
+
+		private void DisplayErrorMessage(PubnubClientError pubnubError)
+		{
+			Console.WriteLine ("[pubnub] Error: " + pubnubError.Message);
+		}
+
+		public void UnsubscribeFromImageChannel()
+		{
+
+			MainActivity.pubnub.Unsubscribe<string> (ChannelName, DisplayUnsubscribeReturnMessage, DisplaySubscribeConnectStatusMessage, DisplaySubscribeDisconnectStatusMessage, DisplayErrorMessage);
+			MainActivity.pubnub.PresenceUnsubscribe<string>(ChannelName, DisplayUnsubscribeReturnMessage, DisplayPresenceConnectStatusMessage, DisplayPresenceDisconnectStatusMessage, DisplayErrorMessage);
+
 		}
 
 		public void OnPageScrolled(int position, float positionOffset, int positionOffsetPixels)
@@ -160,8 +364,15 @@ namespace PhotoToss.AndroidApp
 
 			case 2:
 				// Stats
+				chatFragment.Update ();
+				ClearMessageCount ();
+				break;
+
+			case 3:
+				// Stats
 				statsFragment.Update();
 				break;
+
 
 			}
 		}
@@ -256,6 +467,7 @@ namespace PhotoToss.AndroidApp
 
 		private void btn_right_Click(object sender, EventArgs e)
 		{
+			/*
 			if (detailFragment != null) // that means it is active
 			{
 				Finish();
@@ -270,6 +482,14 @@ namespace PhotoToss.AndroidApp
 				Finish();
 				//commentsFragment.triggerCreateBlock();
 			}
+
+			if (chatFragment != null) // that means it is active
+			{
+				Finish();
+				//commentsFragment.triggerCreateBlock();
+			}
+			*/
+			Finish ();
 		}
 	}
 }

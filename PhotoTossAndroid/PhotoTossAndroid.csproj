@@ -146,9 +146,6 @@
     <Reference Include="GCM.Client">
       <HintPath>..\Components\GCMClient-1.0\lib\android\GCM.Client.dll</HintPath>
     </Reference>
-    <Reference Include="ByteSmith.WindowsAzure.Messaging.Android">
-      <HintPath>_external\ByteSmith.WindowsAzure.Messaging.Android.dll</HintPath>
-    </Reference>
     <Reference Include="System.Runtime.Serialization" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="Flurry.Analytics.Android">
@@ -224,6 +221,10 @@
     <Compile Include="Activities\ImageViewStatsFragment.cs" />
     <Compile Include="HelperClasses\TypefaceSpan.cs" />
     <Compile Include="Activities\PhotoLineageActivity.cs" />
+    <Compile Include="..\PhotoTossCore\pubnub.cs">
+      <Link>PhotoTossCore\pubnub.cs</Link>
+    </Compile>
+    <Compile Include="Activities\ImageViewChatFragment.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\AboutResources.txt" />
@@ -264,6 +265,10 @@
     <AndroidResource Include="Resources\layout\PhotoLineageCell.axml" />
     <None Include="_external\PubNubMessaging.dll" />
     <None Include="_external\Newtonsoft.Json.MonoDroid.dll" />
+    <AndroidResource Include="Resources\layout\ChatHistoryCell.axml" />
+    <AndroidResource Include="Resources\layout\ImageViewChatFragment.axml" />
+    <AndroidResource Include="Resources\layout\NotifyTabView.axml" />
+    <AndroidResource Include="Resources\drawable\RounderCorner.xml" />
   </ItemGroup>
   <ItemGroup>
     <AndroidResource Include="Resources\values\Strings.xml" />

@@ -13,6 +13,7 @@ using Android.Views;
 using Android.Widget;
 using PhotoToss.Core;
 
+
 namespace PhotoToss.AndroidApp
 {
 	public class ImageViewDetailFragment : Android.Support.V4.App.Fragment
@@ -20,6 +21,7 @@ namespace PhotoToss.AndroidApp
 		ImageView imageView;
 		public static int itemWidth = 320;
 		Android.Util.DisplayMetrics	metrics;
+
 
 		public override void OnCreate (Bundle savedInstanceState)
 		{
@@ -38,18 +40,27 @@ namespace PhotoToss.AndroidApp
 			int screenHeight = metrics.HeightPixels;
 			itemWidth = Math.Max (screenWidth, screenHeight);
 
-			imageView = fragment.FindViewById<ImageView>(Resource.Id.aztekView);
+			imageView = fragment.FindViewById<ImageView>(Resource.Id.imageView);
 			Koush.UrlImageViewHelper.SetUrlDrawable (imageView, curRec.imageUrl + "=s" + itemWidth.ToString(), Resource.Drawable.ic_camera);
+
 
 
 			return fragment;
 		}
+
+
 			
 		public void Update()
 		{
 
 		}
 
+	
+
+
+
 	}
+
+
 }
 
