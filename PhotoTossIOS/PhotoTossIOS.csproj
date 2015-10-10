@@ -223,13 +223,15 @@
     <InterfaceDefinition Include="Base.lproj\ImageStatsViewController.xib" />
     <InterfaceDefinition Include="Base.lproj\ImageViewController.xib" />
     <InterfaceDefinition Include="Base.lproj\LeaderboardViewController.xib" />
-    <InterfaceDefinition Include="Base.lproj\SettingsViewController.xib" />
     <InterfaceDefinition Include="Base.lproj\TossViewController.xib" />
     <InterfaceDefinition Include="Base.lproj\LaunchScreen.xib" />
     <InterfaceDefinition Include="Base.lproj\ImageInfoCell.xib" />
     <InterfaceDefinition Include="Base.lproj\TossedImageCell.xib" />
     <InterfaceDefinition Include="Base.lproj\TossInfoCell.xib" />
     <InterfaceDefinition Include="Base.lproj\TossProgressCell.xib" />
+    <InterfaceDefinition Include="Base.lproj\ChatHistoryCell.xib" />
+    <InterfaceDefinition Include="Base.lproj\ImageLineageCell.xib" />
+    <InterfaceDefinition Include="Base.lproj\LeaderboardCell.xib" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Info.plist" />
@@ -270,10 +272,6 @@
     <Compile Include="ViewControllers\ProfileViewController.cs" />
     <Compile Include="ViewControllers\ProfileViewController.designer.cs">
       <DependentUpon>ProfileViewController.cs</DependentUpon>
-    </Compile>
-    <Compile Include="ViewControllers\SettingsViewController.cs" />
-    <Compile Include="ViewControllers\SettingsViewController.designer.cs">
-      <DependentUpon>SettingsViewController.cs</DependentUpon>
     </Compile>
     <Compile Include="ViewControllers\AboutViewController.cs" />
     <Compile Include="ViewControllers\AboutViewController.designer.cs">
@@ -321,6 +319,18 @@
       <DependentUpon>TossProgressCell.cs</DependentUpon>
     </Compile>
     <Compile Include="ViewControllers\HomeViewController.cs" />
+    <Compile Include="Views\LeaderboardCell.cs" />
+    <Compile Include="Views\LeaderboardCell.designer.cs">
+      <DependentUpon>LeaderboardCell.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Views\ChatHistoryCell.cs" />
+    <Compile Include="Views\ChatHistoryCell.designer.cs">
+      <DependentUpon>ChatHistoryCell.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Views\ImageLineageCell.cs" />
+    <Compile Include="Views\ImageLineageCell.designer.cs">
+      <DependentUpon>ImageLineageCell.cs</DependentUpon>
+    </Compile>
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\iOS\Xamarin.iOS.CSharp.targets" />
   <ItemGroup>

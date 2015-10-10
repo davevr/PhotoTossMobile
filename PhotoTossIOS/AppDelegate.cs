@@ -121,13 +121,6 @@ namespace PhotoToss.iOSApp
 				},
 				new JVMenuViewControllerItem()
 				{
-					//New view controller, will be reused everytime the item is selected
-					Icon = UIImage.FromBundle(@"settings-48"),
-					Title = NSBundle.MainBundle.LocalizedString("Settings_Menu","Settings_Menu"),
-					ViewController = new SettingsViewController()
-				},
-				new JVMenuViewControllerItem()
-				{
 					Icon = UIImage.FromBundle(@"about-48"),
 					Title =NSBundle.MainBundle.LocalizedString("About_Menu","About_Menu"),
 					ViewController = new AboutViewController()

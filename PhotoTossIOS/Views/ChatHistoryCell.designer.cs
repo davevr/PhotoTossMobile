@@ -8,8 +8,8 @@ using Foundation;
 
 namespace PhotoToss.iOSApp
 {
-	[Register ("SettingsViewController")]
-	partial class SettingsViewController
+	[Register ("ChatHistoryCell")]
+	partial class ChatHistoryCell
 	{
 		void ReleaseDesignerOutlets ()
 		{
