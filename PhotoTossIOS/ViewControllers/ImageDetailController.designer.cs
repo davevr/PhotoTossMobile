@@ -13,6 +13,9 @@ namespace PhotoToss.iOSApp
 	partial class ImageDetailController
 	{
 		[Outlet]
+		UIKit.NSLayoutConstraint BottomSpacerHeight { get; set; }
+
+		[Outlet]
 		UIKit.UITextField CaptionTextField { get; set; }
 
 		[Outlet]
@@ -23,6 +26,11 @@ namespace PhotoToss.iOSApp
 		
 		void ReleaseDesignerOutlets ()
 		{
+			if (BottomSpacerHeight != null) {
+				BottomSpacerHeight.Dispose ();
+				BottomSpacerHeight = null;
+			}
+
 			if (CaptionTextField != null) {
 				CaptionTextField.Dispose ();
 				CaptionTextField = null;
