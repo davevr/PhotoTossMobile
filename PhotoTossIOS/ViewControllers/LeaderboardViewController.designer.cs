@@ -20,17 +20,25 @@ namespace PhotoToss.iOSApp
 
 		[Outlet]
 		UIKit.UITableView LeaderboardTable { get; set; }
+
+		[Outlet]
+		UIKit.UILabel TossTitle { get; set; }
 		
 		void ReleaseDesignerOutlets ()
 		{
-			if (FakeHeaderView != null) {
-				FakeHeaderView.Dispose ();
-				FakeHeaderView = null;
+			if (TossTitle != null) {
+				TossTitle.Dispose ();
+				TossTitle = null;
 			}
 
 			if (FakeHeaderHeight != null) {
 				FakeHeaderHeight.Dispose ();
 				FakeHeaderHeight = null;
+			}
+
+			if (FakeHeaderView != null) {
+				FakeHeaderView.Dispose ();
+				FakeHeaderView = null;
 			}
 
 			if (LeaderboardTable != null) {

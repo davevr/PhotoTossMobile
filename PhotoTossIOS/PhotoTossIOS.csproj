@@ -331,6 +331,7 @@
     <Compile Include="Views\ImageLineageCell.designer.cs">
       <DependentUpon>ImageLineageCell.cs</DependentUpon>
     </Compile>
+    <Compile Include="Collections\LeaderboardDataSource.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\iOS\Xamarin.iOS.CSharp.targets" />
   <ItemGroup>

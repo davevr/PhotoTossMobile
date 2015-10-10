@@ -66,6 +66,12 @@
                     <constraint firstItem="aH3-Kg-qzi" firstAttribute="top" secondItem="Zjn-SG-pAE" secondAttribute="bottom" constant="8" id="vpj-eD-piv"/>
                 </constraints>
             </tableViewCellContentView>
+            <connections>
+                <outlet property="ImageThumbnail" destination="aKD-8X-E7O" id="LY7-fU-0dH"/>
+                <outlet property="IndexLabel" destination="Mxl-aU-x6T" id="PHE-pA-CdW"/>
+                <outlet property="ShareCountLabel" destination="Zjn-SG-pAE" id="pzO-gt-L1B"/>
+                <outlet property="UserImage" destination="aH3-Kg-qzi" id="aAI-Di-1Oi"/>
+            </connections>
         </tableViewCell>
     </objects>
 </document>

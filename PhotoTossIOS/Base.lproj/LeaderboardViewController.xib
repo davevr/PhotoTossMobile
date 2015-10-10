@@ -9,6 +9,7 @@
                 <outlet property="FakeHeaderHeight" destination="t08-MF-VvO" id="SGo-mR-Le5"/>
                 <outlet property="FakeHeaderView" destination="21r-Sc-mle" id="iQC-Mq-sdN"/>
                 <outlet property="LeaderboardTable" destination="Vxn-jR-HgN" id="f3S-U2-5MM"/>
+                <outlet property="TossTitle" destination="ZxI-ID-ZyZ" id="kdY-rt-Guu"/>
                 <outlet property="view" destination="iN0-l3-epB" id="kCW-yf-GMq"/>
             </connections>
         </placeholder>
@@ -20,9 +21,9 @@
                 <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="background2.png" translatesAutoresizingMaskIntoConstraints="NO" id="CkL-s5-fhB">
                     <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
                 </imageView>
-                <tableView clipsSubviews="YES" contentMode="scaleToFill" fixedFrame="YES" alwaysBounceVertical="YES" style="plain" separatorStyle="default" rowHeight="64" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="Vxn-jR-HgN">
-                    <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
-                    <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" style="plain" separatorStyle="default" rowHeight="64" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="Vxn-jR-HgN">
+                    <rect key="frame" x="0.0" y="60" width="320" height="508"/>
+                    <color key="backgroundColor" white="1" alpha="0.5" colorSpace="calibratedWhite"/>
                 </tableView>
                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="21r-Sc-mle">
                     <rect key="frame" x="0.0" y="0.0" width="320" height="60"/>
@@ -52,8 +53,12 @@
             <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
             <constraints>
                 <constraint firstItem="21r-Sc-mle" firstAttribute="top" secondItem="iN0-l3-epB" secondAttribute="top" id="5Hb-Cw-hNI"/>
+                <constraint firstAttribute="bottom" secondItem="Vxn-jR-HgN" secondAttribute="bottom" id="LGN-SD-Sxi"/>
                 <constraint firstItem="21r-Sc-mle" firstAttribute="leading" secondItem="iN0-l3-epB" secondAttribute="leading" id="jbE-zd-HNY"/>
+                <constraint firstAttribute="trailing" secondItem="Vxn-jR-HgN" secondAttribute="trailing" id="jxO-eS-km2"/>
+                <constraint firstItem="Vxn-jR-HgN" firstAttribute="leading" secondItem="iN0-l3-epB" secondAttribute="leading" id="noB-dQ-Oah"/>
                 <constraint firstAttribute="trailing" secondItem="21r-Sc-mle" secondAttribute="trailing" id="o3M-XN-gjj"/>
+                <constraint firstItem="Vxn-jR-HgN" firstAttribute="top" secondItem="21r-Sc-mle" secondAttribute="bottom" id="uUa-11-fev"/>
             </constraints>
         </view>
     </objects>
