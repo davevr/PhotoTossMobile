@@ -13,7 +13,7 @@
         android:textStyle="italic"
         android:layout_marginLeft="8dp"
         android:layout_marginRight="8dp"
-        android:textColor="@color/PT_white" />
+        android:textColor="@color/PT_dark_teal" />
     <ListView
         android:minWidth="25px"
         android:minHeight="25px"

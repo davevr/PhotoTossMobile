@@ -13,7 +13,9 @@ namespace PhotoToss.iOSApp
 	public partial class ImageDetailController : UIViewController
 	{
 		public UIImage CurrentImage { get; set; }
+		private UIImageView newImageView { get; set;}
 
+		private nfloat nativeScale = 1;
 		public ImageDetailController () : base ("ImageDetailController", null)
 		{
 		}
@@ -30,19 +32,100 @@ namespace PhotoToss.iOSApp
 		public override void ViewDidLoad ()
 		{
 			base.ViewDidLoad ();
-			LargeImageView.ContentMode = UIViewContentMode.ScaleToFill;
-			// Perform any additional setup after loading the view, typically from a nib.
-			if ((LargeImageView != null) && (HomeViewController.CurrentPhotoRecord != null)) {
-				LargeImageView.SetImage(new NSUrl (HomeViewController.CurrentPhotoRecord.imageUrl + "=s1024"),
-					UIImage.FromBundle("placeholder"), ImageLoadComplete);
+
+			UITapGestureRecognizer doubletap = new UITapGestureRecognizer(OnDoubleTap) {
+				NumberOfTapsRequired = 2 // double tap
+			};
+			ImageScroller.AddGestureRecognizer(doubletap); 
+
+
+			CaptionTextField.Text = HomeViewController.CurrentPhotoRecord.caption;
+
+			SendBtn.TouchUpInside += (object sender, EventArgs e) => {
+				UpdateCaptionText();
+			};
+		}
+
+		private void OnDoubleTap (UIGestureRecognizer gesture) {
+			nfloat oldScale = ImageScroller.ZoomScale;
+			nfloat newScale = 1;
+
+			if (oldScale > 1)
+				newScale = 1;
+			else if (oldScale != nativeScale)
+				newScale = nativeScale;
+			else
+				newScale = 1;
+
+			ImageScroller.SetZoomScale(newScale, true);
+		}
+
+		public override void ViewDidAppear (bool animated)
+		{
+			base.ViewDidAppear (animated);
+			if (HomeViewController.CurrentPhotoRecord != null) {
+				SDWebImageManager.SharedManager.Download (
+					url: new NSUrl (HomeViewController.CurrentPhotoRecord.imageUrl + "=s2048"), 
+					options: SDWebImageOptions.CacheMemoryOnly,
+					progressHandler: (recievedSize, expectedSize) => {
+						// Track progress...
+					},
+					completedHandler: ImageLoadComplete);
+
+
+				//LargeImageView.SetImage(new NSUrl (HomeViewController.CurrentPhotoRecord.imageUrl + "=s2048"),
+				//UIImage.FromBundle("placeholder"), ImageLoadComplete);
 
 			}
 		}
-
-		private void ImageLoadComplete(UIImage image, NSError theErr, SDImageCacheType cacheType, NSUrl theURL )
+		private void UpdateCaptionText()
 		{
-			ResizeImage();
-			CurrentImage = image;
+			if (string.Compare (CaptionTextField.Text, HomeViewController.CurrentPhotoRecord.caption) != 0) {
+				SendBtn.Enabled = false;
+				CaptionTextField.Enabled = false;
+
+				PhotoTossRest.Instance.SetImageCaption (HomeViewController.CurrentPhotoRecord.id, CaptionTextField.Text, (newRec) => {
+					if (newRec != null) {
+						InvokeOnMainThread (() => {
+							HomeViewController.CurrentPhotoRecord.caption = newRec.caption;
+							SendBtn.Enabled = true;
+							CaptionTextField.Enabled = true;
+						});
+					}
+				});
+			}
+		}
+
+		private void ImageLoadComplete(UIImage image, NSError theErr, SDImageCacheType cacheType, bool finished, NSUrl theUrl )
+		{
+			System.Console.Out.WriteLine("image loaded");
+			InvokeOnMainThread (() => {
+				//ResizeImage();
+				CurrentImage = image;
+
+				CGRect bounds = new CGRect(new CGPoint(0,0), image.Size);
+				newImageView = new UIImageView(bounds);
+
+
+
+				newImageView.ContentMode = UIViewContentMode.ScaleAspectFill;
+				ImageScroller.AddSubview(newImageView);
+				newImageView.Image = image;
+				ImageScroller.ContentSize = image.Size;
+				//Set the zoom properties:
+				ImageScroller.MaximumZoomScale = 3f;
+				ImageScroller.MinimumZoomScale = .1f;
+				ImageScroller.ViewForZoomingInScrollView += (UIScrollView sv) => {
+					return newImageView;
+				};
+				CGSize scrollSize = ImageScroller.Bounds.Size;
+
+				nfloat hScale = scrollSize.Width / image.Size.Width;
+				nfloat vScale = scrollSize.Height / image.Size.Height;
+				nativeScale = hScale < vScale ? hScale : vScale;// (nfloat)Math.Min(hScale, vScale);
+				// compute initial scale
+				ImageScroller.SetZoomScale(nativeScale, true);
+			});
 		}
 
 
@@ -59,6 +142,7 @@ namespace PhotoToss.iOSApp
 			}
 		}
 
+		/*
 		private void ResizeImage ()
 		{
 			CGSize imageSize = LargeImageView.Image.Size;
@@ -67,6 +151,7 @@ namespace PhotoToss.iOSApp
 			ImageHeightConstraint.Constant = desiredHeight;
 			ImageScroller.ContentSize = new CGSize( LargeImageView.Bounds.Width, desiredHeight);
 		}
+		*/
 
 		public override bool PrefersStatusBarHidden ()
 		{
@@ -76,7 +161,7 @@ namespace PhotoToss.iOSApp
 		public override void DidRotate (UIInterfaceOrientation fromInterfaceOrientation)
 		{
 			base.DidRotate (fromInterfaceOrientation);
-			ResizeImage ();
+			//ResizeImage ();
 		}
 
 

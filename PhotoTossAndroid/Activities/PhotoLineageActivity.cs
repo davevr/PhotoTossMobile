@@ -116,7 +116,6 @@ namespace PhotoToss.AndroidApp
 			var photoTextStatic = view.FindViewById<TextView> (Resource.Id.photoTextStatic);
 			PhotoRecord curItem = allItems [position];
 
-			dateTossView.Text = string.Format ("{0}", position + 1);
 			string imageUrl, dateString, userUrl;
 
 			if (!String.IsNullOrEmpty (curItem.catchUrl)) {

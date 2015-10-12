@@ -379,7 +379,12 @@ namespace PhotoToss.iOSApp
 
 			public override void DidTapInfoWindowOfMarker(MapView mapView, Marker marker)
 			{
-				
+				ImageLineageViewController imageViewer = new ImageLineageViewController ();
+				if (imageViewer != null) {
+					PhotoRecord markerRecord = ((PhotoWrapper)marker.UserData).record; 
+					imageViewer.CurrentMarkerRecord = markerRecord;
+					this.controller.NavigationController.PushViewController (imageViewer, true);
+				}
 			}
 
 			public override UIView MarkerInfoContents(MapView mapView, Marker marker)

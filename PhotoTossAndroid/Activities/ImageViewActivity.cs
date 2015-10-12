@@ -24,11 +24,23 @@ using Android.Content.PM;
 using PhotoToss.Core;
 using PubNubMessaging.Core;
 using ServiceStack.Text;
-
+using Xamarin.Facebook;
+using Xamarin.Facebook.AppEvents;
+using Xamarin.Facebook.Login;
 
 namespace PhotoToss.AndroidApp
 {
 	[Activity(Theme = "@style/AppSubTheme", ScreenOrientation = ScreenOrientation.Portrait, WindowSoftInputMode = SoftInput.AdjustPan)]	
+	[IntentFilter (new[]{Intent.ActionView}, 
+		Categories=new[]{"android.intent.category.DEFAULT", "android.intent.category.BROWSABLE"},
+		DataScheme = "http",
+		DataHost = "www.phototoss.com",
+		DataPathPrefix = "/image/")]
+	[IntentFilter (new[]{Intent.ActionView}, 
+		Categories=new[]{"android.intent.category.DEFAULT", "android.intent.category.BROWSABLE"},
+		DataScheme = "http",
+		DataHost = "phototoss.com",
+		DataPathPrefix = "/image/")]
 	public class ImageViewActivity : Android.Support.V7.App.AppCompatActivity, ViewPager.IOnPageChangeListener
 	{
 		private Android.Support.V7.Widget.Toolbar toolbar = null;
@@ -38,7 +50,8 @@ namespace PhotoToss.AndroidApp
 		public static ImageViewChatFragment chatFragment;
 		public static int NewMessageCount {get; set;}
 		public static string ChannelName {get; set;}
-
+		private ProfileTracker profileTracker = null;
+		private ICallbackManager callbackManager = null;
 
 		private Android.Support.V7.Widget.ShareActionProvider actionProvider = null;
 
@@ -133,10 +146,141 @@ namespace PhotoToss.AndroidApp
 			SupportActionBar.SetDisplayShowHomeEnabled(false);
 			SupportActionBar.SetBackgroundDrawable(new Android.Graphics.Drawables.ColorDrawable( Resources.GetColor(Resource.Color.PT_light_teal)));
 
-
 			this.Title =  "Photo";
 
+			string actionStr = this.Intent.Action;
 
+			if (actionStr == Intent.ActionView) {
+				// we have launched this...
+				EnsureLogin();
+			} else {
+				int page = Intent.GetIntExtra("Page", 0);
+				FinishCreate (page);
+			}
+		}
+
+		private void EnsureLogin()
+		{
+			System.Console.Out.WriteLine ("In Ensure Login");
+			if (PhotoTossRest.Instance.CurrentUser == null) {
+				// attempt Facebook login
+				System.Console.Out.WriteLine ("No user - initing Facebook");
+				FacebookSdk.SdkInitialize (this.ApplicationContext);
+				callbackManager = CallbackManagerFactory.Create ();
+
+				var loginCallback = new FacebookCallback<LoginResult> {
+					HandleSuccess = loginResult => {
+						HandleLoginOK ();
+					},
+					HandleCancel = () => {
+						ShowAlert (
+							GetString (Resource.String.cancelled),
+							GetString (Resource.String.permission_not_granted));
+
+
+						HandleLoginCancel ();                        
+					},
+					HandleError = loginError => {
+						if (loginError is FacebookAuthorizationException) {
+							ShowAlert (
+								GetString (Resource.String.cancelled),
+								GetString (Resource.String.permission_not_granted));
+						}
+						HandleLoginError ();
+					}
+				};
+
+				LoginManager.Instance.RegisterCallback (callbackManager, loginCallback);
+
+				profileTracker = new CustomProfileTracker {
+					HandleCurrentProfileChanged = (oldProfile, currentProfile) => {
+						HandleLoginOK ();
+					}
+				};
+
+				LoginManager.Instance.LogInWithReadPermissions (this, new string[] { "public_profile" });
+
+
+
+			} else {
+				// already signed in - load the image
+				HandleImageLoad();
+			}
+		}
+
+		protected override void OnActivityResult(int requestCode, Android.App.Result resultCode, Intent data)
+		{
+			if (resultCode == Android.App.Result.Ok)
+			{
+				switch (requestCode) {
+
+
+				default:
+					base.OnActivityResult (requestCode, resultCode, data);
+					callbackManager.OnActivityResult (requestCode, (int)resultCode, data);
+					break;
+				}
+			}
+			else
+				base.OnActivityResult(requestCode, resultCode, data);
+		}
+
+		protected override void OnDestroy ()
+		{
+			if (profileTracker != null) {
+				profileTracker.StopTracking ();
+			}
+			base.OnDestroy ();
+		}
+
+		private void HandleLoginOK()
+		{
+			System.Console.Out.WriteLine ("In Handle Login OK");
+			var profile = Profile.CurrentProfile;
+			var accessToken = AccessToken.CurrentAccessToken;
+
+			if ((profile != null) && (accessToken != null)) {
+				PhotoTossRest.Instance.FacebookLogin(profile.Id, accessToken.Token, (newUser) =>
+					{
+						if (newUser != null)
+						{
+							// ok we have logged in!
+							HandleImageLoad();
+							MainActivity.pubnub = new Pubnub( "pub-c-910a2f43-9bdb-46e2-9174-0c25800ea8f9", "sub-c-0854b99c-6d53-11e5-945f-02ee2ddab7fe");
+						}
+					});
+
+			}
+		}
+
+		private void HandleLoginCancel()
+		{
+			Console.WriteLine ("Facebook: login canceled");
+		}
+
+		private void HandleLoginError()
+		{
+			Console.WriteLine ("Facebook: login error");
+		}
+
+		private void HandleImageLoad()
+		{
+			System.Console.Out.WriteLine ("In Image Load");
+			string theURL = this.Intent.DataString;
+			long theId = long.Parse(theURL.Substring(theURL.LastIndexOf("/")+1));
+			PhotoTossRest.Instance.GetImageById (theId, (theRecord) => {
+				if (theRecord != null) {
+					PhotoTossRest.Instance.CurrentImage = theRecord;
+					RunOnUiThread(() => {
+						FinishCreate(0);
+						SubscribeToImageChannel ();
+					});
+				}
+			});
+		}
+
+		private void FinishCreate(int defaultPage)
+		{
 			detailFragment = new ImageViewDetailFragment();
 			spreadFragment = new ImageViewSpreadFragment();
 			statsFragment = new ImageViewStatsFragment();
@@ -157,11 +301,7 @@ namespace PhotoToss.AndroidApp
 			//tabs.ShouldExpand = true;
 
 			tabs.SetTabTextColor(Color.White);
-
-
-			int page = Intent.GetIntExtra("Page", 0);
-
-			pager.CurrentItem = page;
+			pager.CurrentItem = defaultPage;
 
 		}
 
@@ -169,7 +309,7 @@ namespace PhotoToss.AndroidApp
 		protected override void OnStart ()
 		{
 			base.OnStart ();
-			SubscribeToImageChannel ();
+			//SubscribeToImageChannel ();
 		}
 
 		protected override void OnResume ()
@@ -187,27 +327,29 @@ namespace PhotoToss.AndroidApp
 		protected override void OnStop ()
 		{
 			base.OnStop ();
-			UnsubscribeFromImageChannel ();
+			//UnsubscribeFromImageChannel ();
 		}
 
 
 
 		public void SubscribeToImageChannel()
 		{
-			long imageId = PhotoTossRest.Instance.CurrentImage.originid;
-			if (imageId == 0)
-				imageId = PhotoTossRest.Instance.CurrentImage.id;
-			ChannelName = "image" + imageId.ToString ();
-			MainActivity.pubnub.Subscribe<string>(ChannelName, DisplaySubscribeReturnMessage, DisplaySubscribeConnectStatusMessage, DisplayErrorMessage);
-			MainActivity.pubnub.Presence<string>(ChannelName, DisplayPresenceReturnMessage, DisplayPresenceConnectStatusMessage, DisplayErrorMessage);
-			GetHistory ();
+			if (PhotoTossRest.Instance.CurrentImage != null) {
+				long imageId = PhotoTossRest.Instance.CurrentImage.originid;
+				if (imageId == 0)
+					imageId = PhotoTossRest.Instance.CurrentImage.id;
+				ChannelName = "image" + imageId.ToString ();
+				MainActivity.pubnub.Subscribe<string> (ChannelName, DisplaySubscribeReturnMessage, DisplaySubscribeConnectStatusMessage, DisplayErrorMessage);
+				MainActivity.pubnub.Presence<string> (ChannelName, DisplayPresenceReturnMessage, DisplayPresenceConnectStatusMessage, DisplayErrorMessage);
+				GetHistory ();
+			}
 		}
 
 
 
 		public void GetHistory()
 		{
-			MainActivity.pubnub.DetailedHistory<string>(ChannelName, 100, HistoryReturnMessage, DisplayErrorMessage);
+			MainActivity.pubnub.DetailedHistory<string>(ChannelName, 20, HistoryReturnMessage, DisplayErrorMessage);
 
 
 		}
@@ -216,13 +358,15 @@ namespace PhotoToss.AndroidApp
 		private void HistoryReturnMessage(string theMsg)
 		{
 			try {
-				List<string> topList = theMsg.FromJson<List<string>>();
-				string historyJSON = topList[0];
+				int startLoc = theMsg.IndexOf("[", 1);
+				int endLoc = theMsg.LastIndexOf("]",theMsg.Length - 2);
+				int strLen = (endLoc + 1) - startLoc;
+				string historyJSON = theMsg.Substring(startLoc, strLen);
 				Console.WriteLine ("[pubnub] history: " + historyJSON);
 				List<ChatTurn>	historyList = historyJSON.FromJson<List<ChatTurn>>();
 				if (historyList != null) {
 					chatFragment.InsertHistory(historyList);
-					IncrementMessageCount(historyList.Count);
+					ClearMessageCount();
 				}
 			} catch (Exception exp) {
 				Console.WriteLine ("[pubnub] history parse error: " + theMsg);
@@ -332,9 +476,10 @@ namespace PhotoToss.AndroidApp
 
 		public void UnsubscribeFromImageChannel()
 		{
-
-			MainActivity.pubnub.Unsubscribe<string> (ChannelName, DisplayUnsubscribeReturnMessage, DisplaySubscribeConnectStatusMessage, DisplaySubscribeDisconnectStatusMessage, DisplayErrorMessage);
-			MainActivity.pubnub.PresenceUnsubscribe<string>(ChannelName, DisplayUnsubscribeReturnMessage, DisplayPresenceConnectStatusMessage, DisplayPresenceDisconnectStatusMessage, DisplayErrorMessage);
+			if (PhotoTossRest.Instance.CurrentImage != null) {
+				MainActivity.pubnub.Unsubscribe<string> (ChannelName, DisplayUnsubscribeReturnMessage, DisplaySubscribeConnectStatusMessage, DisplaySubscribeDisconnectStatusMessage, DisplayErrorMessage);
+				MainActivity.pubnub.PresenceUnsubscribe<string> (ChannelName, DisplayUnsubscribeReturnMessage, DisplayPresenceConnectStatusMessage, DisplayPresenceDisconnectStatusMessage, DisplayErrorMessage);
+			}
 
 		}
 
@@ -391,16 +536,18 @@ namespace PhotoToss.AndroidApp
 			if (actionProvider == null)
 			{
 				PhotoRecord curImage = PhotoTossRest.Instance.CurrentImage;
-				string blahURL = curImage.ShareURL;
-				var shareItem = menu.FindItem(Resource.Id.shareBtn);
-				var nativeAction = MenuItemCompat.GetActionProvider(shareItem);
-				actionProvider = nativeAction.JavaCast<Android.Support.V7.Widget.ShareActionProvider>();
-				var intent = new Intent(Intent.ActionSend);
-				intent.SetType("text/plain");
-				intent.AddFlags(ActivityFlags.ClearWhenTaskReset);
-				intent.PutExtra(Intent.ExtraTitle, "Shared from PhotoToss");
-				intent.PutExtra(Intent.ExtraText, blahURL);
-				actionProvider.SetShareIntent(intent);
+				if (curImage != null) {
+					string imageUrl = curImage.ShareURL;
+					var shareItem = menu.FindItem (Resource.Id.shareBtn);
+					var nativeAction = MenuItemCompat.GetActionProvider (shareItem);
+					actionProvider = nativeAction.JavaCast<Android.Support.V7.Widget.ShareActionProvider> ();
+					var intent = new Intent (Intent.ActionSend);
+					intent.SetType ("text/plain");
+					intent.AddFlags (ActivityFlags.ClearWhenTaskReset);
+					intent.PutExtra (Intent.ExtraTitle, "Shared from PhotoToss");
+					intent.PutExtra (Intent.ExtraText, imageUrl);
+					actionProvider.SetShareIntent (intent);
+				}
 
 			}
 
@@ -463,6 +610,15 @@ namespace PhotoToss.AndroidApp
 			this.SupportActionBar.TitleFormatted = s;
 
 
+		}
+
+		void ShowAlert (string title, string msg, string buttonText = null)
+		{
+			new Android.Support.V7.App.AlertDialog.Builder (this)
+				.SetTitle (title)
+				.SetMessage (msg)
+				.SetPositiveButton (buttonText, (s2, e2) => { })
+				.Show ();
 		}
 
 		private void btn_right_Click(object sender, EventArgs e)

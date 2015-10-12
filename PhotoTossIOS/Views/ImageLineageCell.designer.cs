@@ -9,31 +9,32 @@ using System.CodeDom.Compiler;
 
 namespace PhotoToss.iOSApp
 {
-	[Register ("ImageDetailController")]
-	partial class ImageDetailController
+	[Register ("ImageLineageCell")]
+	partial class ImageLineageCell
 	{
 		[Outlet]
-		UIKit.NSLayoutConstraint BottomSpacerHeight { get; set; }
+		UIKit.UITextField CaptionField { get; set; }
 
 		[Outlet]
-		UIKit.UITextField CaptionTextField { get; set; }
+		UIKit.UILabel CaptionLabel { get; set; }
 
 		[Outlet]
 		UIKit.UIScrollView ImageScroller { get; set; }
 
 		[Outlet]
 		UIKit.UIButton SendBtn { get; set; }
+
+		[Outlet]
+		UIKit.UILabel TossDateLabel { get; set; }
+
+		[Outlet]
+		UIKit.UIImageView UserImageView { get; set; }
 		
 		void ReleaseDesignerOutlets ()
 		{
-			if (BottomSpacerHeight != null) {
-				BottomSpacerHeight.Dispose ();
-				BottomSpacerHeight = null;
-			}
-
-			if (CaptionTextField != null) {
-				CaptionTextField.Dispose ();
-				CaptionTextField = null;
+			if (UserImageView != null) {
+				UserImageView.Dispose ();
+				UserImageView = null;
 			}
 
 			if (ImageScroller != null) {
@@ -41,9 +42,24 @@ namespace PhotoToss.iOSApp
 				ImageScroller = null;
 			}
 
+			if (TossDateLabel != null) {
+				TossDateLabel.Dispose ();
+				TossDateLabel = null;
+			}
+
 			if (SendBtn != null) {
 				SendBtn.Dispose ();
 				SendBtn = null;
+			}
+
+			if (CaptionLabel != null) {
+				CaptionLabel.Dispose ();
+				CaptionLabel = null;
+			}
+
+			if (CaptionField != null) {
+				CaptionField.Dispose ();
+				CaptionField = null;
 			}
 		}
 	}
