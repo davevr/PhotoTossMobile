@@ -4,6 +4,9 @@ using System;
 using Foundation;
 using UIKit;
 using PhotoToss.Core;
+using PubNubMessaging.Core;
+using ServiceStack.Text;
+using System.Collections.Generic;
 
 namespace PhotoToss.iOSApp
 {
@@ -12,28 +15,30 @@ namespace PhotoToss.iOSApp
 		public delegate void ImageDeletedDelegate(PhotoRecord theImage);
 		public event ImageDeletedDelegate ImageDeleted;
 
-		private ImageDetailController tab1;
-		private ImageSpreadViewController tab2;
-		private ImageChatViewController tab3;
-		private ImageStatsViewController tab4;
+		private ImageDetailController detailTab;
+		private ImageSpreadViewController spreadTab;
+		private ImageChatViewController chatTab;
+		private ImageStatsViewController statsTab;
+		public static int NewMessageCount {get; set;}
+		public static string ChannelName {get; set;}
 
 		public ImageViewController () : base ("ImageViewController", null)
 		{
-			tab1 = new ImageDetailController();
-			tab1.TabBarItem = new UITabBarItem ("Image", UIImage.FromBundle ("CameraIcon"), 0);
+			detailTab = new ImageDetailController();
+			detailTab.TabBarItem = new UITabBarItem ("Image", UIImage.FromBundle ("CameraIcon"), 0);
 
 		
-			tab2 = new ImageSpreadViewController();
-			tab2.TabBarItem = new UITabBarItem ("Spread", UIImage.FromBundle ("SpreadIcon"), 1);
+			spreadTab = new ImageSpreadViewController();
+			spreadTab.TabBarItem = new UITabBarItem ("Spread", UIImage.FromBundle ("SpreadIcon"), 1);
 
-			tab3 = new ImageChatViewController();
-			tab3.TabBarItem = new UITabBarItem ("Chat", UIImage.FromBundle ("ChatIcon"), 2);
+			chatTab = new ImageChatViewController();
+			chatTab.TabBarItem = new UITabBarItem ("Chat", UIImage.FromBundle ("ChatIcon"), 2);
 
-			tab4 = new ImageStatsViewController();
-			tab4.TabBarItem = new UITabBarItem ("Stats", UIImage.FromBundle ("StatsIcon"), 3);
+			statsTab = new ImageStatsViewController();
+			statsTab.TabBarItem = new UITabBarItem ("Stats", UIImage.FromBundle ("StatsIcon"), 3);
 
 			var tabs = new UIViewController[] {
-				tab1, tab2, tab3, tab4
+				detailTab, spreadTab, chatTab, statsTab
 			};
 
 			ViewControllers = tabs;
@@ -86,7 +91,7 @@ namespace PhotoToss.iOSApp
 
 			UIBarButtonItem shareBtn = new UIBarButtonItem (UIBarButtonSystemItem.Action, (sender, eventArg) => 
 				{
-					NSUrl newURL = new NSUrl(HomeViewController.CurrentPhotoRecord.ShareURL);
+					NSUrl newURL = new NSUrl(PhotoTossRest.Instance.CurrentImage.ShareURL);
 					var activityViewController = new UIActivityViewController(new NSObject[] {newURL }, null)
 					{
 
@@ -98,6 +103,9 @@ namespace PhotoToss.iOSApp
 			deleteBtn.TintColor = UIColor.Black;
 			shareBtn.TintColor = UIColor.Black;
 			NavigationItem.RightBarButtonItems = new UIBarButtonItem[] {shareBtn, deleteBtn, tossBtn};
+			NewMessageCount = 0;
+			SubscribeToImageChannel ();
+
 		}
 
 
@@ -108,9 +116,9 @@ namespace PhotoToss.iOSApp
 
 		public void RemoveImage()
 		{
-			PhotoRecord deadImage = HomeViewController.CurrentPhotoRecord;
-			PhotoTossRest.Instance.RemoveImage (HomeViewController.CurrentPhotoRecord.id, false, (theResult) => {
-				HomeViewController.CurrentPhotoRecord = null;
+			PhotoRecord deadImage = PhotoTossRest.Instance.CurrentImage;
+			PhotoTossRest.Instance.RemoveImage (PhotoTossRest.Instance.CurrentImage.id, false, (theResult) => {
+				PhotoTossRest.Instance.CurrentImage = null;
 				InvokeOnMainThread(() => {
 					NavigationController.PopViewController (true);
 					if (ImageDeleted != null)
@@ -121,9 +129,9 @@ namespace PhotoToss.iOSApp
 
 		public void RemoveAllTosses()
 		{
-			PhotoRecord deadImage = HomeViewController.CurrentPhotoRecord;
-			PhotoTossRest.Instance.RemoveImage(HomeViewController.CurrentPhotoRecord.id, true, (theResult) => {
-				HomeViewController.CurrentPhotoRecord = null;
+			PhotoRecord deadImage = PhotoTossRest.Instance.CurrentImage;
+			PhotoTossRest.Instance.RemoveImage(PhotoTossRest.Instance.CurrentImage.id, true, (theResult) => {
+				PhotoTossRest.Instance.CurrentImage = null;
 				InvokeOnMainThread(() => {
 					NavigationController.PopViewController (true);
 					if (ImageDeleted != null)
@@ -131,6 +139,160 @@ namespace PhotoToss.iOSApp
 				});
 
 			});
+		}
+
+		public override void ViewDidUnload ()
+		{
+			SubscribeToImageChannel ();
+			base.ViewDidUnload ();
+		}
+
+		public void SubscribeToImageChannel()
+		{
+			if (PhotoTossRest.Instance.CurrentImage != null) {
+				long imageId = PhotoTossRest.Instance.CurrentImage.originid;
+				if (imageId == 0)
+					imageId = PhotoTossRest.Instance.CurrentImage.id;
+				ChannelName = "image" + imageId.ToString ();
+				AppDelegate.pubnub.Subscribe<string> (ChannelName, DisplaySubscribeReturnMessage, DisplaySubscribeConnectStatusMessage, DisplayErrorMessage);
+				AppDelegate.pubnub.Presence<string> (ChannelName, DisplayPresenceReturnMessage, DisplayPresenceConnectStatusMessage, DisplayErrorMessage);
+				GetHistory ();
+			}
+		}
+
+
+
+		public void GetHistory()
+		{
+			AppDelegate.pubnub.DetailedHistory<string>(ChannelName, 20, HistoryReturnMessage, DisplayErrorMessage);
+
+
+		}
+
+
+		private void HistoryReturnMessage(string theMsg)
+		{
+			try {
+				int startLoc = theMsg.IndexOf("[", 1);
+				int endLoc = theMsg.LastIndexOf("]",theMsg.Length - 2);
+				int strLen = (endLoc + 1) - startLoc;
+				string historyJSON = theMsg.Substring(startLoc, strLen);
+				Console.WriteLine ("[pubnub] history: " + historyJSON);
+				List<ChatTurn>	historyList = historyJSON.FromJson<List<ChatTurn>>();
+				if (historyList != null) {
+					chatTab.InsertHistory(historyList);
+					ClearMessageCount();
+				}
+			} catch (Exception exp) {
+				Console.WriteLine ("[pubnub] history parse error: " + theMsg);
+			}
+			AppDelegate.pubnub.HereNow<string>(ChannelName, DisplayPresenceReturnMessage, DisplayErrorMessage);
+
+		}
+
+		private void DisplaySubscribeReturnMessage(string theMsg)
+		{
+			try {
+				string	jsonMsg = theMsg.Substring (theMsg.IndexOf ("{"), theMsg.IndexOf ("}"));
+				//string reparse = jsonMsg.FromJson<string>();
+				ChatTurn theTurn = jsonMsg.FromJson<ChatTurn> ();
+
+				if ((theTurn != null) && (chatTab != null)) {
+					chatTab.ShowTurn(theTurn);
+					IncrementMessageCount(1);
+				}
+			}
+			catch (Exception exp)
+			{
+				Console.WriteLine ("[pubnub] subscribe: invalid ChatTurn " + theMsg);
+			}
+		}
+
+		private void DisplayUnsubscribeReturnMessage(string theMsg)
+		{
+			Console.WriteLine ("[pubnub] unsubscribe: " + theMsg);
+		}
+
+
+		private void DisplayPresenceReturnMessage(string theMsg)
+		{
+			try {
+				string	jsonMsg = theMsg.Substring (theMsg.IndexOf ("{"), theMsg.IndexOf ("}"));
+				PresenceMessage msg = jsonMsg.FromJson<PresenceMessage>();
+				if ((msg != null) && (chatTab != null))
+					chatTab.UpdateCount(msg.occupancy);
+
+			}
+			catch (Exception exp) {
+				Console.WriteLine ("[pubnub] presence err: " + theMsg);
+			}
+		}
+
+		public void IncrementMessageCount(int numMessages)
+		{
+			InvokeOnMainThread (() => {
+				if (this.SelectedIndex != 2) {
+					NewMessageCount += numMessages;
+					UpdateMessageCountIndicator ();
+				} else
+					NewMessageCount = 0;
+			});
+		}
+
+		public void ClearMessageCount()
+		{
+			NewMessageCount = 0;
+			UpdateMessageCountIndicator ();
+		}
+
+		private void UpdateMessageCountIndicator()
+		{
+			if (chatTab != null) {
+				InvokeOnMainThread (() => {
+					if (NewMessageCount == 0)
+						chatTab.TabBarItem.BadgeValue = null;
+					else {
+						chatTab.TabBarItem.BadgeValue = NewMessageCount.ToString();
+					}
+
+				});
+			}
+		}
+
+		private void DisplayPresenceConnectStatusMessage(string theMsg)
+		{
+			Console.WriteLine ("[pubnub] presence connect: " + theMsg);
+		}
+
+		private void DisplayPresenceDisconnectStatusMessage(string theMsg)
+		{
+			Console.WriteLine ("[pubnub] presence disconnect: " + theMsg);
+		}
+
+
+		private void DisplaySubscribeConnectStatusMessage(string theMsg)
+		{
+			Console.WriteLine ("[pubnub] sub connect: " + theMsg);
+		}
+
+		private void DisplaySubscribeDisconnectStatusMessage(string theMsg)
+		{
+			Console.WriteLine ("sub disconnect: " + theMsg);
+		}
+
+
+		private void DisplayErrorMessage(PubnubClientError pubnubError)
+		{
+			Console.WriteLine ("[pubnub] Error: " + pubnubError.Message);
+		}
+
+		public void UnsubscribeFromImageChannel()
+		{
+			if (PhotoTossRest.Instance.CurrentImage != null) {
+				AppDelegate.pubnub.Unsubscribe<string> (ChannelName, DisplayUnsubscribeReturnMessage, DisplaySubscribeConnectStatusMessage, DisplaySubscribeDisconnectStatusMessage, DisplayErrorMessage);
+				AppDelegate.pubnub.PresenceUnsubscribe<string> (ChannelName, DisplayUnsubscribeReturnMessage, DisplayPresenceConnectStatusMessage, DisplayPresenceDisconnectStatusMessage, DisplayErrorMessage);
+			}
+
 		}
 
 	}

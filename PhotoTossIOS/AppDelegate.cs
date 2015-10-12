@@ -9,6 +9,7 @@ using JVMenuPopover;
 using HockeyApp;
 using Google.Maps;
 using WindowsAzure.Messaging;
+using PubNubMessaging.Core;
 
 
 namespace PhotoToss.iOSApp
@@ -34,6 +35,7 @@ namespace PhotoToss.iOSApp
 		public static GoogleAnalytics   analytics = null;
 		public UINavigationController NavigationController {get; set;}
 		private NSDictionary savedOptions = null;
+		public static Pubnub pubnub;
 
 		public override bool FinishedLaunching (UIApplication app, NSDictionary options)
 		{
@@ -82,6 +84,9 @@ namespace PhotoToss.iOSApp
 				System.Threading.Tasks.TaskScheduler.UnobservedTaskException += (sender, e) => 
 					Setup.ThrowExceptionAsNative(e.Exception);
 			});
+
+			// init pubnub
+			pubnub = new Pubnub( "pub-c-910a2f43-9bdb-46e2-9174-0c25800ea8f9", "sub-c-0854b99c-6d53-11e5-945f-02ee2ddab7fe");
 
 			MapServices.ProvideAPIKey (MapsApiKey);
 			// This method verifies if you have been logged into the app before, and keep you logged in after you reopen or kill your app.

@@ -117,6 +117,9 @@
     <Reference Include="GoogleMaps">
       <HintPath>..\Components\googlemapsios-1.9.2\lib\ios-unified\GoogleMaps.dll</HintPath>
     </Reference>
+    <Reference Include="PubnubMessaging">
+      <HintPath>libs\PubnubMessaging.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <ImageAsset Include="Resources\Images.xcassets\AppIcons.appiconset\Contents.json">
@@ -345,6 +348,9 @@
     <Compile Include="ViewControllers\ImageChatViewController.designer.cs">
       <DependentUpon>ImageChatViewController.cs</DependentUpon>
     </Compile>
+    <Compile Include="..\PhotoTossCore\pubnub.cs">
+      <Link>PhotoTossCore\pubnub.cs</Link>
+    </Compile>
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\iOS\Xamarin.iOS.CSharp.targets" />
   <ItemGroup>
@@ -431,5 +437,6 @@
     <Folder Include="Resources\zh-Hans.lproj\" />
     <Folder Include="Resources\fr.lproj\" />
     <Folder Include="Resources\Fonts\" />
+    <Folder Include="libs\" />
   </ItemGroup>
 </Project>

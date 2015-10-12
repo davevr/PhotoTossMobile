@@ -59,7 +59,7 @@ namespace PhotoToss.iOSApp
 		public override void ViewDidAppear (bool animated)
 		{
 			base.ViewDidAppear (animated);
-			long imageId = HomeViewController.CurrentPhotoRecord.id;
+			long imageId = PhotoTossRest.Instance.CurrentImage.id;
 			LocationHelper.StartLocationManager (CoreLocation.CLLocation.AccuracyBest);
 			LocationHelper.LocationResult curLoc = LocationHelper.GetLocationResult ();
 			LocationHelper.StopLocationManager ();

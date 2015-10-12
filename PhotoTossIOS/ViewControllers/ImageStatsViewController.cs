@@ -37,7 +37,7 @@ namespace PhotoToss.iOSApp
 
 		private void UpdateStats()
 		{
-			PhotoTossRest.Instance.GetImageStats(HomeViewController.CurrentPhotoRecord.id, DrawStats);
+			PhotoTossRest.Instance.GetImageStats(PhotoTossRest.Instance.CurrentImage.id, DrawStats);
 		}
 
 		private void DrawStats(ImageStatsRecord theStats)

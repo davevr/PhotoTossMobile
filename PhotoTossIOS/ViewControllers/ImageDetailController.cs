@@ -39,7 +39,7 @@ namespace PhotoToss.iOSApp
 			ImageScroller.AddGestureRecognizer(doubletap); 
 
 
-			CaptionTextField.Text = HomeViewController.CurrentPhotoRecord.caption;
+			CaptionTextField.Text = PhotoTossRest.Instance.CurrentImage.caption;
 
 			SendBtn.TouchUpInside += (object sender, EventArgs e) => {
 				UpdateCaptionText();
@@ -63,9 +63,9 @@ namespace PhotoToss.iOSApp
 		public override void ViewDidAppear (bool animated)
 		{
 			base.ViewDidAppear (animated);
-			if (HomeViewController.CurrentPhotoRecord != null) {
+			if (PhotoTossRest.Instance.CurrentImage != null) {
 				SDWebImageManager.SharedManager.Download (
-					url: new NSUrl (HomeViewController.CurrentPhotoRecord.imageUrl + "=s2048"), 
+					url: new NSUrl (PhotoTossRest.Instance.CurrentImage.imageUrl + "=s2048"), 
 					options: SDWebImageOptions.CacheMemoryOnly,
 					progressHandler: (recievedSize, expectedSize) => {
 						// Track progress...
@@ -73,21 +73,21 @@ namespace PhotoToss.iOSApp
 					completedHandler: ImageLoadComplete);
 
 
-				//LargeImageView.SetImage(new NSUrl (HomeViewController.CurrentPhotoRecord.imageUrl + "=s2048"),
+				//LargeImageView.SetImage(new NSUrl (PhotoTossRest.Instance.CurrentImage.imageUrl + "=s2048"),
 				//UIImage.FromBundle("placeholder"), ImageLoadComplete);
 
 			}
 		}
 		private void UpdateCaptionText()
 		{
-			if (string.Compare (CaptionTextField.Text, HomeViewController.CurrentPhotoRecord.caption) != 0) {
+			if (string.Compare (CaptionTextField.Text, PhotoTossRest.Instance.CurrentImage.caption) != 0) {
 				SendBtn.Enabled = false;
 				CaptionTextField.Enabled = false;
 
-				PhotoTossRest.Instance.SetImageCaption (HomeViewController.CurrentPhotoRecord.id, CaptionTextField.Text, (newRec) => {
+				PhotoTossRest.Instance.SetImageCaption (PhotoTossRest.Instance.CurrentImage.id, CaptionTextField.Text, (newRec) => {
 					if (newRec != null) {
 						InvokeOnMainThread (() => {
-							HomeViewController.CurrentPhotoRecord.caption = newRec.caption;
+							PhotoTossRest.Instance.CurrentImage.caption = newRec.caption;
 							SendBtn.Enabled = true;
 							CaptionTextField.Enabled = true;
 						});

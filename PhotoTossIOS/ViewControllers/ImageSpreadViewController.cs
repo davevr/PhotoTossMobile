@@ -94,7 +94,7 @@ namespace PhotoToss.iOSApp
 			{
 				theHue = UIColor.Red;
 			}
-			if (theRec == HomeViewController.CurrentPhotoRecord)
+			if (theRec == PhotoTossRest.Instance.CurrentImage)
 				theHue = UIColor.Blue;
 
 			CLLocationCoordinate2D newLoc = GetPhotoLocation (theRec);
@@ -191,18 +191,18 @@ namespace PhotoToss.iOSApp
 			if (isUpdated)
 				return;
 			isUpdated = true;
-			CLLocationCoordinate2D baseMap = GetPhotoLocation(HomeViewController.CurrentPhotoRecord);
+			CLLocationCoordinate2D baseMap = GetPhotoLocation(PhotoTossRest.Instance.CurrentImage);
 			CLLocationCoordinate2D southWest = new CLLocationCoordinate2D(baseMap.Latitude - 0.01, baseMap.Longitude - 0.01);
 			CLLocationCoordinate2D northEast = new CLLocationCoordinate2D(baseMap.Latitude + 0.01, baseMap.Longitude + 0.01);
 			markerBounds = new CoordinateBounds(southWest, northEast);
-			AddMarker (HomeViewController.CurrentPhotoRecord, "your image");
+			AddMarker (PhotoTossRest.Instance.CurrentImage, "your image");
 
-			if (HomeViewController.CurrentPhotoRecord.tossid != 0) {
-				PhotoTossRest.Instance.GetImageLineage (HomeViewController.CurrentPhotoRecord.id, (parentList) => {
+			if (PhotoTossRest.Instance.CurrentImage.tossid != 0) {
+				PhotoTossRest.Instance.GetImageLineage (PhotoTossRest.Instance.CurrentImage.id, (parentList) => {
 					if ((parentList != null) && (parentList.Count > 0))
 					{
 						MutablePath newPath = new MutablePath();
-						newPath.AddCoordinate(GetPhotoLocation(HomeViewController.CurrentPhotoRecord));
+						newPath.AddCoordinate(GetPhotoLocation(PhotoTossRest.Instance.CurrentImage));
 						int parentCount = 1;
 						string parentString;
 
@@ -235,7 +235,7 @@ namespace PhotoToss.iOSApp
 				ShowAll();
 			}
 
-			ShowImageChildren(HomeViewController.CurrentPhotoRecord);
+			ShowImageChildren(PhotoTossRest.Instance.CurrentImage);
 
 		}
 

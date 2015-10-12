@@ -30,7 +30,7 @@ namespace PhotoToss.iOSApp
 	public partial class HomeViewController : JVMenuViewController, IUICollectionViewDelegate
 	{
 		public static AVCaptureSession session;
-		public static PhotoRecord CurrentPhotoRecord { get; set; }
+
 		DispatchQueue queue;
 		private UIView loadingOverlay = null;
 		List<string> readPermissions = new List<string> { "public_profile" };
@@ -129,7 +129,7 @@ namespace PhotoToss.iOSApp
 		[Export ("collectionView:didSelectItemAtIndexPath:")]
 		public void ItemSelected (UIKit.UICollectionView collectionView, Foundation.NSIndexPath indexPath)
 		{
-			CurrentPhotoRecord = ((TossedImageDataSource)TossedImageCollectionView.DataSource).GetItem (indexPath);
+			PhotoTossRest.Instance.CurrentImage = ((TossedImageDataSource)TossedImageCollectionView.DataSource).GetItem (indexPath);
 
 			ImageViewController imageViewer = new ImageViewController ();
 			if (imageViewer != null) {
