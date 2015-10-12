@@ -212,6 +212,10 @@
     <ImageAsset Include="Resources\Images.xcassets\DeleteIcon.imageset\ic_delete.png">
       <InProject>false</InProject>
     </ImageAsset>
+    <ImageAsset Include="Resources\Images.xcassets\ChatIcon.imageset\Contents.json" />
+    <ImageAsset Include="Resources\Images.xcassets\ChatIcon.imageset\chat25.png" />
+    <ImageAsset Include="Resources\Images.xcassets\ChatIcon.imageset\chat50.png" />
+    <ImageAsset Include="Resources\Images.xcassets\ChatIcon.imageset\chat75.png" />
   </ItemGroup>
   <ItemGroup>
     <InterfaceDefinition Include="Base.lproj\ProfileViewController.xib" />

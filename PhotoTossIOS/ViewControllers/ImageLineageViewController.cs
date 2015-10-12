@@ -55,6 +55,11 @@ namespace PhotoToss.iOSApp
 			});
 
 		}
+
+		public override bool PrefersStatusBarHidden ()
+		{
+			return true;
+		}
 	}
 
 	public class LineageDataSource : UITableViewDataSource

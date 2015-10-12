@@ -371,6 +371,11 @@ namespace PhotoToss.iOSApp
 			dateView.TextAlignment = UITextAlignment.Left;
 		}
 
+		public override bool PrefersStatusBarHidden ()
+		{
+			return true;
+		}
+
 		public class MapDelegate : MapViewDelegate
 		{
 			public ImageSpreadViewController controller { get; set;}

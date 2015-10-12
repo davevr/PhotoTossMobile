@@ -26,6 +26,13 @@ namespace PhotoToss.iOSApp
 			
 			// Perform any additional setup after loading the view, typically from a nib.
 		}
+
+		public override bool PrefersStatusBarHidden ()
+		{
+			return true;
+		}
+
+
 	}
 }
 
