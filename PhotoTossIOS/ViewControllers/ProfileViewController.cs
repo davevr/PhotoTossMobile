@@ -37,6 +37,13 @@ namespace PhotoToss.iOSApp
 		{
 			base.ViewDidLoad ();
 
+			FakeHeaderView.Layer.ShadowOffset = new CGSize (1, 5);
+			FakeHeaderView.Layer.ShadowColor = new CGColor (0, 0, 0);
+			FakeHeaderView.Layer.ShadowOpacity = 0.5f;
+
+			ViewTitle.AttributedText = new NSAttributedString("Profile", UIFont.FromName("RammettoOne-Regular", 17),
+				UIColor.FromRGB(255,121,0));
+			
 			AddFacebookUI ();
 
 			// Perform any additional setup after loading the view, typically from a nib.
@@ -53,6 +60,7 @@ namespace PhotoToss.iOSApp
 		{
 			var bounds = UIScreen.MainScreen.Bounds;
 
+
 			Profile.Notifications.ObserveDidChange ((sender, e) => {
 
 				if (e.NewProfile == null) {
@@ -67,7 +75,7 @@ namespace PhotoToss.iOSApp
 			});
 
 			// Set the Read and Publish permissions you want to get
-			loginButton = new LoginButton (new CGRect (80, 120, 220, 46)) {
+			loginButton = new LoginButton (new CGRect ((bounds.Width / 2) - 64, 232, 128, 30)) {
 				LoginBehavior = LoginBehavior.Native,
 				ReadPermissions = readPermissions.ToArray ()
 			};
@@ -92,20 +100,14 @@ namespace PhotoToss.iOSApp
 			};
 
 			// The user image profile is set automatically once is logged in
-			pictureView = new ProfilePictureView (new CGRect (80, 200, 220, 220));
+			pictureView = new ProfilePictureView (new CGRect ((bounds.Width /2 ) - 64, 98, 128,128));
 
-			// Create the label that will hold user's facebook name
-			nameLabel = new UILabel (new CGRect (20, 420, 280, 21)) {
-				TextAlignment = UITextAlignment.Center,
-				BackgroundColor = UIColor.Clear
-			};
 
 
 
 			// Add views to main view
 			View.AddSubview (loginButton);
 			View.AddSubview (pictureView);
-			View.AddSubview (nameLabel);
 
 		}
 
@@ -156,16 +158,26 @@ namespace PhotoToss.iOSApp
 
 					// Get your profile name
 					var userInfo = result as NSDictionary;
-
-					InvokeOnMainThread (() => {
-						nameLabel.Text = userInfo["name"].ToString();
-						pictureView.ProfileId = userInfo["id"].ToString();
-
+					PhotoTossRest.Instance.GetUserStats((theStats) => {
+						InvokeOnMainThread (() => {
+							ProfileNameLabel.Text = userInfo["name"].ToString();
+							pictureView.ProfileId = userInfo["id"].ToString();
+							TossesCount.Text = theStats.numtosses.ToString();
+							CatchesCount.Text = theStats.numcatches.ToString();
+							TakenCount.Text = theStats.numoriginals.ToString();
+							CollectedCount.Text = theStats.numimages.ToString();
+						});
 					});
 				});
 			} else {
-				nameLabel.Text = "";
-				pictureView.ProfileId = null;
+				InvokeOnMainThread (() => {
+					ProfileNameLabel.Text = "";
+					pictureView.ProfileId = null;
+					TossesCount.Text = "--";
+					CatchesCount.Text = "--";
+					TakenCount.Text = "--";
+					CollectedCount.Text = "--";
+				});
 			}
 
 		}
