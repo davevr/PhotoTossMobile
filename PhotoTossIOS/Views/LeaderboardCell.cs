@@ -30,7 +30,7 @@ namespace PhotoToss.iOSApp
 			IndexLabel.Text = (index + 1).ToString ();
 			string thumbnailURL = thePhoto.imageUrl + "=s128-c";
 			ImageThumbnail.SetImage(new NSUrl(thumbnailURL), UIImage.FromBundle("placeholder"));
-			string statsStr = string.Format ("shared {0} times", thePhoto.tossCount);
+			string statsStr = string.Format ("shared {0} times", thePhoto.totalshares);
 			ShareCountLabel.Text = statsStr;
 			UserImage.SetImage (new NSUrl(PhotoTossRest.Instance.GetUserProfileImage (thePhoto.ownername)), UIImage.FromBundle ("unknownperson"));
 

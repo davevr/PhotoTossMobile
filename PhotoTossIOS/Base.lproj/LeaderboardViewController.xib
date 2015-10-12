@@ -18,7 +18,7 @@
             <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>
-                <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="background2.png" translatesAutoresizingMaskIntoConstraints="NO" id="CkL-s5-fhB">
+                <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="background2.png" translatesAutoresizingMaskIntoConstraints="NO" id="CkL-s5-fhB">
                     <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
                 </imageView>
                 <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" style="plain" separatorStyle="default" rowHeight="64" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="Vxn-jR-HgN">
@@ -34,7 +34,7 @@
                                 <fragment content="Leaderboard">
                                     <attributes>
                                         <color key="NSColor" red="1" green="0.47450980392156861" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
-                                        <font key="NSFont" size="17" name="RammettoOne-Regular"/>
+                                        <font key="NSFont" metaFont="system" size="17"/>
                                         <paragraphStyle key="NSParagraphStyle" alignment="left" lineBreakMode="wordWrapping" baseWritingDirection="natural"/>
                                     </attributes>
                                 </fragment>
@@ -52,9 +52,13 @@
             </subviews>
             <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
             <constraints>
+                <constraint firstAttribute="bottom" secondItem="CkL-s5-fhB" secondAttribute="bottom" id="2fi-EC-J0l"/>
+                <constraint firstAttribute="trailing" secondItem="CkL-s5-fhB" secondAttribute="trailing" id="45O-Cm-QlN"/>
                 <constraint firstItem="21r-Sc-mle" firstAttribute="top" secondItem="iN0-l3-epB" secondAttribute="top" id="5Hb-Cw-hNI"/>
                 <constraint firstAttribute="bottom" secondItem="Vxn-jR-HgN" secondAttribute="bottom" id="LGN-SD-Sxi"/>
+                <constraint firstItem="CkL-s5-fhB" firstAttribute="leading" secondItem="iN0-l3-epB" secondAttribute="leading" id="jNZ-ta-h3Z"/>
                 <constraint firstItem="21r-Sc-mle" firstAttribute="leading" secondItem="iN0-l3-epB" secondAttribute="leading" id="jbE-zd-HNY"/>
+                <constraint firstItem="CkL-s5-fhB" firstAttribute="top" secondItem="iN0-l3-epB" secondAttribute="top" id="jrp-s7-sl8"/>
                 <constraint firstAttribute="trailing" secondItem="Vxn-jR-HgN" secondAttribute="trailing" id="jxO-eS-km2"/>
                 <constraint firstItem="Vxn-jR-HgN" firstAttribute="leading" secondItem="iN0-l3-epB" secondAttribute="leading" id="noB-dQ-Oah"/>
                 <constraint firstAttribute="trailing" secondItem="21r-Sc-mle" secondAttribute="trailing" id="o3M-XN-gjj"/>

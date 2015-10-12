@@ -232,6 +232,7 @@
     <InterfaceDefinition Include="Base.lproj\ChatHistoryCell.xib" />
     <InterfaceDefinition Include="Base.lproj\ImageLineageCell.xib" />
     <InterfaceDefinition Include="Base.lproj\LeaderboardCell.xib" />
+    <InterfaceDefinition Include="Base.lproj\ImageLineageViewController.xib" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Info.plist" />
@@ -331,7 +332,10 @@
     <Compile Include="Views\ImageLineageCell.designer.cs">
       <DependentUpon>ImageLineageCell.cs</DependentUpon>
     </Compile>
-    <Compile Include="Collections\LeaderboardDataSource.cs" />
+    <Compile Include="ViewControllers\ImageLineageViewController.cs" />
+    <Compile Include="ViewControllers\ImageLineageViewController.designer.cs">
+      <DependentUpon>ImageLineageViewController.cs</DependentUpon>
+    </Compile>
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\iOS\Xamarin.iOS.CSharp.targets" />
   <ItemGroup>
