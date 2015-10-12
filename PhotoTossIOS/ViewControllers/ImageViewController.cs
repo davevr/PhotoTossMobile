@@ -14,7 +14,8 @@ namespace PhotoToss.iOSApp
 
 		private ImageDetailController tab1;
 		private ImageSpreadViewController tab2;
-		private ImageStatsViewController tab3;
+		private ImageChatViewController tab3;
+		private ImageStatsViewController tab4;
 
 		public ImageViewController () : base ("ImageViewController", null)
 		{
@@ -24,14 +25,15 @@ namespace PhotoToss.iOSApp
 		
 			tab2 = new ImageSpreadViewController();
 			tab2.TabBarItem = new UITabBarItem ("Spread", UIImage.FromBundle ("SpreadIcon"), 1);
-			//tab2.View.BackgroundColor = UIColor.Orange;
 
-			tab3 = new ImageStatsViewController();
-			tab3.TabBarItem = new UITabBarItem ("Stats", UIImage.FromBundle ("StatsIcon"), 2);
-			tab3.View.BackgroundColor = UIColor.Red;
+			tab3 = new ImageChatViewController();
+			tab3.TabBarItem = new UITabBarItem ("Chat", UIImage.FromBundle ("ChatIcon"), 2);
+
+			tab4 = new ImageStatsViewController();
+			tab4.TabBarItem = new UITabBarItem ("Stats", UIImage.FromBundle ("StatsIcon"), 3);
 
 			var tabs = new UIViewController[] {
-				tab1, tab2, tab3
+				tab1, tab2, tab3, tab4
 			};
 
 			ViewControllers = tabs;

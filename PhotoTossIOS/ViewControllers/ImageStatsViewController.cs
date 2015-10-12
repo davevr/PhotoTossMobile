@@ -3,6 +3,8 @@ using System;
 
 using Foundation;
 using UIKit;
+using PhotoToss.Core;
+
 
 namespace PhotoToss.iOSApp
 {
@@ -25,11 +27,35 @@ namespace PhotoToss.iOSApp
 			base.ViewDidLoad ();
 			
 			// Perform any additional setup after loading the view, typically from a nib.
+			UpdateStats();
 		}
 
 		public override bool PrefersStatusBarHidden ()
 		{
 			return true;
+		}
+
+		private void UpdateStats()
+		{
+			PhotoTossRest.Instance.GetImageStats(HomeViewController.CurrentPhotoRecord.id, DrawStats);
+		}
+
+		private void DrawStats(ImageStatsRecord theStats)
+		{
+			InvokeOnMainThread (() => {
+				if (theStats != null) {
+					TotalImageText.Text = theStats.numcopies.ToString();
+					ImageLineageText.Text = theStats.numparents.ToString();
+					ImageTossesText.Text = theStats.numtosses.ToString();
+					ImageCatchesText.Text =theStats.numchildren.ToString();
+				} else {
+					TotalImageText.Text = "--";
+					ImageLineageText.Text = "--";
+					ImageTossesText.Text = "--";
+					ImageCatchesText.Text = "--";
+				}
+			});
+
 		}
 	}
 }
