@@ -427,6 +427,7 @@
     <BundleResource Include="Resources\Fonts\RammettoOne-Regular.ttf">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </BundleResource>
+    <BundleResource Include="Resources\tosstopus.png" />
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>

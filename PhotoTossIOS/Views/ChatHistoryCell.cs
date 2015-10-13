@@ -3,6 +3,7 @@ using System;
 
 using Foundation;
 using UIKit;
+using PhotoToss.Core;
 
 namespace PhotoToss.iOSApp
 {
@@ -18,6 +19,11 @@ namespace PhotoToss.iOSApp
 		public static ChatHistoryCell Create ()
 		{
 			return (ChatHistoryCell)Nib.Instantiate (null, null) [0];
+		}
+
+		public void ConformToRecord (ChatTurn curItem, int index)
+		{
+
 		}
 	}
 }

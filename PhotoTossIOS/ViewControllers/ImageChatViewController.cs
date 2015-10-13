@@ -13,6 +13,7 @@ namespace PhotoToss.iOSApp
 	{
 		private long lastSpeaker = 0;
 		private List<ChatTurn> turnList = new List<ChatTurn>();
+		ChatHistoryDataSource dataSource;
 
 		public ImageChatViewController () : base ("ImageChatViewController", null)
 		{
@@ -31,6 +32,11 @@ namespace PhotoToss.iOSApp
 			base.ViewDidLoad ();
 			
 			// Perform any additional setup after loading the view, typically from a nib.
+			ChatHistoryTableView.RegisterNibForCellReuse(UINib.FromName(ChatHistoryCell.Key, NSBundle.MainBundle), ChatHistoryCell.Key);
+			dataSource = new ChatHistoryDataSource ();
+			dataSource.chatList = turnList;
+			ChatHistoryTableView.DataSource = dataSource;
+			ChatHistoryTableView.ReloadData ();
 		}
 
 		public override bool PrefersStatusBarHidden ()
@@ -63,15 +69,12 @@ namespace PhotoToss.iOSApp
 
 		private void RefreshListView()
 		{
-			/*
-			if (this.View != null) {
-				Activity.RunOnUiThread (() => {
-					adapter.NotifyDataSetChanged ();
-					chatHistoryView.InvalidateViews ();
-					chatHistoryView.SmoothScrollToPosition (turnList.Count - 1);
+			InvokeOnMainThread(() => {
+				ChatHistoryTableView.ReloadData ();
+				ChatHistoryTableView.ScrollToRow(NSIndexPath.FromRowSection(turnList.Count-1, 0), UITableViewScrollPosition.Bottom, true);
+
 				});
-			}
-			*/
+
 		}
 
 		public override void ViewDidAppear (bool animated)
@@ -90,7 +93,7 @@ namespace PhotoToss.iOSApp
 
 			turnList = historyList;
 			if (this.View != null) {
-				//adapter.allItems = turnList;
+				dataSource.chatList = turnList;
 				RefreshListView ();
 			}
 		}
@@ -134,6 +137,44 @@ namespace PhotoToss.iOSApp
 		{
 			Console.WriteLine ("[pubnub] Error: " + pubnubError.Message);
 		}
+	}
+
+	public class ChatHistoryDataSource : UITableViewDataSource
+	{
+		public List<ChatTurn> chatList;
+
+		public ChatHistoryDataSource ()
+		{
+		}
+		public override UITableViewCell GetCell (UITableView tableView, NSIndexPath indexPath)
+		{
+			var cell = (ChatHistoryCell)tableView.DequeueReusableCell (new NSString(ChatHistoryCell.Key), indexPath);
+			ChatTurn curTurn = chatList [(int)indexPath.Item];
+
+			cell.ConformToRecord (curTurn, indexPath.Row);
+
+
+			return cell;
+		}
+
+
+		public override nint NumberOfSections (UITableView collectionView)
+		{
+			return 1;
+		}
+
+		public override nint RowsInSection (UITableView tableView, nint section)
+		{
+			return chatList.Count;
+		}
+
+
+
+		public ChatTurn GetItem(NSIndexPath indexPath)
+		{
+			return chatList [(int)indexPath.Item];
+		}
+
 	}
 }
 

@@ -25,30 +25,6 @@
                 <imageView userInteractionEnabled="NO" alpha="0.25" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="background2.png" translatesAutoresizingMaskIntoConstraints="NO" id="Y9f-Ve-tU9">
                     <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
                 </imageView>
-                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="TBY-sl-jar">
-                    <rect key="frame" x="0.0" y="0.0" width="320" height="60"/>
-                    <subviews>
-                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" usesAttributedText="YES" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="tYE-Gg-XqN">
-                            <rect key="frame" x="60" y="39" width="42" height="17"/>
-                            <attributedString key="attributedText">
-                                <fragment content="Profile">
-                                    <attributes>
-                                        <color key="NSColor" red="1" green="0.47450980392156861" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
-                                        <font key="NSFont" metaFont="system" size="17"/>
-                                        <paragraphStyle key="NSParagraphStyle" alignment="left" lineBreakMode="wordWrapping" baseWritingDirection="natural"/>
-                                    </attributes>
-                                </fragment>
-                            </attributedString>
-                            <nil key="highlightedColor"/>
-                        </label>
-                    </subviews>
-                    <color key="backgroundColor" red="0.0" green="0.61960784310000006" blue="0.56078431370000004" alpha="1" colorSpace="calibratedRGB"/>
-                    <constraints>
-                        <constraint firstAttribute="bottom" secondItem="tYE-Gg-XqN" secondAttribute="bottom" constant="4" id="ZAc-xZ-vBw"/>
-                        <constraint firstAttribute="height" constant="60" id="qo0-3f-2e4"/>
-                        <constraint firstItem="tYE-Gg-XqN" firstAttribute="leading" secondItem="TBY-sl-jar" secondAttribute="leading" constant="60" id="x5P-Z2-n8C"/>
-                    </constraints>
-                </view>
                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Here be your profile" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="JgC-Dh-Fbw">
                     <rect key="frame" x="8" y="68" width="304" height="21"/>
                     <fontDescription key="fontDescription" type="system" pointSize="17"/>
@@ -135,6 +111,30 @@
                     <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
                     <nil key="highlightedColor"/>
                 </label>
+                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="TBY-sl-jar">
+                    <rect key="frame" x="0.0" y="0.0" width="320" height="60"/>
+                    <subviews>
+                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" usesAttributedText="YES" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="tYE-Gg-XqN">
+                            <rect key="frame" x="60" y="39" width="42" height="17"/>
+                            <attributedString key="attributedText">
+                                <fragment content="Profile">
+                                    <attributes>
+                                        <color key="NSColor" red="1" green="0.47450980392156861" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
+                                        <font key="NSFont" metaFont="system" size="17"/>
+                                        <paragraphStyle key="NSParagraphStyle" alignment="left" lineBreakMode="wordWrapping" baseWritingDirection="natural"/>
+                                    </attributes>
+                                </fragment>
+                            </attributedString>
+                            <nil key="highlightedColor"/>
+                        </label>
+                    </subviews>
+                    <color key="backgroundColor" red="0.0" green="0.61960784310000006" blue="0.56078431370000004" alpha="1" colorSpace="calibratedRGB"/>
+                    <constraints>
+                        <constraint firstAttribute="bottom" secondItem="tYE-Gg-XqN" secondAttribute="bottom" constant="4" id="ZAc-xZ-vBw"/>
+                        <constraint firstAttribute="height" constant="60" id="qo0-3f-2e4"/>
+                        <constraint firstItem="tYE-Gg-XqN" firstAttribute="leading" secondItem="TBY-sl-jar" secondAttribute="leading" constant="60" id="x5P-Z2-n8C"/>
+                    </constraints>
+                </view>
             </subviews>
             <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
             <constraints>
