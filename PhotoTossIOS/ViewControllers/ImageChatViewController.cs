@@ -36,7 +36,13 @@ namespace PhotoToss.iOSApp
 			dataSource = new ChatHistoryDataSource ();
 			dataSource.chatList = turnList;
 			ChatHistoryTableView.DataSource = dataSource;
+			ChatHistoryTableView.RowHeight = UITableView.AutomaticDimension;
+			ChatHistoryTableView.EstimatedRowHeight = 58;
 			ChatHistoryTableView.ReloadData ();
+
+			SendBtn.TouchUpInside += (object sender, EventArgs e) => {
+				SubmitTextTurn ();
+			};
 		}
 
 		public override bool PrefersStatusBarHidden ()
@@ -46,17 +52,12 @@ namespace PhotoToss.iOSApp
 
 		private void SubmitTextTurn()
 		{
-			/*
-			InputMethodManager imm = (InputMethodManager)Activity.GetSystemService(Context.InputMethodService);
-			imm.HideSoftInputFromWindow(turnTextField.WindowToken, 0);
-
-			string turnText = turnTextField.Text;
+			string turnText = ChatTurnField.Text;
 			if (!string.IsNullOrEmpty(turnText)) {
 				PublishMessage(turnText);
 
-				turnTextField.Text = "";
+				ChatTurnField.Text = "";
 			}	
-*/
 		}
 
 		public void ShowTurn(ChatTurn theTurn)
@@ -69,11 +70,13 @@ namespace PhotoToss.iOSApp
 
 		private void RefreshListView()
 		{
-			InvokeOnMainThread(() => {
-				ChatHistoryTableView.ReloadData ();
-				ChatHistoryTableView.ScrollToRow(NSIndexPath.FromRowSection(turnList.Count-1, 0), UITableViewScrollPosition.Bottom, true);
+			if (ChatHistoryTableView != null) {
+				InvokeOnMainThread (() => {
+					ChatHistoryTableView.ReloadData ();
+					ChatHistoryTableView.ScrollToRow (NSIndexPath.FromRowSection (turnList.Count - 1, 0), UITableViewScrollPosition.Bottom, true);
 
 				});
+			}
 
 		}
 

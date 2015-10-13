@@ -10,25 +10,25 @@
         <tableViewCell contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" rowHeight="57" id="cxk-wN-pdQ" customClass="ChatHistoryCell">
             <rect key="frame" x="0.0" y="0.0" width="403" height="59"/>
             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-            <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="cxk-wN-pdQ" id="YTl-1W-gDM">
+            <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" ambiguous="YES" tableViewCell="cxk-wN-pdQ" id="YTl-1W-gDM">
                 <rect key="frame" x="0.0" y="0.0" width="403" height="58"/>
                 <autoresizingMask key="autoresizingMask"/>
                 <subviews>
-                    <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="aGf-Jf-Vc7">
+                    <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" ambiguous="YES" translatesAutoresizingMaskIntoConstraints="NO" id="aGf-Jf-Vc7">
                         <rect key="frame" x="8" y="4" width="48" height="48"/>
                         <constraints>
                             <constraint firstAttribute="width" constant="48" id="KgQ-Ai-QWo"/>
                             <constraint firstAttribute="height" constant="48" id="mLE-cu-bN3"/>
                         </constraints>
                     </imageView>
-                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" ambiguous="YES" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="bix-nO-Tew">
-                        <rect key="frame" x="303" y="8" width="36" height="17"/>
+                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" ambiguous="YES" misplaced="YES" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="bix-nO-Tew">
+                        <rect key="frame" x="303" y="8" width="36" height="42"/>
                         <color key="backgroundColor" red="0.039215686274509803" green="0.61568627450980395" blue="0.56470588235294117" alpha="1" colorSpace="calibratedRGB"/>
                         <fontDescription key="fontDescription" type="system" pointSize="14"/>
                         <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                         <nil key="highlightedColor"/>
                     </label>
-                    <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="lPz-MA-Ndd">
+                    <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" ambiguous="YES" translatesAutoresizingMaskIntoConstraints="NO" id="lPz-MA-Ndd">
                         <rect key="frame" x="347" y="4" width="48" height="48"/>
                         <constraints>
                             <constraint firstAttribute="width" constant="48" id="j8b-vC-2ZO"/>
@@ -38,14 +38,14 @@
                 </subviews>
                 <constraints>
                     <constraint firstItem="aGf-Jf-Vc7" firstAttribute="leading" secondItem="YTl-1W-gDM" secondAttribute="leading" constant="8" id="4mG-OJ-Ku3"/>
-                    <constraint firstAttribute="bottom" relation="greaterThanOrEqual" secondItem="bix-nO-Tew" secondAttribute="bottom" constant="4" id="Bmg-pi-jp3"/>
+                    <constraint firstAttribute="bottom" relation="greaterThanOrEqual" secondItem="bix-nO-Tew" secondAttribute="bottom" constant="8" id="Bmg-pi-jp3"/>
                     <constraint firstAttribute="trailing" secondItem="lPz-MA-Ndd" secondAttribute="trailing" constant="8" id="JN3-md-f0k"/>
                     <constraint firstItem="bix-nO-Tew" firstAttribute="top" secondItem="YTl-1W-gDM" secondAttribute="top" constant="8" id="Kjl-WV-hiT"/>
                     <constraint firstItem="bix-nO-Tew" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="YTl-1W-gDM" secondAttribute="leading" constant="64" id="a8V-Ba-f2m"/>
                     <constraint firstAttribute="trailing" relation="greaterThanOrEqual" secondItem="bix-nO-Tew" secondAttribute="trailing" priority="800" constant="64" id="eY6-d5-axx"/>
                     <constraint firstItem="lPz-MA-Ndd" firstAttribute="top" secondItem="YTl-1W-gDM" secondAttribute="top" constant="4" id="pge-Ub-2kR"/>
                     <constraint firstAttribute="bottom" relation="greaterThanOrEqual" secondItem="lPz-MA-Ndd" secondAttribute="bottom" constant="4" id="qph-hQ-ccE"/>
-                    <constraint firstAttribute="bottomMargin" secondItem="aGf-Jf-Vc7" secondAttribute="bottom" priority="800" constant="4" id="rcl-Fc-3jQ"/>
+                    <constraint firstAttribute="bottomMargin" relation="greaterThanOrEqual" secondItem="aGf-Jf-Vc7" secondAttribute="bottom" constant="4" id="rcl-Fc-3jQ"/>
                     <constraint firstItem="aGf-Jf-Vc7" firstAttribute="top" secondItem="YTl-1W-gDM" secondAttribute="top" constant="4" id="wDP-RN-TdL"/>
                 </constraints>
             </tableViewCellContentView>

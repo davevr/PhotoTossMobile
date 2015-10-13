@@ -25,19 +25,19 @@
                     <nil key="highlightedColor"/>
                 </label>
                 <button opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="249" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="UfF-0F-0fA">
-                    <rect key="frame" x="262" y="530" width="50" height="30"/>
+                    <rect key="frame" x="262" y="482" width="50" height="30"/>
                     <constraints>
                         <constraint firstAttribute="width" constant="50" id="oOS-kU-ohB"/>
                     </constraints>
                     <state key="normal" title="send"/>
                 </button>
                 <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" horizontalHuggingPriority="750" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="z9F-WC-0rK">
-                    <rect key="frame" x="8" y="530" width="246" height="30"/>
+                    <rect key="frame" x="8" y="482" width="246" height="30"/>
                     <fontDescription key="fontDescription" type="system" pointSize="14"/>
                     <textInputTraits key="textInputTraits"/>
                 </textField>
                 <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="5I5-U2-aEO">
-                    <rect key="frame" x="0.0" y="33" width="320" height="489"/>
+                    <rect key="frame" x="0.0" y="33" width="320" height="441"/>
                     <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                 </tableView>
             </subviews>
@@ -45,14 +45,14 @@
             <constraints>
                 <constraint firstAttribute="trailing" secondItem="UfF-0F-0fA" secondAttribute="trailing" constant="8" id="1FK-hd-oHF"/>
                 <constraint firstItem="5I5-U2-aEO" firstAttribute="leading" secondItem="iN0-l3-epB" secondAttribute="leading" id="DDH-er-my1"/>
-                <constraint firstAttribute="bottom" secondItem="UfF-0F-0fA" secondAttribute="bottom" constant="8" id="GbI-6k-jRJ"/>
+                <constraint firstAttribute="bottom" secondItem="UfF-0F-0fA" secondAttribute="bottom" constant="56" id="GbI-6k-jRJ"/>
                 <constraint firstAttribute="trailing" secondItem="5I5-U2-aEO" secondAttribute="trailing" id="IgF-GH-vcg"/>
                 <constraint firstItem="z9F-WC-0rK" firstAttribute="top" secondItem="5I5-U2-aEO" secondAttribute="bottom" constant="8" id="K2n-bq-pQa"/>
                 <constraint firstAttribute="trailing" secondItem="xbM-1B-XFr" secondAttribute="trailing" constant="8" id="LLO-ct-9mc"/>
                 <constraint firstItem="xbM-1B-XFr" firstAttribute="top" secondItem="iN0-l3-epB" secondAttribute="top" constant="8" id="Rpu-TB-w2n"/>
                 <constraint firstItem="5I5-U2-aEO" firstAttribute="top" secondItem="xbM-1B-XFr" secondAttribute="bottom" constant="8" id="bqF-bB-P5b"/>
                 <constraint firstItem="xbM-1B-XFr" firstAttribute="leading" secondItem="iN0-l3-epB" secondAttribute="leading" constant="8" id="c3Y-Bf-3rB"/>
-                <constraint firstAttribute="bottom" secondItem="z9F-WC-0rK" secondAttribute="bottom" constant="8" id="hAx-Ks-I17"/>
+                <constraint firstAttribute="bottom" secondItem="z9F-WC-0rK" secondAttribute="bottom" constant="56" id="hAx-Ks-I17"/>
                 <constraint firstItem="z9F-WC-0rK" firstAttribute="leading" secondItem="iN0-l3-epB" secondAttribute="leading" constant="8" id="pNG-yp-1a6"/>
                 <constraint firstItem="UfF-0F-0fA" firstAttribute="leading" secondItem="z9F-WC-0rK" secondAttribute="trailing" constant="8" id="pPY-xv-oBB"/>
             </constraints>
