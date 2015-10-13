@@ -22,16 +22,30 @@ namespace PhotoToss.iOSApp
 		UIKit.UILabel ChatTurnLabel { get; set; }
 
 		[Outlet]
+		UIKit.UIView ChatTurnWrapper { get; set; }
+
+		[Outlet]
 		UIKit.UIImageView MyImage { get; set; }
+
+		[Outlet]
+		UIKit.NSLayoutConstraint MyImageHeight { get; set; }
+
+		[Outlet]
+		UIKit.NSLayoutConstraint OtherPersonHeight { get; set; }
 
 		[Outlet]
 		UIKit.UIImageView OtherPersonImage { get; set; }
 		
 		void ReleaseDesignerOutlets ()
 		{
-			if (OtherPersonImage != null) {
-				OtherPersonImage.Dispose ();
-				OtherPersonImage = null;
+			if (ChatLeftConstraint != null) {
+				ChatLeftConstraint.Dispose ();
+				ChatLeftConstraint = null;
+			}
+
+			if (ChatRightConstraint != null) {
+				ChatRightConstraint.Dispose ();
+				ChatRightConstraint = null;
 			}
 
 			if (ChatTurnLabel != null) {
@@ -44,14 +58,24 @@ namespace PhotoToss.iOSApp
 				MyImage = null;
 			}
 
-			if (ChatRightConstraint != null) {
-				ChatRightConstraint.Dispose ();
-				ChatRightConstraint = null;
+			if (OtherPersonImage != null) {
+				OtherPersonImage.Dispose ();
+				OtherPersonImage = null;
 			}
 
-			if (ChatLeftConstraint != null) {
-				ChatLeftConstraint.Dispose ();
-				ChatLeftConstraint = null;
+			if (ChatTurnWrapper != null) {
+				ChatTurnWrapper.Dispose ();
+				ChatTurnWrapper = null;
+			}
+
+			if (OtherPersonHeight != null) {
+				OtherPersonHeight.Dispose ();
+				OtherPersonHeight = null;
+			}
+
+			if (MyImageHeight != null) {
+				MyImageHeight.Dispose ();
+				MyImageHeight = null;
 			}
 		}
 	}

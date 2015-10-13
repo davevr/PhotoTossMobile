@@ -31,6 +31,8 @@ namespace PhotoToss.iOSApp
 
 			MyImage.Hidden = true;
 			OtherPersonImage.Hidden = true;
+			MyImageHeight.Constant = 0;
+			OtherPersonHeight.Constant = 0;
 
 			if (curItem.sameUser) {
 				showImage = false;
@@ -40,30 +42,34 @@ namespace PhotoToss.iOSApp
 				RemoveConstraint(ChatConstraint);
 				ChatConstraint = null;
 			}
+
+			ChatTurnWrapper.Layer.CornerRadius = 5;
 				
 		
 			if (curItem.userid == PhotoTossRest.Instance.CurrentUser.id) {
 				// current user - show to the reight
 				ChatTurnLabel.TextAlignment = UITextAlignment.Right;
-				ChatTurnLabel.BackgroundColor = UIColor.FromRGB (1,124,112);
+				ChatTurnWrapper.BackgroundColor = UIColor.FromRGB (1,124,112);
 				ChatConstraint = NSLayoutConstraint.Create (this, NSLayoutAttribute.Trailing,
-					NSLayoutRelation.Equal, ChatTurnLabel, NSLayoutAttribute.Trailing, 1, 64);
+					NSLayoutRelation.Equal, ChatTurnWrapper, NSLayoutAttribute.Trailing, 1, 64);
 				this.AddConstraint (ChatConstraint);
 		
 				if (showImage) {
 					MyImage.Hidden = false;
+					MyImageHeight.Constant = 48;
 					MyImage.SetImage (new NSUrl (curItem.userimage), UIImage.FromBundle ("unknownperson"));
 				}
 			} else {
 				// some other user - show to the left
 				ChatTurnLabel.TextAlignment = UITextAlignment.Left;
-				ChatTurnLabel.BackgroundColor = UIColor.FromRGB (213, 88, 2);
-				ChatConstraint = NSLayoutConstraint.Create (ChatTurnLabel, NSLayoutAttribute.Leading,
+				ChatTurnWrapper.BackgroundColor = UIColor.FromRGB (213, 88, 2);
+				ChatConstraint = NSLayoutConstraint.Create (ChatTurnWrapper, NSLayoutAttribute.Leading,
 					NSLayoutRelation.Equal, this, NSLayoutAttribute.Leading, 1, 64);
 				this.AddConstraint (ChatConstraint);
 
 				if (showImage) {
 					OtherPersonImage.Hidden = false;
+					OtherPersonHeight.Constant = 48;
 					OtherPersonImage.SetImage (new NSUrl (curItem.userimage), UIImage.FromBundle ("unknownperson"));
 				}
 			}

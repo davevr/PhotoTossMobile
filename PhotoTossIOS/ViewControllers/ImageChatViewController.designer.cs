@@ -22,6 +22,9 @@ namespace PhotoToss.iOSApp
 		UIKit.UITextField ChatTurnField { get; set; }
 
 		[Outlet]
+		UIKit.UIView NoChatMessage { get; set; }
+
+		[Outlet]
 		UIKit.UIButton SendBtn { get; set; }
 		
 		void ReleaseDesignerOutlets ()
@@ -29,11 +32,6 @@ namespace PhotoToss.iOSApp
 			if (ChatCountLabel != null) {
 				ChatCountLabel.Dispose ();
 				ChatCountLabel = null;
-			}
-
-			if (SendBtn != null) {
-				SendBtn.Dispose ();
-				SendBtn = null;
 			}
 
 			if (ChatHistoryTableView != null) {
@@ -44,6 +42,16 @@ namespace PhotoToss.iOSApp
 			if (ChatTurnField != null) {
 				ChatTurnField.Dispose ();
 				ChatTurnField = null;
+			}
+
+			if (SendBtn != null) {
+				SendBtn.Dispose ();
+				SendBtn = null;
+			}
+
+			if (NoChatMessage != null) {
+				NoChatMessage.Dispose ();
+				NoChatMessage = null;
 			}
 		}
 	}

@@ -9,6 +9,7 @@
                 <outlet property="ChatCountLabel" destination="xbM-1B-XFr" id="4y3-ce-yLe"/>
                 <outlet property="ChatHistoryTableView" destination="5I5-U2-aEO" id="c1X-lB-yBG"/>
                 <outlet property="ChatTurnField" destination="z9F-WC-0rK" id="wBl-5u-dg3"/>
+                <outlet property="NoChatMessage" destination="81l-Cc-b05" id="lqZ-Eg-IYG"/>
                 <outlet property="SendBtn" destination="UfF-0F-0fA" id="Uy4-H8-YG1"/>
                 <outlet property="view" destination="iN0-l3-epB" id="kCW-yf-GMq"/>
             </connections>
@@ -21,7 +22,7 @@
                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="14 people in chat" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="xbM-1B-XFr">
                     <rect key="frame" x="8" y="8" width="304" height="17"/>
                     <fontDescription key="fontDescription" type="system" pointSize="14"/>
-                    <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                    <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                     <nil key="highlightedColor"/>
                 </label>
                 <button opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="249" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="UfF-0F-0fA">
@@ -40,15 +41,36 @@
                     <rect key="frame" x="0.0" y="33" width="320" height="441"/>
                     <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                 </tableView>
+                <view userInteractionEnabled="NO" contentMode="scaleToFill" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="81l-Cc-b05">
+                    <rect key="frame" x="32" y="89" width="256" height="114"/>
+                    <subviews>
+                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" text="No one has discussed this image yet.  Why don't you kick things off by typing your own message in the field below?" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="BaB-3b-1VM">
+                            <rect key="frame" x="16" y="16" width="224" height="82"/>
+                            <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                            <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                            <nil key="highlightedColor"/>
+                        </label>
+                    </subviews>
+                    <color key="backgroundColor" red="0.81960784313725488" green="0.48627450980392156" blue="0.14509803921568629" alpha="1" colorSpace="calibratedRGB"/>
+                    <constraints>
+                        <constraint firstAttribute="trailing" secondItem="BaB-3b-1VM" secondAttribute="trailing" constant="16" id="O47-0d-STQ"/>
+                        <constraint firstAttribute="bottom" secondItem="BaB-3b-1VM" secondAttribute="bottom" constant="16" id="YFa-GI-Klt"/>
+                        <constraint firstItem="BaB-3b-1VM" firstAttribute="top" secondItem="81l-Cc-b05" secondAttribute="top" constant="16" id="bW8-qP-ho2"/>
+                        <constraint firstItem="BaB-3b-1VM" firstAttribute="leading" secondItem="81l-Cc-b05" secondAttribute="leading" constant="16" id="bxT-h2-G2W"/>
+                    </constraints>
+                </view>
             </subviews>
             <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
             <constraints>
                 <constraint firstAttribute="trailing" secondItem="UfF-0F-0fA" secondAttribute="trailing" constant="8" id="1FK-hd-oHF"/>
+                <constraint firstItem="81l-Cc-b05" firstAttribute="top" secondItem="xbM-1B-XFr" secondAttribute="bottom" constant="64" id="4qG-Rz-FQw"/>
                 <constraint firstItem="5I5-U2-aEO" firstAttribute="leading" secondItem="iN0-l3-epB" secondAttribute="leading" id="DDH-er-my1"/>
                 <constraint firstAttribute="bottom" secondItem="UfF-0F-0fA" secondAttribute="bottom" constant="56" id="GbI-6k-jRJ"/>
+                <constraint firstItem="81l-Cc-b05" firstAttribute="leading" secondItem="iN0-l3-epB" secondAttribute="leading" constant="32" id="IGJ-41-N76"/>
                 <constraint firstAttribute="trailing" secondItem="5I5-U2-aEO" secondAttribute="trailing" id="IgF-GH-vcg"/>
                 <constraint firstItem="z9F-WC-0rK" firstAttribute="top" secondItem="5I5-U2-aEO" secondAttribute="bottom" constant="8" id="K2n-bq-pQa"/>
                 <constraint firstAttribute="trailing" secondItem="xbM-1B-XFr" secondAttribute="trailing" constant="8" id="LLO-ct-9mc"/>
+                <constraint firstAttribute="trailing" secondItem="81l-Cc-b05" secondAttribute="trailing" constant="32" id="OY5-QN-AHq"/>
                 <constraint firstItem="xbM-1B-XFr" firstAttribute="top" secondItem="iN0-l3-epB" secondAttribute="top" constant="8" id="Rpu-TB-w2n"/>
                 <constraint firstItem="5I5-U2-aEO" firstAttribute="top" secondItem="xbM-1B-XFr" secondAttribute="bottom" constant="8" id="bqF-bB-P5b"/>
                 <constraint firstItem="xbM-1B-XFr" firstAttribute="leading" secondItem="iN0-l3-epB" secondAttribute="leading" constant="8" id="c3Y-Bf-3rB"/>

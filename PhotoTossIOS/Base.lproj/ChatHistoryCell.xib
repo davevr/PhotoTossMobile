@@ -21,13 +21,24 @@
                             <constraint firstAttribute="height" constant="48" id="mLE-cu-bN3"/>
                         </constraints>
                     </imageView>
-                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" ambiguous="YES" misplaced="YES" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="bix-nO-Tew">
-                        <rect key="frame" x="303" y="8" width="36" height="42"/>
-                        <color key="backgroundColor" red="0.039215686274509803" green="0.61568627450980395" blue="0.56470588235294117" alpha="1" colorSpace="calibratedRGB"/>
-                        <fontDescription key="fontDescription" type="system" pointSize="14"/>
-                        <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
-                        <nil key="highlightedColor"/>
-                    </label>
+                    <view contentMode="scaleToFill" ambiguous="YES" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="K8e-tw-Yr5">
+                        <rect key="frame" x="64" y="4" width="52" height="25"/>
+                        <subviews>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="1000" ambiguous="YES" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="bix-nO-Tew">
+                                <rect key="frame" x="8" y="4" width="36" height="17"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                        </subviews>
+                        <color key="backgroundColor" red="1" green="0.47450980390000003" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
+                        <constraints>
+                            <constraint firstAttribute="bottom" secondItem="bix-nO-Tew" secondAttribute="bottom" constant="4" id="4n1-wz-rkM"/>
+                            <constraint firstItem="bix-nO-Tew" firstAttribute="top" secondItem="K8e-tw-Yr5" secondAttribute="top" constant="4" id="a73-rC-Ob2"/>
+                            <constraint firstAttribute="trailing" secondItem="bix-nO-Tew" secondAttribute="trailing" constant="8" id="gci-5V-OVM"/>
+                            <constraint firstItem="bix-nO-Tew" firstAttribute="leading" secondItem="K8e-tw-Yr5" secondAttribute="leading" constant="8" id="rof-hj-xMm"/>
+                        </constraints>
+                    </view>
                     <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" ambiguous="YES" translatesAutoresizingMaskIntoConstraints="NO" id="lPz-MA-Ndd">
                         <rect key="frame" x="347" y="4" width="48" height="48"/>
                         <constraints>
@@ -38,22 +49,23 @@
                 </subviews>
                 <constraints>
                     <constraint firstItem="aGf-Jf-Vc7" firstAttribute="leading" secondItem="YTl-1W-gDM" secondAttribute="leading" constant="8" id="4mG-OJ-Ku3"/>
-                    <constraint firstAttribute="bottom" relation="greaterThanOrEqual" secondItem="bix-nO-Tew" secondAttribute="bottom" constant="8" id="Bmg-pi-jp3"/>
                     <constraint firstAttribute="trailing" secondItem="lPz-MA-Ndd" secondAttribute="trailing" constant="8" id="JN3-md-f0k"/>
-                    <constraint firstItem="bix-nO-Tew" firstAttribute="top" secondItem="YTl-1W-gDM" secondAttribute="top" constant="8" id="Kjl-WV-hiT"/>
-                    <constraint firstItem="bix-nO-Tew" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="YTl-1W-gDM" secondAttribute="leading" constant="64" id="a8V-Ba-f2m"/>
-                    <constraint firstAttribute="trailing" relation="greaterThanOrEqual" secondItem="bix-nO-Tew" secondAttribute="trailing" priority="800" constant="64" id="eY6-d5-axx"/>
+                    <constraint firstItem="K8e-tw-Yr5" firstAttribute="top" secondItem="YTl-1W-gDM" secondAttribute="top" constant="4" id="Mlc-b7-kWW"/>
+                    <constraint firstAttribute="bottom" relation="greaterThanOrEqual" secondItem="K8e-tw-Yr5" secondAttribute="bottom" constant="4" id="c5K-tx-O8E"/>
+                    <constraint firstItem="lPz-MA-Ndd" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="K8e-tw-Yr5" secondAttribute="trailing" constant="8" id="dws-ZG-fei"/>
                     <constraint firstItem="lPz-MA-Ndd" firstAttribute="top" secondItem="YTl-1W-gDM" secondAttribute="top" constant="4" id="pge-Ub-2kR"/>
                     <constraint firstAttribute="bottom" relation="greaterThanOrEqual" secondItem="lPz-MA-Ndd" secondAttribute="bottom" constant="4" id="qph-hQ-ccE"/>
                     <constraint firstAttribute="bottomMargin" relation="greaterThanOrEqual" secondItem="aGf-Jf-Vc7" secondAttribute="bottom" constant="4" id="rcl-Fc-3jQ"/>
+                    <constraint firstItem="K8e-tw-Yr5" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="aGf-Jf-Vc7" secondAttribute="trailing" constant="8" id="uFG-oT-kbx"/>
                     <constraint firstItem="aGf-Jf-Vc7" firstAttribute="top" secondItem="YTl-1W-gDM" secondAttribute="top" constant="4" id="wDP-RN-TdL"/>
                 </constraints>
             </tableViewCellContentView>
             <connections>
-                <outlet property="ChatLeftConstraint" destination="a8V-Ba-f2m" id="gmC-DL-SeV"/>
-                <outlet property="ChatRightConstraint" destination="eY6-d5-axx" id="Mwh-jM-jvD"/>
                 <outlet property="ChatTurnLabel" destination="bix-nO-Tew" id="o8J-VF-oz1"/>
+                <outlet property="ChatTurnWrapper" destination="K8e-tw-Yr5" id="2vs-wo-hhK"/>
                 <outlet property="MyImage" destination="lPz-MA-Ndd" id="Gdv-Sg-wmP"/>
+                <outlet property="MyImageHeight" destination="oK1-v5-3yL" id="Svk-M9-rm1"/>
+                <outlet property="OtherPersonHeight" destination="mLE-cu-bN3" id="nyi-jE-dtr"/>
                 <outlet property="OtherPersonImage" destination="aGf-Jf-Vc7" id="I4x-8e-Gg8"/>
             </connections>
             <point key="canvasLocation" x="551.5" y="445.5"/>

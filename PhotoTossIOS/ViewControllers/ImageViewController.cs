@@ -7,6 +7,7 @@ using PhotoToss.Core;
 using PubNubMessaging.Core;
 using ServiceStack.Text;
 using System.Collections.Generic;
+using CoreAnimation;
 
 namespace PhotoToss.iOSApp
 {
@@ -106,6 +107,45 @@ namespace PhotoToss.iOSApp
 			NewMessageCount = 0;
 			SubscribeToImageChannel ();
 
+			this.View.AddGestureRecognizer (new UISwipeGestureRecognizer (() => {
+				DoSwipeLeft ();
+			}) {
+				Direction = UISwipeGestureRecognizerDirection.Left
+			});
+
+			this.View.AddGestureRecognizer (new UISwipeGestureRecognizer (() => {
+				DoSwipeRight ();
+			}) {
+				Direction = UISwipeGestureRecognizerDirection.Right
+			});
+				
+
+		}
+
+		private void DoSwipeLeft()
+		{
+			if (this.SelectedIndex < 3) {
+				this.SelectedIndex++;
+				CATransition anim = new CATransition ();
+				anim.Type = CATransition.TransitionPush;
+				anim.Subtype = CATransition.TransitionFromRight;
+				anim.Duration = .5;
+				anim.TimingFunction = CAMediaTimingFunction.FromName (CAMediaTimingFunction.EaseIn);
+				this.View.Layer.AddAnimation (anim, "fadetransition");
+			}
+		}
+
+		private void DoSwipeRight()
+		{
+			if (this.SelectedIndex > 0) {
+				this.SelectedIndex--;
+				CATransition anim = new CATransition ();
+				anim.Type = CATransition.TransitionPush;
+				anim.Subtype = CATransition.TransitionFromLeft;
+				anim.Duration = .5;
+				anim.TimingFunction = CAMediaTimingFunction.FromName (CAMediaTimingFunction.EaseIn);
+				this.View.Layer.AddAnimation (anim, "fadetransition");
+			}
 		}
 
 
@@ -143,7 +183,7 @@ namespace PhotoToss.iOSApp
 
 		public override void ViewDidUnload ()
 		{
-			SubscribeToImageChannel ();
+			UnsubscribeFromImageChannel ();
 			base.ViewDidUnload ();
 		}
 
@@ -156,7 +196,6 @@ namespace PhotoToss.iOSApp
 				ChannelName = "image" + imageId.ToString ();
 				AppDelegate.pubnub.Subscribe<string> (ChannelName, DisplaySubscribeReturnMessage, DisplaySubscribeConnectStatusMessage, DisplayErrorMessage);
 				AppDelegate.pubnub.Presence<string> (ChannelName, DisplayPresenceReturnMessage, DisplayPresenceConnectStatusMessage, DisplayErrorMessage);
-				GetHistory ();
 			}
 		}
 
@@ -169,6 +208,12 @@ namespace PhotoToss.iOSApp
 
 		}
 
+		public override void ViewWillAppear (bool animated)
+		{
+			GetHistory ();
+			base.ViewWillAppear (animated);
+
+		}
 
 		private void HistoryReturnMessage(string theMsg)
 		{
@@ -179,7 +224,7 @@ namespace PhotoToss.iOSApp
 				string historyJSON = theMsg.Substring(startLoc, strLen);
 				Console.WriteLine ("[pubnub] history: " + historyJSON);
 				List<ChatTurn>	historyList = historyJSON.FromJson<List<ChatTurn>>();
-				if (historyList != null) {
+				if ((chatTab != null) && (historyList != null)) {
 					chatTab.InsertHistory(historyList);
 					ClearMessageCount();
 				}
