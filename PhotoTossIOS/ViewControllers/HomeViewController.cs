@@ -459,69 +459,32 @@ namespace PhotoToss.iOSApp
 			options.PossibleFormats = new List<ZXing.BarcodeFormat>() { 
 				ZXing.BarcodeFormat.AZTEC 
 			};
+			options.CameraResolutionSelector = (resList) => {
+				CameraResolution finalRes = null;
 
-			var result = await scanner.Scan(options, true);
+				foreach( CameraResolution curRes in resList) {
+					if (((curRes.Height == 640) || (curRes.Width == 640)) && finalRes == null)
+						finalRes = curRes;
+					else if ((curRes.Height == 720) || (curRes.Width == 720))
+						finalRes = curRes;
+				
+				}
+
+				return finalRes;
+			};
+
+			var result = await scanner.Scan(options, false);
 
 			if (result != null) {
 				catchResult = result.Text;
-				CaptureOneFrame (FinalizeCatch);
+				FinalizeCatch (result);
 
 			}
 		}
 
-		private void CaptureOneFrame(stream_callback callback)
-		{
-			SetupCaptureSession (callback);
-		}
 
-		void SetupCaptureSession(stream_callback callback)
-		{
-			session = new AVCaptureSession();
-			var camera = AVCaptureDevice.DefaultDeviceWithMediaType(AVMediaType.Video);
-			var input = AVCaptureDeviceInput.FromDevice(camera);
-			session.BeginConfiguration ();
-
-			session.AddInput(input);
-
-			var output = new AVCaptureStillImageOutput() {OutputSettings = new NSDictionary(AVVideo.CodecKey, AVVideo.CodecJPEG)};
-
-			session.AddOutput(output);
-			session.SessionPreset = AVCaptureSession.Preset1280x720;
-			session.CommitConfiguration ();
-			session.StartRunning();
-			AVCaptureConnection connection = output.Connections[0];
-
-			if (session.Running) {
-				
-				CaptureImageWithMetadata (output, connection, callback);
-			}
-
-		}
-
-
-		private void CaptureImageWithMetadata(AVCaptureStillImageOutput output, AVCaptureConnection connection, stream_callback callback)
-		{
-			Invoke (() => {
-				output.CaptureStillImageAsynchronously (connection, (sampleBuffer, error) => {
-					var imageData = AVCaptureStillImageOutput.JpegStillToNSData(sampleBuffer);
-
-					System.IO.Stream theData = imageData.AsStream();// image = CIImage.FromData(imageData);
-					//UIImage newImage = UIImage.FromImage (image);
-
-					session.StopRunning ();
-					session.RemoveOutput ((AVCaptureOutput)session.Outputs.GetValue (0));
-					session.RemoveInput ((AVCaptureInput)session.Inputs.GetValue (0));
-					session.Dispose ();
-					session = null;
-
-					if (callback != null)
-						callback (theData);
-				});
-			}, .5);
-	
-		}
 			
-		public void FinalizeCatch(System.IO.Stream theData)
+		public void FinalizeCatch(ZXing.Result theResult)
 		{
 			InvokeOnMainThread (() => {
 				ShowOverlay(View, "Finishing the catch...");
@@ -529,21 +492,34 @@ namespace PhotoToss.iOSApp
 					LocationHelper.StartLocationManager (CoreLocation.CLLocation.AccuracyBest);
 					LocationHelper.LocationResult curLoc = LocationHelper.GetLocationResult ();
 					LocationHelper.StopLocationManager ();
-					long tossId = long.Parse (catchResult.Substring (catchResult.LastIndexOf ("/") + 1));
+					long tossId = 0;
 
+					try {
+						tossId = long.Parse (catchResult.Substring (catchResult.LastIndexOf ("/") + 1));
+					} catch (Exception exp) {
+						Console.Error.WriteLine("Invalid barcode");
+					}
+					if (tossId != 0) {
+						UIImage catchImage = theResult.CaptureImage as UIImage;
+						PhotoTossRest.Instance.CatchToss (catchImage.AsJPEG().AsStream (), tossId, curLoc.Longitude, curLoc.Latitude, (newRec) => 
+							{
+								InvokeOnMainThread(() => 
+									{
+										HideOverlay();
+										if (newRec != null) 
+											AddNewImage(newRec);
+										else 
+											new UIAlertView("Error", "Catch failed.  Please try again.", null, "dang", null).Show();
+									});
 
-					PhotoTossRest.Instance.CatchToss (theData, tossId, curLoc.Longitude, curLoc.Latitude, (newRec) => 
-						{
-							InvokeOnMainThread(() => 
-								{
-									HideOverlay();
-									if (newRec != null) 
-										AddNewImage(newRec);
-									else 
-										new UIAlertView("Error", "Catch failed.  Please try again.", null, "dang", null).Show();
-								});
-
-						});
+							});
+					} else {
+						InvokeOnMainThread(() => 
+							{
+								HideOverlay();
+								new UIAlertView("Error", "Catch failed.  Invalid Barcode.", null, "dang", null).Show();
+							});
+					}
 				});
 
 			});

@@ -145,12 +145,6 @@
     <Reference Include="Flurry.Analytics.Android">
       <HintPath>..\packages\Flurry.Analytics.1.2.1\lib\MonoAndroid23\Flurry.Analytics.Android.dll</HintPath>
     </Reference>
-    <Reference Include="zxing.portable">
-      <HintPath>..\Components\zxing.net.mobile-1.5.1.0\lib\android\zxing.portable.dll</HintPath>
-    </Reference>
-    <Reference Include="ZXingNetMobile">
-      <HintPath>..\Components\zxing.net.mobile-1.5.1.0\lib\android\ZXingNetMobile.dll</HintPath>
-    </Reference>
     <Reference Include="Refractored.PagerSlidingTabStrip">
       <HintPath>..\packages\Refractored.PagerSlidingTabStrip.1.0.9\lib\MonoAndroid10\Refractored.PagerSlidingTabStrip.dll</HintPath>
     </Reference>
@@ -353,10 +347,6 @@
     </XamarinComponentReference>
     <XamarinComponentReference Include="GCMClient">
       <Version>1.0</Version>
-      <Visible>False</Visible>
-    </XamarinComponentReference>
-    <XamarinComponentReference Include="zxing.net.mobile">
-      <Version>1.5.1.0</Version>
       <Visible>False</Visible>
     </XamarinComponentReference>
     <XamarinComponentReference Include="hockeyappandroid">

@@ -289,27 +289,32 @@ namespace PhotoToss.iOSApp
 				titleView.Text = theMarker.Title;
 				PhotoRecord markerRecord = ((PhotoWrapper)theMarker.UserData).record; // to do - look up actual record
 				long tosserId = markerRecord.tosserid;
-				string tosserName;
-
-				if (tosserId == 0)
-					tosserName = markerRecord.ownername;
-				else
-					tosserName = markerRecord.tossername;
-
-				string userImageUrl = PhotoTossRest.Instance.GetUserProfileImage(markerRecord.tossername);
-
-				userImageView.SetImage(new NSUrl(userImageUrl), UIImage.FromBundle ("unknownperson"));
-
 				string imageUrl;
+				string userUrl;
+				string dateString;
 
-				if (markerRecord.tossid == 0)
-					imageUrl = markerRecord.imageUrl;
-				else
+				if (!String.IsNullOrEmpty (markerRecord.catchUrl)) {
+					// caught image
 					imageUrl = markerRecord.catchUrl;
+					DateTime photoDate = markerRecord.received.ToLocalTime();
+					dateString = string.Format("caught {0} {1}", photoDate.ToShortDateString(), photoDate.ToShortTimeString());
+					userUrl = PhotoTossRest.Instance.GetUserProfileImage(markerRecord.ownername);
+
+				}
+				else {
+					// original image
+					imageUrl = markerRecord.imageUrl;
+					DateTime photoDate = markerRecord.created.ToLocalTime();
+					dateString = string.Format("originally taken {0} {1}", photoDate.ToShortDateString(), photoDate.ToShortTimeString());
+					userUrl = PhotoTossRest.Instance.GetUserProfileImage(markerRecord.ownername);
+				}
+					
+				userImageView.SetImage(new NSUrl(userUrl), UIImage.FromBundle ("unknownperson"));
 
 				catchImageView.SetImage(new NSUrl(imageUrl + "=s128-c"), UIImage.FromBundle("placeholder"));
 				infoWindowView.Bounds = new CGRect (0, 0, 136, 168);
 				userImageView.Layer.CornerRadius = 16;
+				dateView.Text = dateString;
 
 			}
 			return infoWindowView;
