@@ -88,7 +88,11 @@ namespace PhotoToss.iOSApp
 
 		public override nint RowsInSection (UITableView tableView, nint section)
 		{
-			return photoList.Count;
+			nint numCells = 0;
+
+			if (photoList != null)
+				numCells = photoList.Count;
+			return numCells;
 		}
 
 

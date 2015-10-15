@@ -17,7 +17,6 @@ namespace PhotoToss.iOSApp
 	{
 		LoginButton loginButton;
 		ProfilePictureView pictureView;
-		UILabel nameLabel;
 		List<string> readPermissions = new List<string> { "public_profile" };
 		private UIView loadingOverlay = null;
 
@@ -64,11 +63,11 @@ namespace PhotoToss.iOSApp
 			Profile.Notifications.ObserveDidChange ((sender, e) => {
 
 				if (e.NewProfile == null) {
-					nameLabel.Text = "";
+					ProfileNameLabel.Text = "";
 					pictureView.ProfileId = "";
 				} else {
 					pictureView.ProfileId = e.NewProfile.UserID;
-					nameLabel.Text = e.NewProfile.Name;
+					ProfileNameLabel.Text = e.NewProfile.Name;
 				}
 
 
@@ -96,7 +95,7 @@ namespace PhotoToss.iOSApp
 			// Handle actions once the user is logged out
 			loginButton.LoggedOut += (sender, e) => {
 				// Handle your logout
-				nameLabel.Text = "";
+				ProfileNameLabel.Text = "";
 			};
 
 			// The user image profile is set automatically once is logged in
@@ -172,7 +171,7 @@ namespace PhotoToss.iOSApp
 			} else {
 				InvokeOnMainThread (() => {
 					ProfileNameLabel.Text = "";
-					pictureView.ProfileId = null;
+					pictureView.ProfileId = "";
 					TossesCount.Text = "--";
 					CatchesCount.Text = "--";
 					TakenCount.Text = "--";

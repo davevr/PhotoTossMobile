@@ -392,6 +392,7 @@ namespace PhotoToss.iOSApp
 			DateTime now = DateTime.Now;
 
 			PhotoTossRest.Instance.GetUploadURL ((theUrl) => {
+				
 				PhotoTossRest.Instance.UploadImage (imageForUploading.AsJPEG ().AsStream (), curLoc.Longitude, curLoc.Latitude, (theRecord) => {
 
 					PhotoTossRest.Instance.GetUploadURL((uploadStr) =>
