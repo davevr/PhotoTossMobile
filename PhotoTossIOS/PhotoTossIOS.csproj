@@ -36,7 +36,7 @@
     <MtouchArch>ARMv7, ARM64</MtouchArch>
     <ConsolePause>false</ConsolePause>
     <CodesignKey>iPhone Distribution</CodesignKey>
-    <CodesignProvision>866774dc-cdf5-44e8-8eb3-dd2129b2204e</CodesignProvision>
+    <CodesignProvision>976222ad-b00f-4bcd-9ab8-5add0b8e48bc</CodesignProvision>
     <IpaPackageName>
     </IpaPackageName>
     <MtouchUseRefCounting>true</MtouchUseRefCounting>

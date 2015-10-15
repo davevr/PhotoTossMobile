@@ -21,6 +21,7 @@ namespace PhotoToss.AndroidApp
 	{
 		ImageView imageView;
 		public static int itemWidth = 320;
+		public static Bitmap CurrentImage;
 		Android.Util.DisplayMetrics	metrics;
 		private EditText captionText;
 		private Button sendBtn;
@@ -40,7 +41,7 @@ namespace PhotoToss.AndroidApp
 
 
 			imageView = fragment.FindViewById<ImageView>(Resource.Id.imageView);
-			Koush.UrlImageViewHelper.SetUrlDrawable (imageView, curRec.imageUrl + "=s2058", Resource.Drawable.ic_camera, this);
+			Koush.UrlImageViewHelper.SetUrlDrawable (imageView, curRec.imageUrl + "=s2048", Resource.Drawable.ic_camera, this);
 
 
 			captionText = fragment.FindViewById<EditText> (Resource.Id.turnText);
@@ -56,6 +57,11 @@ namespace PhotoToss.AndroidApp
 
 		public override void OnDestroyView ()
 		{
+			if (CurrentImage != null) {
+				CurrentImage.Dispose ();
+				CurrentImage = null;
+			}
+
 			base.OnDestroyView ();
 		}
 		public void OnLoaded(ImageView theImage, Bitmap theBitmap, string theURL, bool p4)
@@ -63,6 +69,7 @@ namespace PhotoToss.AndroidApp
 			var attacher = new  PhotoViewAttacher(imageView);
 			attacher.MaximumScale = 5;
 			attacher.Update();
+			CurrentImage = theBitmap;
 		}
 			
 		public void Update()

@@ -32,7 +32,7 @@ namespace PhotoToss.Core
 		public long tosserid { get; set; }
         public string tossername { get; set; }
 		public long tossid { get; set; }
-
+		public BarcodeLocation barcodelocation { get; set; }
 
 		// updated after a toss
         public long totalshares { get; set; }
@@ -42,32 +42,10 @@ namespace PhotoToss.Core
         private object cachedImage = null;
         private object cachedCatchImage = null;
 
+
 		public List<TossRecord> tossList {get; set;}
 
-        public static PhotoRecord MakeSample()
-        {
-            PhotoRecord newRec = new PhotoRecord();
-            newRec.id = 0L;
-            newRec.caption = "some image";
-            newRec.totalshares = 1000;
-            newRec.ownerid = 0;
-            newRec.ownername = "davevr";
-            newRec.tags = new List<string>() { "sheep", "nose", "fred" };
-            newRec.received = DateTime.Now;
-            newRec.created = DateTime.Now;
-            newRec.lastshared = DateTime.Now;
-            newRec.createdlat = 34.0824;
-            newRec.createdlong = -118.3941;
-            newRec.receivedlat = 34.0824;
-            newRec.receivedlong = -118.3941;
-            newRec.receivedcaption = "cool share";
-            newRec.imageUrl = "http://lh6.ggpht.com/mmXPSLXJbkXflBYX525inqAmT93u409QyD9KJgkvEyvPhCNxwbiZIhDG-KTTVvP39Z0G88AmHcLk50S81wHy6us7x3a7JFQo9A";
-            newRec.catchUrl = "http://lh6.ggpht.com/mmXPSLXJbkXflBYX525inqAmT93u409QyD9KJgkvEyvPhCNxwbiZIhDG-KTTVvP39Z0G88AmHcLk50S81wHy6us7x3a7JFQo9A";
-            
-
-            return newRec;
-
-        }
+        
 
         public object CachedImage
         {
@@ -126,6 +104,28 @@ namespace PhotoToss.Core
 		public int numtosses { get; set;}
 		public int numparents { get; set;}
 		public int numchildren { get; set;}
+	}
+
+	public class BarcodeLocation 
+	{
+		public BarcodePoint topleft {get; set;}
+		public BarcodePoint topright {get; set;}
+		public BarcodePoint bottomleft {get; set;}
+		public BarcodePoint bottomright {get; set;}
+
+
+	}
+
+	public struct BarcodePoint
+	{
+		public float x {get; set;}
+		public float y { get; set; }
+
+		public BarcodePoint(float xLoc, float yLoc)
+		{
+			x = xLoc;
+			y = yLoc;
+		}
 	}
 
    

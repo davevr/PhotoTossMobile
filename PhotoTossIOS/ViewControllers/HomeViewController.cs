@@ -81,7 +81,7 @@ namespace PhotoToss.iOSApp
 			// set up collection view
 			TossedImageCollectionView.RegisterNibForCell(UINib.FromName("TossedImageCell", NSBundle.MainBundle), kTossCellName);
 			TossedImageCollectionView.SetCollectionViewLayout (new UICollectionViewFlowLayout () {
-				SectionInset = new UIEdgeInsets (0,marginSize,0,marginSize),
+				SectionInset = new UIEdgeInsets (marginSize,marginSize,0,marginSize),
 				ItemSize = new CGSize(kCellSize, kCellSize),
 				ScrollDirection = UICollectionViewScrollDirection.Vertical,
 				MinimumInteritemSpacing = marginSize, // minimum spacing between cells
@@ -500,9 +500,15 @@ namespace PhotoToss.iOSApp
 					} catch (Exception exp) {
 						Console.Error.WriteLine("Invalid barcode");
 					}
+					BarcodeLocation barcodeLoc = new BarcodeLocation();
+					barcodeLoc.topleft = new BarcodePoint( theResult.ResultPoints[3].X, theResult.ResultPoints[3].Y);
+					barcodeLoc.topright = new BarcodePoint( theResult.ResultPoints[0].X, theResult.ResultPoints[0].Y);
+					barcodeLoc.bottomleft = new BarcodePoint( theResult.ResultPoints[2].X, theResult.ResultPoints[2].Y);
+					barcodeLoc.bottomright = new BarcodePoint( theResult.ResultPoints[1].X, theResult.ResultPoints[1].Y);
+
 					if (tossId != 0) {
 						UIImage catchImage = theResult.CaptureImage as UIImage;
-						PhotoTossRest.Instance.CatchToss (catchImage.AsJPEG().AsStream (), tossId, curLoc.Longitude, curLoc.Latitude, (newRec) => 
+						PhotoTossRest.Instance.CatchToss (catchImage.AsJPEG().AsStream (), tossId, curLoc.Longitude, curLoc.Latitude, barcodeLoc, (newRec) => 
 							{
 								InvokeOnMainThread(() => 
 									{

@@ -325,7 +325,7 @@ namespace PhotoToss.Core
             });
         }
 
-        public void CatchToss(Stream photoStream, long tossid, double longitude, double latitude, PhotoRecord_callback callback)
+        public void CatchToss(Stream photoStream, long tossid, double longitude, double latitude, BarcodeLocation barcodeLoc, PhotoRecord_callback callback)
         {
             RestClient onetimeClient = new RestClient(_catchURL);
             onetimeClient.CookieContainer = apiClient.CookieContainer;
@@ -336,6 +336,16 @@ namespace PhotoToss.Core
             request.AddParameter("toss", tossid);
             request.AddParameter("long", longitude);
             request.AddParameter("lat", latitude);
+			if (barcodeLoc != null) {
+				request.AddParameter("tlx", String.Format("{0:0.##}", barcodeLoc.topleft.x)); 
+				request.AddParameter("tly", String.Format("{0:0.##}", barcodeLoc.topleft.y)); 
+				request.AddParameter("trx", String.Format("{0:0.##}", barcodeLoc.topright.x)); 
+				request.AddParameter("try", String.Format("{0:0.##}", barcodeLoc.topright.y)); 
+				request.AddParameter("blx", String.Format("{0:0.##}", barcodeLoc.bottomleft.x)); 
+				request.AddParameter("bly", String.Format("{0:0.##}", barcodeLoc.bottomleft.y)); 
+				request.AddParameter("brx", String.Format("{0:0.##}", barcodeLoc.bottomright.x)); 
+				request.AddParameter("bry", String.Format("{0:0.##}", barcodeLoc.bottomright.y)); 
+			}
             request.AddFile("file", ReadToEnd(photoStream), "file", "image/jpeg");
 
             onetimeClient.ExecuteAsync(request, (response) =>

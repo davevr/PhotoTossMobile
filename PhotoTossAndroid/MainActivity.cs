@@ -696,15 +696,22 @@ namespace PhotoToss.AndroidApp
 
 		}
 
-		private void HandleScanResult(ZXing.Result result)
+		private void HandleScanResult(ZXing.Result theResult)
 		{
-			if (result != null && !string.IsNullOrEmpty (result.Text)) {
+			if (theResult != null && !string.IsNullOrEmpty (theResult.Text)) {
 				long tossId = 0;
 
 				try {
-					tossId = long.Parse(result.Text.Substring(result.Text.LastIndexOf("/") + 1));
+					tossId = long.Parse(theResult.Text.Substring(theResult.Text.LastIndexOf("/") + 1));
+
+					BarcodeLocation barcodeLoc = new BarcodeLocation();
+					barcodeLoc.topleft = new BarcodePoint( theResult.ResultPoints[3].X, theResult.ResultPoints[3].Y);
+					barcodeLoc.topright = new BarcodePoint( theResult.ResultPoints[0].X, theResult.ResultPoints[0].Y);
+					barcodeLoc.bottomleft = new BarcodePoint( theResult.ResultPoints[2].X, theResult.ResultPoints[2].Y);
+					barcodeLoc.bottomright = new BarcodePoint( theResult.ResultPoints[1].X, theResult.ResultPoints[1].Y);
+
 					
-					FinalizeToss (tossId, result.CaptureImage as Bitmap);
+					FinalizeToss (tossId, theResult.CaptureImage as Bitmap, barcodeLoc);
 
 				} 
 				catch (System.Exception exp) {
@@ -723,7 +730,7 @@ namespace PhotoToss.AndroidApp
 
 
 
-		private void FinalizeToss (long tossId, Bitmap catchImage)
+		private void FinalizeToss (long tossId, Bitmap catchImage, BarcodeLocation barcodeLoc)
 		{
 			PhotoTossRest.Instance.GetCatchURL ((urlStr) => {
 				double longitude = MainActivity._lastLocation.Longitude;
@@ -735,7 +742,7 @@ namespace PhotoToss.AndroidApp
 				catchImage = null;
 
 
-				PhotoTossRest.Instance.CatchToss(photoStream, tossId, longitude, latitude, (newRec) => 
+				PhotoTossRest.Instance.CatchToss(photoStream, tossId, longitude, latitude, barcodeLoc, (newRec) => 
 					{
 						if (newRec != null)
 							homePage.AddImage(newRec);

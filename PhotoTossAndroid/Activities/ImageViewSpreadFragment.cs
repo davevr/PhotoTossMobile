@@ -46,13 +46,8 @@ namespace PhotoToss.AndroidApp
 
 		public override View OnCreateView (LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
 		{
-			View fragment = this.View;
+			View fragment = inflater.Inflate(Resource.Layout.ImageViewSpreadFragment, null);
 
-			try {
-				 fragment = inflater.Inflate(Resource.Layout.ImageViewSpreadFragment, null);
-			} catch (Exception exp) {
-				Console.Error.WriteLine ("Error inflating view: " + exp.Message);
-			}
             mapFragment = (SupportMapFragment) ChildFragmentManager.FindFragmentById(Resource.Id.mapFragment);
 			showMeBtn = fragment.FindViewById<Button> (Resource.Id.showMeBtn);
 			showAllBtn = fragment.FindViewById<Button> (Resource.Id.showAllBtn);
@@ -80,19 +75,7 @@ namespace PhotoToss.AndroidApp
 
         }
 
-		public override void OnDestroyView ()
-		{
-			if (mapFragment != null) {
-				map.Clear ();
 
-				Android.Support.V4.App.FragmentTransaction fragTx = FragmentManager.BeginTransaction();
-				fragTx.Remove(mapFragment);
-				mapFragment.Dispose();
-				fragTx.Commit();
-
-			}
-			base.OnDestroyView ();
-		}
 
         private void ShowAll()
         {
