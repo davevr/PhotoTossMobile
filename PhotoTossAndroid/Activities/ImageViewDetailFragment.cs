@@ -54,6 +54,10 @@ namespace PhotoToss.AndroidApp
 			return fragment;
 		}
 
+		public override void OnDestroyView ()
+		{
+			base.OnDestroyView ();
+		}
 		public void OnLoaded(ImageView theImage, Bitmap theBitmap, string theURL, bool p4)
 		{
 			var attacher = new  PhotoViewAttacher(imageView);

@@ -167,6 +167,12 @@
     <Reference Include="PhotoView">
       <HintPath>..\Components\PhotoView-1.2.4\lib\android\PhotoView.dll</HintPath>
     </Reference>
+    <Reference Include="ZXingNetMobile">
+      <HintPath>_external\ZXingNetMobile.dll</HintPath>
+    </Reference>
+    <Reference Include="zxing.portable">
+      <HintPath>_external\zxing.portable.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs" />

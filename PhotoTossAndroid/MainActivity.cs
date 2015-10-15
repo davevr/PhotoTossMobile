@@ -96,7 +96,6 @@ namespace PhotoToss.AndroidApp
 		ICallbackManager callbackManager;
 		public delegate void Image_callback(Image theResult);
 		public event Action PulledToRefresh;
-		private CameraStateListener mStateListener;
 		private CameraDevice mCameraDevice;
 		private bool mOpeningCamera = false;
 		private static readonly SparseIntArray ORIENTATIONS = new SparseIntArray();
@@ -700,11 +699,20 @@ namespace PhotoToss.AndroidApp
 		private void HandleScanResult(ZXing.Result result)
 		{
 			if (result != null && !string.IsNullOrEmpty (result.Text)) {
-				long tossId = long.Parse(result.Text.Substring(result.Text.LastIndexOf("/") + 1));
-				CaptureImageFromCamera ((theImage) => {
+				long tossId = 0;
 
-					FinalizeToss (tossId, theImage);
-				});
+				try {
+					tossId = long.Parse(result.Text.Substring(result.Text.LastIndexOf("/") + 1));
+					
+					FinalizeToss (tossId, result.CaptureImage as Bitmap);
+
+				} 
+				catch (System.Exception exp) {
+					string msg = "Invalid Barcode!";
+					this.RunOnUiThread (() => {
+						Toast.MakeText (this, msg, ToastLength.Short).Show ();
+					});
+				}
 			} else {
 				string msg = "Scanning Canceled!";
 				this.RunOnUiThread (() => {
@@ -713,242 +721,18 @@ namespace PhotoToss.AndroidApp
 			}
 		}
 
-		private void CaptureImageFromCamera(Image_callback callback) {
-			catchImageCallback = callback;
-			OpenCamera ();
-		}
-
-		private void OpenCamera()
-		{
-			CameraManager manager = (CameraManager)GetSystemService (Context.CameraService);
-
-			try 
-			{
-				string cameraId = manager.GetCameraIdList()[0];
-
-				CameraAvailableCallback callback = new CameraAvailableCallback() {activity = this, targetCameraId = cameraId};
-				manager.RegisterAvailabilityCallback(callback, null);
-			}
-			catch (CameraAccessException ex) {
-				Toast.MakeText (this, "Cannot access the camera.", ToastLength.Short).Show ();
-
-			}
-		}
-
-		private void StartImageCapture(string cameraId)
-		{
-			mStateListener = new CameraStateListener () { activity = this };
-
-			CameraManager manager = (CameraManager)GetSystemService (Context.CameraService);
-			manager.OpenCamera(cameraId, mStateListener, null);
-		}
-
-		private class CameraAvailableCallback : CameraManager.AvailabilityCallback
-		{
-			public MainActivity activity {get; set;}
-			public string targetCameraId {get; set;}
-
-			public override void OnCameraAvailable(string cameraId)
-			{
-				if (cameraId.CompareTo (targetCameraId) == 0) {
-					activity.StartImageCapture (targetCameraId);
-					targetCameraId = "none";
-				}
-			}
-
-			public override void OnCameraUnavailable(string cameraId)
-			{
-				base.OnCameraUnavailable (cameraId);
-			}
-		}
-
-		private class CameraStateListener : CameraDevice.StateCallback
-		{
-			public MainActivity activity;
-			public override void OnOpened (CameraDevice camera)
-			{
-
-				if (activity != null) {
-					activity.mCameraDevice = camera;
-					activity.mOpeningCamera = false;
-					activity.GrabFrame ();
-				}
-			}
-
-			public override void OnDisconnected (CameraDevice camera)
-			{
-				if (activity != null) {
-					camera.Close ();
-					activity.mCameraDevice = null;
-					activity.mOpeningCamera = false;
-				}
-			}
-
-			public override void OnError (CameraDevice camera, CameraError error)
-			{
-				camera.Close();
-				if (activity != null) {
-					activity.mCameraDevice = null;
-					activity.mOpeningCamera = false;
-
-				}
-
-			}
-		}
-
-		private void SetUpCaptureRequestBuilder(CaptureRequest.Builder builder)
-		{
-			// In this sample, w just let the camera device pick the automatic settings
-			builder.Set (CaptureRequest.ControlMode, new Java.Lang.Integer((int)ControlMode.Auto));
-		}
-
-		private void GrabFrame()
-		{
-			try 
-			{
-
-				CameraManager manager = (CameraManager) GetSystemService(Context.CameraService);
-
-				// Pick the best JPEG size that can be captures with this CameraDevice
-				CameraCharacteristics characteristics = manager.GetCameraCharacteristics(mCameraDevice.Id);
-				Size[] jpegSizes = null;
-				if (characteristics != null)
-				{
-					jpegSizes = ((StreamConfigurationMap)characteristics.Get(CameraCharacteristics.ScalerStreamConfigurationMap)).GetOutputSizes((int)ImageFormatType.Jpeg);
-				}
-				int width = 640;
-				int height = 480;
-				if (jpegSizes != null && jpegSizes.Length > 0)
-				{
-					width = jpegSizes[0].Width;
-					height = jpegSizes[0].Height;
-				}
-
-				// We use an ImageReader to get a JPEG from CameraDevice
-				// Here, we create a new ImageReader and prepare its Surface as an output from the camera
-				ImageReader reader = ImageReader.NewInstance(width, height, ImageFormatType.Jpeg, 1);
-				List<Surface> outputSurfaces = new List<Surface>(1);
-				outputSurfaces.Add(reader.Surface);
-
-				CaptureRequest.Builder captureBuilder = mCameraDevice.CreateCaptureRequest(CameraTemplate.StillCapture);
-				captureBuilder.AddTarget(reader.Surface);
-				SetUpCaptureRequestBuilder(captureBuilder);
-				// Orientation
-				SurfaceOrientation rotation = WindowManager.DefaultDisplay.Rotation;
-				captureBuilder.Set(CaptureRequest.JpegOrientation, new Java.Lang.Integer(ORIENTATIONS.Get((int)rotation)));
-
-				// Output file
-				//File file = new File(GetExternalFilesDir(null), "pic.jpg");
-
-				// This listener is called when an image is ready in ImageReader 
-				// Right click on ImageAvailableListener in your IDE and go to its definition
-				ImageAvailableListener readerListener = new ImageAvailableListener();
-
-				// We create a Handler since we want to handle the resulting JPEG in a background thread
-
-				reader.SetOnImageAvailableListener(readerListener, null);
-
-				//This listener is called when the capture is completed
-				// Note that the JPEG data is not available in this listener, but in the ImageAvailableListener we created above
-				// Right click on CameraCaptureListener in your IDE and go to its definition
-				CameraCaptureListener captureListener = new CameraCaptureListener() { activity = this};
-
-				mCameraDevice.CreateCaptureSession(outputSurfaces, new CameraCaptureStateListener()
-					{
-						OnConfiguredAction = (CameraCaptureSession session) => {
-							try 
-							{
-								session.Capture(captureBuilder.Build(), captureListener, null);
-							}
-							catch (CameraAccessException ex)
-							{
-								Log.WriteLine(LogPriority.Info, "Capture Session error: ", ex.ToString());
-							}
-						}
-					}, null );
-			}
-			catch (CameraAccessException ex) {
-				Log.WriteLine(LogPriority.Info, "Taking picture error: ", ex.StackTrace);
-			}
-		}
-
-		private class ImageAvailableListener : Java.Lang.Object, ImageReader.IOnImageAvailableListener
-		{
-			public void OnImageAvailable (ImageReader reader)
-			{
-				try 
-				{
-					savedImage = reader.AcquireLatestImage();
-
-				}
-				catch (System.Exception ex) {
-					Log.WriteLine (LogPriority.Info, "Camera capture session", ex.StackTrace);
-				}
-			}
-		}
 
 
-		private class CameraCaptureListener : CameraCaptureSession.CaptureCallback
-		{
-			public MainActivity activity;
-
-			public override void OnCaptureCompleted (CameraCaptureSession session, CaptureRequest request, TotalCaptureResult result)
-			{
-				if (activity != null)
-				{
-					if (activity != null)
-					{
-						activity.FinishGrab ();
-					}
-				}
-			}
-		}
-
-		private void FinishGrab()
-		{
-			mCameraDevice.Close ();
-			mOpeningCamera = false;
-			mStateListener = null;
-			if (catchImageCallback != null)
-				catchImageCallback (savedImage);
-		}
-
-
-		private class CameraCaptureStateListener : CameraCaptureSession.StateCallback
-		{
-			public Action<CameraCaptureSession> OnConfigureFailedAction;
-			public override void OnConfigureFailed (CameraCaptureSession session)
-			{
-				if (OnConfigureFailedAction != null) {
-					OnConfigureFailedAction (session);
-				}
-			}
-
-			public Action<CameraCaptureSession> OnConfiguredAction;
-			public override void OnConfigured (CameraCaptureSession session)
-			{
-				if (OnConfiguredAction != null) {
-					OnConfiguredAction (session);
-				}
-			}
-
-		}
-
-		private void FinalizeToss (long tossId, Image catchImage)
+		private void FinalizeToss (long tossId, Bitmap catchImage)
 		{
 			PhotoTossRest.Instance.GetCatchURL ((urlStr) => {
 				double longitude = MainActivity._lastLocation.Longitude;
 				double latitude = MainActivity._lastLocation.Latitude;
-				//Bitmap tempImage = BitmapFactory.DecodeResource(Resources, Resource.Drawable.iconNoBorder);
+
 				System.IO.Stream photoStream = new MemoryStream();
-				ByteBuffer buffer = catchImage.GetPlanes()[0].Buffer;
-				byte[] bytes = new byte[buffer.Capacity()];
-				buffer.Get(bytes);
-				photoStream.Write(bytes, 0, buffer.Capacity());
-				catchImage.Close();
+				catchImage.Compress(Bitmap.CompressFormat.Jpeg, 80, photoStream);
+
 				catchImage = null;
-				//tempImage.Compress(Bitmap.CompressFormat.Jpeg, 0, photoStream);
-				// remove toss ID from URL
 
 
 				PhotoTossRest.Instance.CatchToss(photoStream, tossId, longitude, latitude, (newRec) => 

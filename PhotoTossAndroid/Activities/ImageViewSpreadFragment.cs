@@ -31,6 +31,7 @@ namespace PhotoToss.AndroidApp
         private ImageView userImageView;
         private TextView titleView;
         private TextView dateView;
+		private SupportMapFragment mapFragment;
         private Dictionary<string, PhotoRecord> markerMap = new Dictionary<string, PhotoRecord>();
 		public static PhotoRecord CurrentMarkerRecord = null;
 
@@ -40,12 +41,19 @@ namespace PhotoToss.AndroidApp
 			base.OnCreate (savedInstanceState);
 
 			// Create your fragment here
+
 		}
 
 		public override View OnCreateView (LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
 		{
-			View fragment = inflater.Inflate(Resource.Layout.ImageViewSpreadFragment, null);
-            var mapFragment = (SupportMapFragment) ChildFragmentManager.FindFragmentById(Resource.Id.map);
+			View fragment = this.View;
+
+			try {
+				 fragment = inflater.Inflate(Resource.Layout.ImageViewSpreadFragment, null);
+			} catch (Exception exp) {
+				Console.Error.WriteLine ("Error inflating view: " + exp.Message);
+			}
+            mapFragment = (SupportMapFragment) ChildFragmentManager.FindFragmentById(Resource.Id.mapFragment);
 			showMeBtn = fragment.FindViewById<Button> (Resource.Id.showMeBtn);
 			showAllBtn = fragment.FindViewById<Button> (Resource.Id.showAllBtn);
 			mapFragment.GetMapAsync (this);
@@ -71,6 +79,20 @@ namespace PhotoToss.AndroidApp
             dateView = infoWindowView.FindViewById<TextView>(Resource.Id.tossDateView);
 
         }
+
+		public override void OnDestroyView ()
+		{
+			if (mapFragment != null) {
+				map.Clear ();
+
+				Android.Support.V4.App.FragmentTransaction fragTx = FragmentManager.BeginTransaction();
+				fragTx.Remove(mapFragment);
+				mapFragment.Dispose();
+				fragTx.Commit();
+
+			}
+			base.OnDestroyView ();
+		}
 
         private void ShowAll()
         {
@@ -134,8 +156,7 @@ namespace PhotoToss.AndroidApp
 			LatLng newLoc = GetPhotoLocation (theRec);
 
 			if (map != null) {
-                System.Console.WriteLine(string.Format("{0},{1}", newLoc.Latitude, newLoc.Longitude));
-				MarkerOptions markerOpt1 = new MarkerOptions();
+                MarkerOptions markerOpt1 = new MarkerOptions();
 				markerOpt1.SetPosition(newLoc);
 				markerOpt1.SetTitle(title);
                 markerOpt1.SetIcon (BitmapDescriptorFactory.DefaultMarker (theHue));
@@ -311,36 +332,44 @@ namespace PhotoToss.AndroidApp
             if (infoWindowView != null)
             {
                 titleView.Text = theMarker.Title;
-                PhotoRecord markerRecord = markerMap[theMarker.Id]; // to do - look up actual record
-                long tosserId = markerRecord.tosserid;
-                string tosserName;
+                PhotoRecord markerRecord = markerMap[theMarker.Id]; 
+				string imageUrl, dateString, userUrl;
 
-                if (tosserId == 0)
-                    tosserName = markerRecord.ownername;
-                else
-                    tosserName = markerRecord.tossername;
+				if (!String.IsNullOrEmpty (markerRecord.catchUrl)) {
+					// caught image
+					imageUrl = markerRecord.catchUrl;
+					DateTime photoDate = markerRecord.received.ToLocalTime();
+					dateString = string.Format("{0} {1}", photoDate.ToShortDateString(), photoDate.ToShortTimeString());
+					userUrl = PhotoTossRest.Instance.GetUserProfileImage(markerRecord.ownername);
 
-                string userImageUrl = PhotoTossRest.Instance.GetUserProfileImage(markerRecord.tossername);
+				}
+				else {
+					// original image
+					imageUrl = markerRecord.imageUrl;
+					DateTime photoDate = markerRecord.created.ToLocalTime();
+					dateString = string.Format("{0} {1}", photoDate.ToShortDateString(), photoDate.ToShortTimeString());
+					userUrl = PhotoTossRest.Instance.GetUserProfileImage(markerRecord.ownername);
+				}
 
 
-
-                var theObj = Koush.DrawableCache.Instance.Get(userImageUrl);
+				var theObj = Koush.DrawableCache.Instance.Get(userUrl);
 
                 if (theObj == null)
-                    Koush.UrlImageViewHelper.SetUrlDrawable(userImageView, userImageUrl, Resource.Drawable.unknown_octopus, this);
+					Koush.UrlImageViewHelper.SetUrlDrawable(userImageView, userUrl, Resource.Drawable.unknown_octopus, this);
                 else
                 {
                     Koush.UrlImageViewHelper.ZombieDrawable drawable = (Koush.UrlImageViewHelper.ZombieDrawable)theObj;
                     SetRoundImage(userImageView, drawable.Bitmap);
                 }
-                string imageUrl;
-
+                
+				dateView.Text = dateString;
                 if (markerRecord.tossid == 0)
                     imageUrl = markerRecord.imageUrl;
                 else
                     imageUrl = markerRecord.catchUrl;
 
                 Koush.UrlImageViewHelper.SetUrlDrawable(catchImageView, imageUrl + "=s128-c", Resource.Drawable.ic_camera);
+
 
             }
             return infoWindowView;

@@ -289,6 +289,7 @@ namespace PhotoToss.AndroidApp
 			pager = FindViewById<ViewPager>(Resource.Id.post_pager);
 			pager.Adapter = new ImageViewPageAdapter(this.SupportFragmentManager, this);
 			pager.AddOnPageChangeListener (this);
+			pager.OffscreenPageLimit = 2;
 			tabs = FindViewById<PagerSlidingTabStrip>(Resource.Id.tabs);
 			tabs.SetViewPager(pager);
 			tabs.IndicatorColor = Resources.GetColor(Resource.Color.PT_light_orange);

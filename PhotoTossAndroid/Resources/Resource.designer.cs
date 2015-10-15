@@ -1487,9 +1487,6 @@ namespace PhotoToss.AndroidApp
 			global::GooglePlayServices.Resource.Styleable.WalletFragmentStyle_maskedWalletDetailsLogoTextColor = global::PhotoToss.AndroidApp.Resource.Styleable.WalletFragmentStyle_maskedWalletDetailsLogoTextColor;
 			global::GooglePlayServices.Resource.Styleable.WalletFragmentStyle_maskedWalletDetailsTextAppearance = global::PhotoToss.AndroidApp.Resource.Styleable.WalletFragmentStyle_maskedWalletDetailsTextAppearance;
 			global::Gcm.Client.Resource.String.library_name = global::PhotoToss.AndroidApp.Resource.String.library_name;
-			global::ZXing.Mobile.Resource.Id.contentFrame = global::PhotoToss.AndroidApp.Resource.Id.contentFrame;
-			global::ZXing.Mobile.Resource.Layout.zxingscanneractivitylayout = global::PhotoToss.AndroidApp.Resource.Layout.zxingscanneractivitylayout;
-			global::ZXing.Mobile.Resource.Layout.zxingscannerfragmentlayout = global::PhotoToss.AndroidApp.Resource.Layout.zxingscannerfragmentlayout;
 			global::com.refractored.Resource.Attribute.pstsDividerColor = global::PhotoToss.AndroidApp.Resource.Attribute.pstsDividerColor;
 			global::com.refractored.Resource.Attribute.pstsDividerPadding = global::PhotoToss.AndroidApp.Resource.Attribute.pstsDividerPadding;
 			global::com.refractored.Resource.Attribute.pstsDividerWidth = global::PhotoToss.AndroidApp.Resource.Attribute.pstsDividerWidth;
@@ -1533,6 +1530,9 @@ namespace PhotoToss.AndroidApp
 			global::com.refractored.Resource.Styleable.PagerSlidingTabStrip_pstsUnderlineColor = global::PhotoToss.AndroidApp.Resource.Styleable.PagerSlidingTabStrip_pstsUnderlineColor;
 			global::com.refractored.Resource.Styleable.PagerSlidingTabStrip_pstsUnderlineHeight = global::PhotoToss.AndroidApp.Resource.Styleable.PagerSlidingTabStrip_pstsUnderlineHeight;
 			global::PubNubMessaging.Resource.String.library_name = global::PhotoToss.AndroidApp.Resource.String.library_name;
+			global::ZXing.Mobile.Resource.Id.contentFrame = global::PhotoToss.AndroidApp.Resource.Id.contentFrame;
+			global::ZXing.Mobile.Resource.Layout.zxingscanneractivitylayout = global::PhotoToss.AndroidApp.Resource.Layout.zxingscanneractivitylayout;
+			global::ZXing.Mobile.Resource.Layout.zxingscannerfragmentlayout = global::PhotoToss.AndroidApp.Resource.Layout.zxingscannerfragmentlayout;
 		}
 		
 		public partial class Animation
@@ -4017,7 +4017,7 @@ namespace PhotoToss.AndroidApp
 			public const int loginView = 2131493032;
 			
 			// aapt resource value: 0x7f0c0098
-			public const int map = 2131493016;
+			public const int mapFragment = 2131493016;
 			
 			// aapt resource value: 0x7f0c002c
 			public const int match_parent = 2131492908;

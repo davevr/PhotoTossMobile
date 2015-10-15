@@ -14,12 +14,27 @@ namespace PhotoToss.Core
 		public double shareLong { get; set; }
 		public double shareLat { get; set; }
 		public List<PhotoRecord> catchList { get; set; }
-
+		public BarcodeLocation barcodelocation { get; set; }
 
 		public TossRecord ()
 		{
 			catchList = null;
 		}
+	}
+
+	public class BarcodeLocation 
+	{
+		public BarcodePoint topleft {get; set;}
+		public BarcodePoint topright {get; set;}
+		public BarcodePoint bottomleft {get; set;}
+		public BarcodePoint bottomright {get; set;}
+
+	}
+
+	public struct BarcodePoint
+	{
+		public float x {get; set;}
+		public float y { get; set; }
 	}
 }
 
