@@ -150,6 +150,7 @@ namespace PhotoToss.AndroidApp
 			attacher.Update();
 		}
 
+
 		public override View GetView(int position, View convertView, ViewGroup parent)
 		{
 			AttacherView view = convertView as AttacherView; // re-use an existing view, if one is available

@@ -113,7 +113,58 @@ namespace PhotoToss.Core
 		public BarcodePoint bottomleft {get; set;}
 		public BarcodePoint bottomright {get; set;}
 
+		public BarcodeLocation	Copy()
+		{
+			BarcodeLocation newLoc = new BarcodeLocation ();
 
+			newLoc.topleft = topleft;
+			newLoc.topright = topright;
+			newLoc.bottomleft = bottomleft;
+			newLoc.bottomright = bottomright;
+
+			return newLoc;
+		}
+
+		public BarcodeLocation Lerp(BarcodeLocation finalLoc, float percent)
+		{
+			BarcodeLocation newLoc = new BarcodeLocation ();
+			newLoc.topleft = topleft.Lerp(finalLoc.topleft, percent);
+			newLoc.topright = topright.Lerp(finalLoc.topright, percent);
+			newLoc.bottomleft = bottomleft.Lerp(finalLoc.bottomleft, percent);
+			newLoc.bottomright = bottomright.Lerp(finalLoc.bottomright, percent);
+
+			return newLoc;
+
+		}
+
+		public float[] GetPts()
+		{
+			float[] floats = new float[8];
+
+			floats [0] = topleft.x;
+			floats [1] = topleft.y;
+			floats [2] = topright.x;
+			floats [3] = topright.y;
+			floats [4] = bottomleft.x;
+			floats [5] = bottomleft.y;
+			floats [6] = bottomright.x;
+			floats [7] = bottomright.y;
+
+			return floats;
+		}
+
+		public static BarcodeLocation AllocFromPts(float[] ptList)
+		{
+			BarcodeLocation newLoc = new BarcodeLocation ();
+
+			newLoc.topleft = new BarcodePoint (ptList [0], ptList [1]);
+			newLoc.topright = new BarcodePoint (ptList [2], ptList [3]);
+			newLoc.bottomleft = new BarcodePoint (ptList [4], ptList [5]);
+			newLoc.bottomright = new BarcodePoint (ptList [6], ptList [7]);
+
+			return newLoc;
+
+		}
 	}
 
 	public struct BarcodePoint
@@ -126,8 +177,23 @@ namespace PhotoToss.Core
 			x = xLoc;
 			y = yLoc;
 		}
+
+		public BarcodePoint Lerp(BarcodePoint finalPt, float percent)
+		{
+			BarcodePoint newPt;
+
+			newPt.x = x + (finalPt.x - x) * percent;
+			newPt.y = y + (finalPt.y - y) * percent;
+
+			return newPt;
+		}
 	}
 
+	public class ImageLineageRecord
+	{
+
+
+	}
    
 
 }

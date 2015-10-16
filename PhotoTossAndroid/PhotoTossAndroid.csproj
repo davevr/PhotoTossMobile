@@ -228,6 +228,7 @@
       <Link>PhotoTossCore\pubnub.cs</Link>
     </Compile>
     <Compile Include="Activities\ImageViewChatFragment.cs" />
+    <Compile Include="Activities\ImageFlowActivity.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\AboutResources.txt" />
@@ -274,6 +275,7 @@
     <AndroidResource Include="Resources\drawable\RounderCorner.xml" />
     <AndroidResource Include="Resources\drawable\mychatbackground.xml" />
     <AndroidResource Include="Resources\drawable\otherchatbackground.xml" />
+    <AndroidResource Include="Resources\layout\ImageFlowActivity.axml" />
   </ItemGroup>
   <ItemGroup>
     <AndroidResource Include="Resources\values\Strings.xml" />

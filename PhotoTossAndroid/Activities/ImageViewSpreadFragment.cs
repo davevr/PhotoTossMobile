@@ -368,7 +368,8 @@ namespace PhotoToss.AndroidApp
         {
 			CurrentMarkerRecord = markerMap[theMarker.Id];
 
-			this.Activity.StartActivity (typeof(PhotoLineageActivity));
+			this.Activity.StartActivity (typeof(ImageFlowActivity));
+			//this.Activity.StartActivity (typeof(PhotoLineageActivity));
         }
 
     }
