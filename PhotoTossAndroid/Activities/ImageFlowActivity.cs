@@ -64,6 +64,7 @@ namespace PhotoToss.AndroidApp
 		{
 			imageList = new List<ImageLineageRecord> ();
 			theParents.Insert (0, ImageViewSpreadFragment.CurrentMarkerRecord);
+			theParents.Reverse ();
 			ImageLineageRecord prevRec = null;
 			foreach (PhotoRecord curRec in theParents) {
 				ImageLineageRecord newRec = new ImageLineageRecord ();
@@ -90,12 +91,12 @@ namespace PhotoToss.AndroidApp
 		{
 			ImageLineageRecord curRec = imageList.Find (rec => rec.imageUrl.CompareTo(theURL) == 0);
 
-			if (curRec) {
+			if (curRec != null) {
 				curRec.InitRecord (theBitmap);
-				int curIndex = imageList.IndexOf (curRec);
 
-
-
+				RunOnUiThread (() => {
+					UpdatePoints ();
+				});
 
 			}
 		}
@@ -110,46 +111,29 @@ namespace PhotoToss.AndroidApp
 
 		}
 
-		private void ConfigurePoints()
-		{
-			BarcodeLocation barLoc = parents [0].barcodelocation;
 
-			float innerHeight = innerMap.Height * ((float)outerMap.Width / (float)innerMap.Width);
-			innerLarge = new BarcodeLocation ();
-			innerLarge.topleft = new BarcodePoint (0, 0);
-			innerLarge.topright = new BarcodePoint (outerMap.Width, 0);
-			innerLarge.bottomleft = new BarcodePoint (0, innerHeight);
-			innerLarge.bottomright = new BarcodePoint (outerMap.Width, innerHeight);
-
-			outerSmall = new BarcodeLocation ();
-			outerSmall.topleft = new BarcodePoint (0, 0);
-			outerSmall.topright = new BarcodePoint (outerMap.Width, 0);
-			outerSmall.bottomleft = new BarcodePoint (0, outerMap.Height);
-			outerSmall.bottomright = new BarcodePoint (outerMap.Width, outerMap.Height);
-
-			Matrix baseMatrix = new Matrix ();
-			baseMatrix.SetPolyToPoly (new float[] { 0, 0, outerMap.Width, 0, outerMap.Width, outerMap.Width, 0, outerMap.Width }, 0,
-				new float[] {barLoc.topleft.x, barLoc.topleft.y, barLoc.topright.x, barLoc.topright.y,
-					barLoc.bottomright.x, barLoc.bottomright.y, barLoc.bottomleft.x, barLoc.bottomleft.y
-				}, 0, 4);
-
-			float[] innerPtList = innerLarge.GetPts ();
-			baseMatrix.MapPoints (innerPtList);
-			innerSmall = BarcodeLocation.AllocFromPts (innerPtList);
-
-			Matrix expandedMatrix = new Matrix ();
-			baseMatrix.Invert (expandedMatrix);
-			float[] outerPtList = outerSmall.GetPts ();
-			expandedMatrix.MapPoints (outerPtList);
-			outerLarge = BarcodeLocation.AllocFromPts (outerPtList);
-			
-			UpdatePoints ();
-		}
 
 		private void UpdatePoints()
 		{
-			innerCurrent = innerLarge.Lerp (innerSmall, curProgress);
-			outerCurrent = outerLarge.Lerp (outerSmall, curProgress);
+			int curInnerFrame = (int)Math.Truncate (curProgress);
+			float percent = 1 - (curProgress - curInnerFrame);
+
+			ImageLineageRecord innerRec = imageList [curInnerFrame];
+			ImageLineageRecord outerRec = innerRec.nextRec;
+
+			if (innerRec.loaded)
+				innerRec.curLoc = innerRec.innerLarge.Lerp (innerRec.innerSmall, percent);
+			else
+				Koush.UrlImageViewHelper.LoadUrlDrawable (this, innerRec.imageUrl + "=s2048", this);
+
+			if (outerRec != null) {
+				if (outerRec.loaded)
+					outerRec.curLoc = outerRec.outerLarge.Lerp (outerRec.outerSmall, percent);
+				else
+					Koush.UrlImageViewHelper.LoadUrlDrawable (this, outerRec.imageUrl + "=s2048", this);
+
+			}
+
 			RenderImageFrame ();
 		}
 
@@ -157,40 +141,62 @@ namespace PhotoToss.AndroidApp
 		{
 			Canvas newCanvas = new Canvas (canvasMap);
 			Paint thePaint = new Paint (PaintFlags.AntiAlias);
+			int curInnerFrame = (int)Math.Truncate (curProgress);
+			float percent = curProgress - curInnerFrame;
+			ImageLineageRecord innerRec = imageList [curInnerFrame];
+			ImageLineageRecord outerRec = innerRec.nextRec;
 
-			Matrix innerMatrix = new Matrix ();
-			innerMatrix.SetPolyToPoly (new float[] {
-				0,
-				0,
-				innerMap.Width,
-				0,
-				innerMap.Width,
-				innerMap.Height,
-				0,
-				innerMap.Height
-			}, 0,
-				new float[] {innerCurrent.topleft.x, innerCurrent.topleft.y, innerCurrent.topright.x, innerCurrent.topright.y,
-					innerCurrent.bottomright.x, innerCurrent.bottomright.y, innerCurrent.bottomleft.x, innerCurrent.bottomleft.y
-				}, 0, 4);
 
-			Matrix outerMatrix = new Matrix ();
-			outerMatrix.SetPolyToPoly (new float[] {
-				0,
-				0,
-				outerMap.Width,
-				0,
-				outerMap.Width,
-				outerMap.Height,
-				0,
-				outerMap.Height
-			}, 0,
-				new float[] {outerCurrent.topleft.x, outerCurrent.topleft.y, outerCurrent.topright.x, outerCurrent.topright.y,
-					outerCurrent.bottomright.x, outerCurrent.bottomright.y, outerCurrent.bottomleft.x, outerCurrent.bottomleft.y
-				}, 0, 4);
-			
-			//outerMatrix.Reset ();
-			newCanvas.DrawBitmap (outerMap, outerMatrix, thePaint);
-			newCanvas.DrawBitmap (innerMap, innerMatrix, thePaint);
+			if ((outerRec != null) && (outerRec.loaded)) {
+				if (outerRec.curLoc != null) {
+					Matrix outerMatrix = new Matrix ();
+					outerMatrix.SetPolyToPoly (new float[] {
+						0,
+						0,
+						outerRec.cachedMap.Width,
+						0,
+						outerRec.cachedMap.Width,
+						outerRec.cachedMap.Height,
+						0,
+						outerRec.cachedMap.Height
+					}, 0,
+						new float[] {outerRec.curLoc.topleft.x, outerRec.curLoc.topleft.y, outerRec.curLoc.topright.x, outerRec.curLoc.topright.y,
+							outerRec.curLoc.bottomright.x, outerRec.curLoc.bottomright.y, outerRec.curLoc.bottomleft.x, outerRec.curLoc.bottomleft.y
+						}, 0, 4);
+
+					newCanvas.DrawBitmap (outerRec.cachedMap, outerMatrix, thePaint);
+				} else {
+					// not initted yet
+					Paint blackPaint = new Paint();
+					blackPaint.Color = Color.Black;
+					newCanvas.DrawRect(new Rect(0,0,canvasMap.Width, canvasMap.Height), blackPaint);
+				}
+			}
+
+
+			if ((innerRec != null) && (innerRec.loaded)) {
+				if (innerRec.curLoc != null) {
+					Matrix innerMatrix = new Matrix ();
+					innerMatrix.SetPolyToPoly (new float[] {
+						0,
+						0,
+						innerRec.cachedMap.Width,
+						0,
+						innerRec.cachedMap.Width,
+						innerRec.cachedMap.Height,
+						0,
+						innerRec.cachedMap.Height
+					}, 0,
+						new float[] {innerRec.curLoc.topleft.x, innerRec.curLoc.topleft.y, innerRec.curLoc.topright.x, innerRec.curLoc.topright.y,
+							innerRec.curLoc.bottomright.x, innerRec.curLoc.bottomright.y, innerRec.curLoc.bottomleft.x, innerRec.curLoc.bottomleft.y
+						}, 0, 4);
+					newCanvas.DrawBitmap (innerRec.cachedMap, innerMatrix, thePaint);
+				} else {
+					// not inited - just draw fullscreen
+					newCanvas.DrawBitmap (innerRec.cachedMap, 0, 0, thePaint);
+				}
+			}
+
 
 		}
 	}
@@ -219,22 +225,22 @@ namespace PhotoToss.AndroidApp
 			outerSmall.bottomleft = new BarcodePoint (0, cachedMap.Height);
 			outerSmall.bottomright = new BarcodePoint (cachedMap.Width, cachedMap.Height);
 
-			if ((prevRec != null) && prevRec.loaded) {
-				InitFromPrev ();
+			if ((nextRec != null) && nextRec.loaded) {
+				InitFromNext ();
 			}
 
-			if ((nextRec != null) && nextRec.loaded) {
-				nextRec.InitFromPrev ();
+			if ((prevRec != null) && (!prevRec.loaded)) {
+				prevRec.InitFromNext ();
 			}
 
 			loaded = true;
 		}
 
-		private void InitFromPrev()
+		private void InitFromNext()
 		{
-			if ((prevRec != null) && (innerSmall == null)) {
-				Bitmap outerMap = prevRec.cachedMap;
-				BarcodeLocation barLoc = prevRec.photoRec.barcodelocation;
+			if ((nextRec != null) && (innerSmall == null)) {
+				Bitmap outerMap = nextRec.cachedMap;
+				BarcodeLocation barLoc = nextRec.photoRec.barcodelocation;
 
 				if (barLoc != null) {
 					float scaledHeight = cachedMap.Height * ((float)outerMap.Width / (float)cachedMap.Width);
@@ -268,9 +274,9 @@ namespace PhotoToss.AndroidApp
 
 					Matrix expandedMatrix = new Matrix ();
 					baseMatrix.Invert (expandedMatrix);
-					float[] outerPtList = outerSmall.GetPts ();
+					float[] outerPtList = nextRec.outerSmall.GetPts ();
 					expandedMatrix.MapPoints (outerPtList);
-					outerLarge = BarcodeLocation.AllocFromPts (outerPtList);
+					nextRec.outerLarge = BarcodeLocation.AllocFromPts (outerPtList);
 				}
 
 			}
