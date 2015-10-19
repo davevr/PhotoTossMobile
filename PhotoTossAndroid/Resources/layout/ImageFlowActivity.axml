@@ -7,7 +7,8 @@
         android:src="@android:drawable/ic_menu_gallery"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:id="@+id/imageView" />
+        android:id="@+id/imageView"
+        android:layout_gravity="top" />
     <SeekBar
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

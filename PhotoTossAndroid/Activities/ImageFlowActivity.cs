@@ -24,14 +24,14 @@ namespace PhotoToss.AndroidApp
 	{
 		private ImageView imageView { get; set; }
 		private SeekBar slider { get; set; }
-		private Bitmap innerMap = null;
-		private Bitmap outerMap = null;
 		private Bitmap canvasMap = null;
+		private Bitmap curMap = null;
 		private List<ImageLineageRecord> imageList;
 		private PhotoViewAttacher attacher;
 		private float curProgress;
 		private BarcodeLocation innerLarge, innerSmall, innerCurrent;
 		private BarcodeLocation outerLarge, outerSmall, outerCurrent;
+		private string imageSizeStr = "=s2048";
 
 		protected override void OnCreate (Bundle bundle)
 		{
@@ -89,12 +89,27 @@ namespace PhotoToss.AndroidApp
 
 		public void OnLoaded(ImageView theImage, Bitmap theBitmap, string theURL, bool p4)
 		{
-			ImageLineageRecord curRec = imageList.Find (rec => rec.imageUrl.CompareTo(theURL) == 0);
-
+			bool updateAttacher = false;
+			string trimmedURL = theURL.Substring (0, theURL.LastIndexOf ("=s"));
+			ImageLineageRecord curRec = imageList.Find (rec => rec.imageUrl.CompareTo(trimmedURL) == 0);
+			if (canvasMap == null) {
+				curMap = theBitmap;
+				System.GC.Collect ();
+				canvasMap = curMap.Copy (curMap.GetConfig (), true);
+				updateAttacher = true;
+			}
 			if (curRec != null) {
 				curRec.InitRecord (theBitmap);
 
 				RunOnUiThread (() => {
+					if (updateAttacher) {
+						attacher = new PhotoViewAttacher (imageView);
+						imageView.SetImageBitmap (canvasMap);
+
+						attacher.MaximumScale = 5;
+						attacher.Update();
+
+					}
 					UpdatePoints ();
 				});
 
@@ -116,21 +131,31 @@ namespace PhotoToss.AndroidApp
 		private void UpdatePoints()
 		{
 			int curInnerFrame = (int)Math.Truncate (curProgress);
-			float percent = 1 - (curProgress - curInnerFrame);
+			float percent = (curProgress - curInnerFrame);
 
 			ImageLineageRecord innerRec = imageList [curInnerFrame];
 			ImageLineageRecord outerRec = innerRec.nextRec;
 
-			if (innerRec.loaded)
-				innerRec.curLoc = innerRec.innerLarge.Lerp (innerRec.innerSmall, percent);
-			else
-				Koush.UrlImageViewHelper.LoadUrlDrawable (this, innerRec.imageUrl + "=s2048", this);
+			if (innerRec.loaded) {
+				if (innerRec.innerLarge != null)
+					innerRec.curLoc = innerRec.innerLarge.Lerp (innerRec.innerSmall, percent);
+				else
+					innerRec.curLoc = innerRec.outerSmall.Copy ();
+			} else if (!innerRec.loadRequested) {
+				innerRec.loadRequested = true;
+				Koush.UrlImageViewHelper.LoadUrlDrawable (this, innerRec.imageUrl + imageSizeStr, this);
+			}
 
 			if (outerRec != null) {
-				if (outerRec.loaded)
-					outerRec.curLoc = outerRec.outerLarge.Lerp (outerRec.outerSmall, percent);
-				else
-					Koush.UrlImageViewHelper.LoadUrlDrawable (this, outerRec.imageUrl + "=s2048", this);
+				if (outerRec.loaded) {
+					if (outerRec.outerLarge != null)
+						outerRec.curLoc = outerRec.outerLarge.Lerp (outerRec.outerSmall, percent);
+					else
+						outerRec.curLoc = outerRec.outerSmall.Copy ();
+				} else if (!outerRec.loadRequested) {
+					outerRec.loadRequested = true;
+					Koush.UrlImageViewHelper.LoadUrlDrawable (this, outerRec.imageUrl + imageSizeStr, this);
+				}
 
 			}
 
@@ -139,13 +164,34 @@ namespace PhotoToss.AndroidApp
 
 		private void RenderImageFrame()
 		{
-			Canvas newCanvas = new Canvas (canvasMap);
-			Paint thePaint = new Paint (PaintFlags.AntiAlias);
 			int curInnerFrame = (int)Math.Truncate (curProgress);
 			float percent = curProgress - curInnerFrame;
 			ImageLineageRecord innerRec = imageList [curInnerFrame];
 			ImageLineageRecord outerRec = innerRec.nextRec;
 
+			if ((outerRec != null) && (outerRec.loaded) && (outerRec.cachedMap != curMap)) {
+				// potentially recompute the map
+				if (canvasMap != null) {
+					canvasMap.Dispose ();
+					System.GC.Collect ();
+				}
+				
+				curMap = outerRec.cachedMap;
+				canvasMap = curMap.Copy (curMap.GetConfig (), true);
+				imageView.SetImageBitmap (canvasMap);
+
+				if (attacher != null) {
+					attacher.Update ();
+				}
+			}
+			if (canvasMap == null)
+				return;
+			Canvas newCanvas = new Canvas (canvasMap);
+			Paint thePaint = new Paint (PaintFlags.AntiAlias);
+
+			Paint blackPaint = new Paint();
+			blackPaint.Color = Color.Black;
+			newCanvas.DrawRect (new Rect (0, 0, canvasMap.Width, canvasMap.Height), blackPaint);
 
 			if ((outerRec != null) && (outerRec.loaded)) {
 				if (outerRec.curLoc != null) {
@@ -167,9 +213,8 @@ namespace PhotoToss.AndroidApp
 					newCanvas.DrawBitmap (outerRec.cachedMap, outerMatrix, thePaint);
 				} else {
 					// not initted yet
-					Paint blackPaint = new Paint();
-					blackPaint.Color = Color.Black;
-					newCanvas.DrawRect(new Rect(0,0,canvasMap.Width, canvasMap.Height), blackPaint);
+
+					//newCanvas.DrawRect(new Rect(0,0,canvasMap.Width, canvasMap.Height), blackPaint);
 				}
 			}
 
@@ -199,6 +244,20 @@ namespace PhotoToss.AndroidApp
 
 
 		}
+
+		protected override void OnDestroy ()
+		{
+			foreach (ImageLineageRecord curRec in imageList) {
+				curRec.DisposeRecord ();
+			}
+			imageList.Clear ();
+			canvasMap.Dispose();
+			imageList = null;
+			canvasMap = null;
+			curMap = null;
+			System.GC.Collect ();
+			base.OnDestroy ();
+		}
 	}
 
 	public class ImageLineageRecord
@@ -214,7 +273,15 @@ namespace PhotoToss.AndroidApp
 		public BarcodeLocation curLoc {get; set;} 
 		public string imageUrl {get; set;}
 		public bool loaded {get; set;}
+		public bool loadRequested = false;
 
+
+		public void DisposeRecord()
+		{
+			if (cachedMap != null)
+				cachedMap.Dispose();
+			cachedMap = null;
+		}
 
 		public void InitRecord (Bitmap theBitmap) 
 		{
@@ -229,7 +296,7 @@ namespace PhotoToss.AndroidApp
 				InitFromNext ();
 			}
 
-			if ((prevRec != null) && (!prevRec.loaded)) {
+			if ((prevRec != null) && prevRec.loaded) {
 				prevRec.InitFromNext ();
 			}
 
@@ -277,6 +344,34 @@ namespace PhotoToss.AndroidApp
 					float[] outerPtList = nextRec.outerSmall.GetPts ();
 					expandedMatrix.MapPoints (outerPtList);
 					nextRec.outerLarge = BarcodeLocation.AllocFromPts (outerPtList);
+
+					// draw inner graphic into outer graphic...
+					System.GC.Collect();
+					Bitmap newOuterMap = outerMap.Copy (outerMap.GetConfig (), true);
+					outerMap.Dispose ();
+					nextRec.cachedMap = newOuterMap;
+					outerMap = newOuterMap;
+					System.GC.Collect ();
+						
+					Canvas largeCanvas = new Canvas(outerMap);
+					Paint thePaint = new Paint(PaintFlags.AntiAlias);
+
+					Matrix innerMatrix = new Matrix ();
+					innerMatrix.SetPolyToPoly (new float[] {
+						0,
+						0,
+						cachedMap.Width,
+						0,
+						cachedMap.Width,
+						cachedMap.Height,
+						0,
+						cachedMap.Height
+					}, 0,
+						new float[] {innerSmall.topleft.x, innerSmall.topleft.y, innerSmall.topright.x, innerSmall.topright.y,
+							innerSmall.bottomright.x, innerSmall.bottomright.y, innerSmall.bottomleft.x, innerSmall.bottomleft.y
+						}, 0, 4);
+					largeCanvas.DrawBitmap (cachedMap, innerMatrix, thePaint);
+
 				}
 
 			}

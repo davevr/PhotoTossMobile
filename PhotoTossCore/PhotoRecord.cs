@@ -189,11 +189,7 @@ namespace PhotoToss.Core
 		}
 	}
 
-	public class ImageLineageRecord
-	{
 
-
-	}
    
 
 }
