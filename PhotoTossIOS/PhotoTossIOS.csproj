@@ -241,6 +241,7 @@
     <InterfaceDefinition Include="Base.lproj\LeaderboardCell.xib" />
     <InterfaceDefinition Include="Base.lproj\ImageLineageViewController.xib" />
     <InterfaceDefinition Include="Base.lproj\ImageChatViewController.xib" />
+    <InterfaceDefinition Include="Base.lproj\ImageFlowViewController.xib" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Info.plist" />
@@ -351,6 +352,11 @@
     <Compile Include="..\PhotoTossCore\pubnub.cs">
       <Link>PhotoTossCore\pubnub.cs</Link>
     </Compile>
+    <Compile Include="ViewControllers\ImageFlowViewController.cs" />
+    <Compile Include="ViewControllers\ImageFlowViewController.designer.cs">
+      <DependentUpon>ImageFlowViewController.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Helpers\ImageLineageRecord.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\iOS\Xamarin.iOS.CSharp.targets" />
   <ItemGroup>
