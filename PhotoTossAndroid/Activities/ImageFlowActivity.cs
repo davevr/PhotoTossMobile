@@ -29,8 +29,6 @@ namespace PhotoToss.AndroidApp
 		private List<ImageLineageRecord> imageList;
 		private PhotoViewAttacher attacher;
 		private float curProgress;
-		private BarcodeLocation innerLarge, innerSmall, innerCurrent;
-		private BarcodeLocation outerLarge, outerSmall, outerCurrent;
 		private string imageSizeStr = "=s2048";
 
 		protected override void OnCreate (Bundle bundle)
@@ -80,9 +78,12 @@ namespace PhotoToss.AndroidApp
 				imageList.Add (newRec);
 				prevRec = newRec;
 			}
-
-			slider.Max = 100 * (imageList.Count - 1);
-			slider.KeyProgressIncrement = 100;
+			if (theParents.Count == 1) {
+				slider.Visibility = ViewStates.Gone;
+			} else {
+				slider.Max = 100 * (imageList.Count - 1);
+				slider.KeyProgressIncrement = 100;
+			}
 
 			UpdatePoints ();
 		}
@@ -108,7 +109,9 @@ namespace PhotoToss.AndroidApp
 
 						attacher.MaximumScale = 5;
 						attacher.Update();
-
+						Matrix	transMatrix = new Matrix (attacher.DisplayMatrix);
+						transMatrix.SetTranslate (-(attacher.DisplayRect.Left), -(attacher.DisplayRect.Top));
+						attacher.SetDisplayMatrix (transMatrix);
 					}
 					UpdatePoints ();
 				});
@@ -182,6 +185,10 @@ namespace PhotoToss.AndroidApp
 
 				if (attacher != null) {
 					attacher.Update ();
+
+				Matrix	transMatrix = new Matrix (attacher.DisplayMatrix);
+				transMatrix.SetTranslate (-(attacher.DisplayRect.Left), -(attacher.DisplayRect.Top));
+				attacher.SetDisplayMatrix (transMatrix);
 				}
 			}
 			if (canvasMap == null)

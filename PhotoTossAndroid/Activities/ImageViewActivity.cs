@@ -231,6 +231,7 @@ namespace PhotoToss.AndroidApp
 				profileTracker.StopTracking ();
 			}
 			base.OnDestroy ();
+			System.GC.Collect ();
 		}
 
 		private void HandleLoginOK()

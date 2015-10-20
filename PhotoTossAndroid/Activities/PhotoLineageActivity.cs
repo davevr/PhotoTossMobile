@@ -125,7 +125,7 @@ namespace PhotoToss.AndroidApp
 
 			if (barLoc != null) {
 				Bitmap canvasMap = theBitmap.Copy(theBitmap.GetConfig(), true);
-				Bitmap tinyImage = ImageViewDetailFragment.CurrentImage;
+				Bitmap tinyImage = null;//ImageViewDetailFragment.CurrentImage;
 				Canvas newCanvas = new Canvas(canvasMap);
 				Paint thePaint = new Paint(PaintFlags.AntiAlias);
 				BarcodePoint bottomLeftExt;
