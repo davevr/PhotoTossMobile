@@ -20,6 +20,7 @@ namespace PhotoToss.iOSApp
 		public string imageUrl {get; set;}
 		public bool loaded {get; set;}
 		public bool loadRequested = false;
+		public bool needsMapProcessed = true;
 
 
 		public void DisposeRecord()
@@ -83,7 +84,6 @@ namespace PhotoToss.iOSApp
 					float[] outerPtList = nextRec.outerSmall.GetPts ();
 					MapPoints (outerMatrix, outerPtList);
 					nextRec.outerLarge = BarcodeLocation.AllocFromPts (outerPtList);
-
 
 				}
 

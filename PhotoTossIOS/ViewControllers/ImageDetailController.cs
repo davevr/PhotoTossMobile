@@ -210,7 +210,7 @@ namespace PhotoToss.iOSApp
 			if (contr != null) {
 				contr.NavigationBar.Translucent = false;
 				contr.NavigationBar.BarTintColor = UIColor.FromRGB (9, 171, 161);
-				contr.NavigationBar.TintColor = UIColor.FromRGB (213,88,2);
+				//contr.NavigationBar.TintColor = UIColor.FromRGB (213,88,2);
 				Title = "Tossed Image";
 
 			}
