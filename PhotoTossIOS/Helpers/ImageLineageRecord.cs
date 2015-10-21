@@ -73,43 +73,29 @@ namespace PhotoToss.iOSApp
 					CATransform3D innerMatrix = RectToQuad (new CGRect (new CGPoint (0, 0), new CGSize(outerMap.Size.Width, outerMap.Size.Width)),
 						                            barLoc.topleft, barLoc.topright, barLoc.bottomleft, barLoc.bottomright);
 
-					CGPoint oldPt1 = new CGPoint (0, 0);
-					CGPoint oldPt2 = new CGPoint (outerMap.Size.Width, 0);
-					CGPoint oldPt3 = new CGPoint (0, scaledHeight);
-					CGPoint oldPt4 = new CGPoint (outerMap.Size.Width, scaledHeight);
-					CGAffineTransform ptTrans = CATransform3D.GetAffine (innerMatrix);
 
-					CGPoint newPt1 = ptTrans.TransformPoint (oldPt1);
-					CGPoint newPt2 = ptTrans.TransformPoint (oldPt2);
-					CGPoint newPt3 = ptTrans.TransformPoint (oldPt3);
-					CGPoint newPt4 = ptTrans.TransformPoint (oldPt4);
-
-					innerSmall = new BarcodeLocation ();
-					innerSmall.topleft = new BarcodePoint ((float)newPt1.X, (float)newPt1.Y);
-					innerSmall.topright = new BarcodePoint ((float)newPt2.X, (float)newPt2.Y);
-					innerSmall.bottomleft = new BarcodePoint ((float)newPt3.X, (float)newPt3.Y);
-					innerSmall.bottomright = new BarcodePoint ((float)newPt4.X, (float)newPt4.Y);
+					float[] innerPtList = innerLarge.GetPts ();
+					MapPoints (innerMatrix, innerPtList);
+					innerSmall = BarcodeLocation.AllocFromPts (innerPtList);
 
 					CATransform3D outerMatrix = innerMatrix.Invert (innerMatrix);
-					oldPt1 = new CGPoint (0, 0);
-					oldPt2 = new CGPoint (nextRec.cachedMap.Size.Width, 0);
-					oldPt3 = new CGPoint (0, nextRec.cachedMap.Size.Height);
-					oldPt4 = new CGPoint (nextRec.cachedMap.Size.Width, nextRec.cachedMap.Size.Height);
-					ptTrans = CATransform3D.GetAffine (outerMatrix);
 
-					newPt1 = ptTrans.TransformPoint (oldPt1);
-					newPt2 = ptTrans.TransformPoint (oldPt2);
-					newPt3 = ptTrans.TransformPoint (oldPt3);
-					newPt4 = ptTrans.TransformPoint (oldPt4);
-
-					nextRec.outerLarge = new BarcodeLocation ();
-					nextRec.outerLarge.topleft = new BarcodePoint ((float)newPt1.X, (float)newPt1.Y);
-					nextRec.outerLarge.topright = new BarcodePoint ((float)newPt2.X, (float)newPt2.Y);
-					nextRec.outerLarge.bottomleft = new BarcodePoint ((float)newPt3.X, (float)newPt3.Y);
-					nextRec.outerLarge.bottomright = new BarcodePoint ((float)newPt4.X, (float)newPt4.Y);
+					float[] outerPtList = nextRec.outerSmall.GetPts ();
+					MapPoints (outerMatrix, outerPtList);
+					nextRec.outerLarge = BarcodeLocation.AllocFromPts (outerPtList);
 
 
 				}
+
+			}
+		}
+
+		public static void MapPoints(CATransform3D matrix, float[] ptList) {
+			for (int i = 0; i < ptList.Length; i += 2) {
+				float x = ptList [i + 0] * (float)matrix.m11 + ptList [i + 1] * (float)matrix.m21 + (float)matrix.m41;
+				float y = ptList [i + 0] * (float)matrix.m12 + ptList [i + 1] * (float)matrix.m22 + (float)matrix.m42;
+				ptList [i] = x;
+				ptList [i + 1] = y;
 
 			}
 		}
