@@ -7,14 +7,12 @@ using System.Collections.Generic;
 using PhotoToss.Core;
 using SDWebImage;
 using CoreGraphics;
+using CoreAnimation;
 
 namespace PhotoToss.iOSApp
 {
 	public partial class ImageFlowViewController : UIViewController
 	{
-		private UIImageView newImageView { get; set;}
-		private UIImage canvasMap {get; set;}
-		private UIImage curMap { get; set;}
 		private nfloat nativeScale = 1;
 		public PhotoRecord CurrentMarkerRecord {get; set;}
 		private List<ImageLineageRecord> imageList;
@@ -24,7 +22,8 @@ namespace PhotoToss.iOSApp
 		private UIImageView innerImage;
 		private UIImageView outerImage;
 		private int lastFrame = -1;
-
+		private bool scrollInited = false;
+		private bool isOuterSet, isInnerSet;
 		public ImageFlowViewController () : base ("ImageFlowViewController", null)
 		{
 		}
@@ -60,7 +59,11 @@ namespace PhotoToss.iOSApp
 			innerImage = new UIImageView (new CGRect (new CGPoint (100, 100), new CGSize (200, 200)));
 			innerImage.BackgroundColor = UIColor.Yellow;
 			frameView.AddSubview (innerImage);
+
 			scrollView.AddSubview (frameView);
+			frameView.Layer.Position = new CGPoint (0, 0);
+			frameView.Layer.AnchorPoint = new CGPoint (0, 0);
+			scrollView.BackgroundColor = UIColor.Blue;
 		}
 
 		private void OnDoubleTap (UIGestureRecognizer gesture) {
@@ -185,37 +188,30 @@ namespace PhotoToss.iOSApp
 			ImageLineageRecord curRec = imageList.Find (rec => rec.imageUrl.CompareTo(trimmedURL) == 0);
 
 
-			if (canvasMap == null) {
-				curMap = image;
-				canvasMap = UIImage.FromImage (image.CGImage);
-				updateAttacher = true;
-			}
-
 			if (curRec != null) {
 				curRec.InitRecord (image);
 
 				InvokeOnMainThread (() => {
-					if (updateAttacher) {
-						if (newImageView == null) {
-							CGRect bounds = new CGRect (new CGPoint (0, 0), canvasMap.Size);
-							newImageView = new UIImageView (bounds);
-							scrollView.AddSubview (newImageView);
-							scrollView.MaximumZoomScale = 3f;
-							scrollView.MinimumZoomScale = .1f;
-							scrollView.ViewForZoomingInScrollView += (UIScrollView sv) => {
-								return newImageView;
-							};
-						}
-						newImageView.Image = canvasMap;
-						scrollView.ContentSize = canvasMap.Size;
-						newImageView.Image = canvasMap;
+					if (!scrollInited) {
+
+						CGRect bounds = new CGRect (new CGPoint (0, 0), image.Size);
+						frameView.Frame = bounds;
+						frameView.Bounds = bounds;
+						scrollView.MaximumZoomScale = 3f;
+						scrollView.MinimumZoomScale = .1f;
+						scrollView.ViewForZoomingInScrollView += (UIScrollView sv) => {
+							return frameView;
+						};
+
+						scrollView.ContentSize = image.Size;
 						CGSize scrollSize = scrollView.Bounds.Size;
 
-						nfloat hScale = scrollSize.Width / canvasMap.Size.Width;
-						nfloat vScale = scrollSize.Height / canvasMap.Size.Height;
+						nfloat hScale = scrollSize.Width / image.Size.Width;
+						nfloat vScale = scrollSize.Height / image.Size.Height;
 						nativeScale = hScale < vScale ? hScale : vScale;// (nfloat)Math.Min(hScale, vScale);
 						// compute initial scale
 						scrollView.SetZoomScale (nativeScale, true);
+						scrollInited = true;
 
 					}
 					UpdatePoints ();
@@ -225,6 +221,30 @@ namespace PhotoToss.iOSApp
 			}
 		}
 
+		private void SetInnerImage(ImageLineageRecord innerRec)
+		{
+			if ((!isInnerSet) && (innerRec != null) && (innerRec.cachedMap != null)) {
+				// set inner bitmap
+				CGRect bRect = new CGRect (new CGPoint (0, 0), innerRec.cachedMap.Size);
+				innerImage.Frame = bRect;
+				innerImage.Bounds = bRect;
+				innerImage.Image = innerRec.cachedMap;
+				isInnerSet = true;
+			}
+		}
+
+		private void SetOuterImage(ImageLineageRecord outerRec)
+		{
+			if ((!isOuterSet) && (outerRec != null) && (outerRec.cachedMap != null)) {
+				// set outer bitmap
+				CGRect bRect = new CGRect (new CGPoint (0, 0), outerRec.cachedMap.Size);
+				outerImage.Frame = bRect;
+				outerImage.Bounds = bRect;
+				outerImage.Image = outerRec.cachedMap;
+				isOuterSet = true;
+
+			}
+		}
 
 		private void RenderImageFrame()
 		{
@@ -235,47 +255,36 @@ namespace PhotoToss.iOSApp
 
 			if (curInnerFrame != lastFrame) {
 				// set us up!
+				isInnerSet = isOuterSet = false;
 
-				if ((outerRec != null) && (outerRec.cachedMap != null)) {
-					// set outer bitmap
-					CGRect bRect = new CGRect(new CGPoint(0,0), outerRec.cachedMap.Size);
-					outerImage.Frame = bRect;
-					outerImage.Bounds = bRect;
-					outerImage.Image = innerRec.cachedMap;
-					frameView.Frame = bRect;
-					frameView.Bounds = bRect;
-				}
-
-				if ((innerRec != null) && (innerRec.cachedMap != null)) {
-					// set inner bitmap
-					CGRect bRect = new CGRect(new CGPoint(0,0), innerRec.cachedMap.Size);
-					innerImage.Frame = bRect;
-					innerImage.Bounds = bRect;
-					innerImage.Image = innerRec.cachedMap;
-				}
-
-
-
-				lastFrame = curInnerFrame ;
+				lastFrame = curInnerFrame;
 			}
 
-			UIGraphics.BeginImageContextWithOptions (frameView.Bounds.Size, false, 0.0f);
-			frameView.DrawViewHierarchy (frameView.Bounds, false);
-			UIImage snapShot = UIGraphics.GetImageFromCurrentImageContext ();
-			UIGraphics.EndImageContext ();
+			SetOuterImage (outerRec);
+			SetInnerImage (innerRec);
 
+			if ((outerRec != null) && (outerRec.cachedMap != null)) {
+				// set outer transform
+				CATransform3D outerMatrix = ImageLineageRecord.RectToQuad (new CGRect (new CGPoint (0, 0), new CGSize(outerRec.cachedMap.Size.Width, outerRec.cachedMap.Size.Height)),
+					outerRec.curLoc.topleft, outerRec.curLoc.topright, outerRec.curLoc.bottomleft, outerRec.curLoc.bottomright);
 
-			newImageView.Image = snapShot;
-			newImageView.Frame = new CGRect (new CGPoint (0, 0), snapShot.Size);
-			scrollView.ContentSize = snapShot.Size;
-			CGSize scrollSize = scrollView.Bounds.Size;
+				CGPoint newLoc = new CGPoint (0,0);
+				outerImage.Layer.AnchorPoint = newLoc;
+				outerImage.Layer.Position = newLoc;
+				outerImage.Layer.Transform = outerMatrix;
 
-			nfloat hScale = scrollSize.Width / canvasMap.Size.Width;
-			nfloat vScale = scrollSize.Height / canvasMap.Size.Height;
-			nativeScale = hScale < vScale ? hScale : vScale;// (nfloat)Math.Min(hScale, vScale);
-			// compute initial scale
-			scrollView.SetZoomScale (nativeScale, true);
+			}
 
+			if ((innerRec != null) && (innerRec.cachedMap != null)) {
+				// set inner tranform
+				CATransform3D innerMatrix = ImageLineageRecord.RectToQuad (new CGRect (new CGPoint (0, 0), new CGSize(innerRec.cachedMap.Size.Width, innerRec.cachedMap.Size.Height)),
+					innerRec.curLoc.topleft, innerRec.curLoc.topright, innerRec.curLoc.bottomleft, innerRec.curLoc.bottomright);
+
+				CGPoint newLoc = new CGPoint (0,0);
+				innerImage.Layer.AnchorPoint = newLoc;
+				innerImage.Layer.Position = newLoc;
+				innerImage.Layer.Transform = innerMatrix;
+			}
 
 
 		}

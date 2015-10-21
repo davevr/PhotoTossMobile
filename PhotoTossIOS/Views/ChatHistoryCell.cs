@@ -5,7 +5,6 @@ using Foundation;
 using UIKit;
 using PhotoToss.Core;
 using SDWebImage;
-using UIKit;
 
 
 namespace PhotoToss.iOSApp
