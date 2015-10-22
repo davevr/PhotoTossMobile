@@ -107,17 +107,38 @@ namespace PhotoToss.iOSApp
 			NewMessageCount = 0;
 			SubscribeToImageChannel ();
 
-			this.View.AddGestureRecognizer (new UISwipeGestureRecognizer (() => {
+			var swipeLeft = new UISwipeGestureRecognizer (() => {
 				DoSwipeLeft ();
 			}) {
 				Direction = UISwipeGestureRecognizerDirection.Left
-			});
+			};
 
-			this.View.AddGestureRecognizer (new UISwipeGestureRecognizer (() => {
+			var swipeRight = new UISwipeGestureRecognizer (() => {
 				DoSwipeRight ();
 			}) {
 				Direction = UISwipeGestureRecognizerDirection.Right
-			});
+			};
+					
+			swipeLeft.ShouldReceiveTouch += (UIGestureRecognizer r, UITouch t) => 
+			{ 
+				if (t.View is UISlider)
+					return false;
+				else
+					return true; 
+			};
+
+			swipeRight.ShouldReceiveTouch += (UIGestureRecognizer r, UITouch t) => 
+			{ 
+				if (t.View is UISlider)
+					return false;
+				else
+					return true; 
+			};
+
+			this.View.AddGestureRecognizer (swipeLeft);
+			this.View.AddGestureRecognizer (swipeRight);
+
+
 				
 
 		}

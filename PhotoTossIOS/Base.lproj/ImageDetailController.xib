@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="8191" systemVersion="14F27" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="9059" systemVersion="14F1021" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES">
     <dependencies>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="8154"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="9049"/>
     </dependencies>
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="ImageDetailController">
@@ -10,6 +10,7 @@
                 <outlet property="CaptionTextField" destination="8m4-2H-0JC" id="uf8-bZ-Yh1"/>
                 <outlet property="ImageScroller" destination="gqY-cd-Gx2" id="J5K-4g-WNE"/>
                 <outlet property="SendBtn" destination="8z3-jc-Aqh" id="vYv-MU-boh"/>
+                <outlet property="slider" destination="9D4-lc-5rT" id="Vgc-dj-XFX"/>
                 <outlet property="view" destination="iN0-l3-epB" id="kCW-yf-GMq"/>
             </connections>
         </placeholder>
@@ -21,6 +22,9 @@
                 <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="gqY-cd-Gx2">
                     <rect key="frame" x="0.0" y="0.0" width="320" height="474"/>
                 </scrollView>
+                <slider opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" value="0.5" minValue="0.0" maxValue="1" translatesAutoresizingMaskIntoConstraints="NO" id="9D4-lc-5rT">
+                    <rect key="frame" x="6" y="444" width="308" height="31"/>
+                </slider>
                 <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="8m4-2H-0JC">
                     <rect key="frame" x="8" y="482" width="246" height="30"/>
                     <color key="backgroundColor" white="1" alpha="0.80000000000000004" colorSpace="calibratedWhite"/>
@@ -48,12 +52,15 @@
             <color key="backgroundColor" red="0.90980392156862744" green="0.42352941176470588" blue="0.15686274509803921" alpha="1" colorSpace="calibratedRGB"/>
             <constraints>
                 <constraint firstItem="8m4-2H-0JC" firstAttribute="leading" secondItem="iN0-l3-epB" secondAttribute="leading" constant="8" id="1R9-sr-IVO"/>
+                <constraint firstItem="9D4-lc-5rT" firstAttribute="leading" secondItem="iN0-l3-epB" secondAttribute="leading" constant="8" id="3Ao-ol-vej"/>
                 <constraint firstItem="S6F-f0-Xyr" firstAttribute="leading" secondItem="iN0-l3-epB" secondAttribute="leading" id="9uY-aw-uyI"/>
                 <constraint firstItem="8z3-jc-Aqh" firstAttribute="top" secondItem="gqY-cd-Gx2" secondAttribute="bottom" constant="8" id="JKd-5p-SVm"/>
                 <constraint firstAttribute="trailing" secondItem="S6F-f0-Xyr" secondAttribute="trailing" id="dN6-0N-hw8"/>
                 <constraint firstItem="gqY-cd-Gx2" firstAttribute="leading" secondItem="iN0-l3-epB" secondAttribute="leading" id="fwF-yj-auW"/>
+                <constraint firstItem="8m4-2H-0JC" firstAttribute="top" secondItem="9D4-lc-5rT" secondAttribute="bottom" constant="8" id="jqR-Qr-cXi"/>
                 <constraint firstAttribute="bottom" secondItem="S6F-f0-Xyr" secondAttribute="bottom" id="ngC-EK-meh"/>
                 <constraint firstAttribute="trailing" secondItem="gqY-cd-Gx2" secondAttribute="trailing" id="pSL-QS-BWn"/>
+                <constraint firstAttribute="trailing" secondItem="9D4-lc-5rT" secondAttribute="trailing" constant="8" id="sHb-Rk-swk"/>
                 <constraint firstItem="8z3-jc-Aqh" firstAttribute="leading" secondItem="8m4-2H-0JC" secondAttribute="trailing" constant="8" id="uNZ-xy-xND"/>
                 <constraint firstItem="gqY-cd-Gx2" firstAttribute="top" secondItem="iN0-l3-epB" secondAttribute="top" id="uqc-gY-fQf"/>
                 <constraint firstItem="S6F-f0-Xyr" firstAttribute="top" secondItem="8z3-jc-Aqh" secondAttribute="bottom" constant="8" id="vCl-ph-gui"/>

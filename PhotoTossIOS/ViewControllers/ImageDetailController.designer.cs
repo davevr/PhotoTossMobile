@@ -23,6 +23,9 @@ namespace PhotoToss.iOSApp
 
 		[Outlet]
 		UIKit.UIButton SendBtn { get; set; }
+
+		[Outlet]
+		UIKit.UISlider slider { get; set; }
 		
 		void ReleaseDesignerOutlets ()
 		{
@@ -44,6 +47,11 @@ namespace PhotoToss.iOSApp
 			if (SendBtn != null) {
 				SendBtn.Dispose ();
 				SendBtn = null;
+			}
+
+			if (slider != null) {
+				slider.Dispose ();
+				slider = null;
 			}
 		}
 	}
