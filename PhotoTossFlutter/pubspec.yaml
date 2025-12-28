@@ -1,0 +1,32 @@
+name: phototoss_flutter
+description: Flutter reimplementation of the PhotoToss mobile experience.
+version: 0.1.0
+publish_to: "none"
+
+environment:
+  sdk: ">=3.3.0 <4.0.0"
+
+dependencies:
+  flutter:
+    sdk: flutter
+  http: ^1.2.1
+  provider: ^6.1.2
+  qr_code_scanner: ^1.0.1
+  geolocator: ^11.1.0
+  image_picker: ^1.0.7
+  path_provider: ^2.1.3
+  firebase_core: ^2.31.0
+  firebase_messaging: ^14.8.1
+  firebase_analytics: ^10.10.5
+  firebase_crashlytics: ^3.5.5
+  flutter_facebook_auth: ^6.1.0
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^4.0.0
+
+flutter:
+  uses-material-design: true
+  assets:
+    - assets/
