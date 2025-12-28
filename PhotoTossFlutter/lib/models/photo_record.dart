@@ -1,8 +1,10 @@
+import 'json_utils.dart';
+
 class PhotoRecord {
   const PhotoRecord({
-    required this.id,
+    this.id,
     required this.ownerName,
-    required this.ownerId,
+    this.ownerId,
     required this.caption,
     required this.tags,
     required this.created,
@@ -10,25 +12,25 @@ class PhotoRecord {
     required this.createdLong,
     required this.imageUrl,
     required this.thumbnailUrl,
-    required this.originId,
-    required this.parentId,
+    this.originId,
+    this.parentId,
     required this.catchUrl,
     required this.receivedLong,
     required this.receivedLat,
     required this.receivedCaption,
     required this.received,
-    required this.tosserId,
+    this.tosserId,
     required this.tosserName,
-    required this.tossId,
+    this.tossId,
     required this.barcodeLocation,
     required this.totalShares,
     required this.tossCount,
     required this.lastShared,
   });
 
-  final int id;
+  final int? id;
   final String ownerName;
-  final int ownerId;
+  final int? ownerId;
   final String caption;
   final List<String> tags;
   final DateTime created;
@@ -36,16 +38,16 @@ class PhotoRecord {
   final double createdLong;
   final String imageUrl;
   final String thumbnailUrl;
-  final int originId;
-  final int parentId;
+  final int? originId;
+  final int? parentId;
   final String catchUrl;
   final double receivedLong;
   final double receivedLat;
   final String receivedCaption;
   final DateTime received;
-  final int tosserId;
+  final int? tosserId;
   final String tosserName;
-  final int tossId;
+  final int? tossId;
   final BarcodeLocation? barcodeLocation;
   final int totalShares;
   final int tossCount;
@@ -53,40 +55,40 @@ class PhotoRecord {
 
   factory PhotoRecord.fromJson(Map<String, dynamic> json) {
     return PhotoRecord(
-      id: _asInt(json['id']),
+      id: asInt(json['id']),
       ownerName: json['ownername'] as String? ?? '',
-      ownerId: _asInt(json['ownerid']),
+      ownerId: asInt(json['ownerid']),
       caption: json['caption'] as String? ?? '',
       tags: (json['tags'] as List<dynamic>? ?? const [])
           .map((value) => value.toString())
           .toList(),
-      created: _asDateTime(json['created']),
-      createdLat: _asDouble(json['createdlat']),
-      createdLong: _asDouble(json['createdlong']),
+      created: asDateTime(json['created']),
+      createdLat: asDouble(json['createdlat']),
+      createdLong: asDouble(json['createdlong']),
       imageUrl: json['imageUrl'] as String? ?? '',
       thumbnailUrl: json['thumbnailurl'] as String? ?? '',
-      originId: _asInt(json['originid']),
-      parentId: _asInt(json['parentid']),
+      originId: asInt(json['originid']),
+      parentId: asInt(json['parentid']),
       catchUrl: json['catchUrl'] as String? ?? '',
-      receivedLong: _asDouble(json['receivedlong']),
-      receivedLat: _asDouble(json['receivedlat']),
+      receivedLong: asDouble(json['receivedlong']),
+      receivedLat: asDouble(json['receivedlat']),
       receivedCaption: json['receivedcaption'] as String? ?? '',
-      received: _asDateTime(json['received']),
-      tosserId: _asInt(json['tosserid']),
+      received: asDateTime(json['received']),
+      tosserId: asInt(json['tosserid']),
       tosserName: json['tossername'] as String? ?? '',
-      tossId: _asInt(json['tossid']),
+      tossId: asInt(json['tossid']),
       barcodeLocation: (json['barcodelocation'] as Map<String, dynamic>?)
           ?.let(BarcodeLocation.fromJson),
-      totalShares: _asInt(json['totalshares']),
-      tossCount: _asInt(json['tossCount']),
-      lastShared: _asDateTime(json['lastshared']),
+      totalShares: asInt(json['totalshares']) ?? 0,
+      tossCount: asInt(json['tossCount']) ?? 0,
+      lastShared: asDateTime(json['lastshared']),
     );
   }
 
   Map<String, dynamic> toJson() => {
-        'id': id,
+        if (id != null) 'id': id,
         'ownername': ownerName,
-        'ownerid': ownerId,
+        if (ownerId != null) 'ownerid': ownerId,
         'caption': caption,
         'tags': tags,
         'created': created.toIso8601String(),
@@ -94,16 +96,16 @@ class PhotoRecord {
         'createdlong': createdLong,
         'imageUrl': imageUrl,
         'thumbnailurl': thumbnailUrl,
-        'originid': originId,
-        'parentid': parentId,
+        if (originId != null) 'originid': originId,
+        if (parentId != null) 'parentid': parentId,
         'catchUrl': catchUrl,
         'receivedlong': receivedLong,
         'receivedlat': receivedLat,
         'receivedcaption': receivedCaption,
         'received': received.toIso8601String(),
-        'tosserid': tosserId,
+        if (tosserId != null) 'tosserid': tosserId,
         'tossername': tosserName,
-        'tossid': tossId,
+        if (tossId != null) 'tossid': tossId,
         'barcodelocation': barcodeLocation?.toJson(),
         'totalshares': totalShares,
         'tossCount': tossCount,
@@ -147,8 +149,8 @@ class BarcodePoint {
   const BarcodePoint({required this.x, required this.y});
 
   factory BarcodePoint.fromJson(Map<String, dynamic> json) => BarcodePoint(
-        x: _asDouble(json['x']),
-        y: _asDouble(json['y']),
+        x: asDouble(json['x']),
+        y: asDouble(json['y']),
       );
 
   final double x;
@@ -159,27 +161,4 @@ class BarcodePoint {
 
 extension _NullableMapExtension on Map<String, dynamic> {
   T let<T>(T Function(Map<String, dynamic>) converter) => converter(this);
-}
-
-int _asInt(dynamic value) {
-  if (value == null) return 0;
-  if (value is int) return value;
-  if (value is double) return value.toInt();
-  return int.tryParse(value.toString()) ?? 0;
-}
-
-double _asDouble(dynamic value) {
-  if (value == null) return 0;
-  if (value is double) return value;
-  if (value is int) return value.toDouble();
-  return double.tryParse(value.toString()) ?? 0;
-}
-
-DateTime _asDateTime(dynamic value) {
-  if (value == null) {
-    return DateTime.fromMillisecondsSinceEpoch(0);
-  }
-  if (value is DateTime) return value;
-  return DateTime.tryParse(value.toString()) ??
-      DateTime.fromMillisecondsSinceEpoch(0);
 }

@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:http/http.dart' as http;
 import 'package:http_parser/http_parser.dart';
 
@@ -11,13 +13,13 @@ class ApiClient {
   ApiClient({http.Client? httpClient, Uri? baseUri})
       : _http = httpClient ?? http.Client(),
         _baseUri = baseUri ??
-            Uri.parse('http://phototoss-server-01.appspot.com/api/');
+            Uri.parse('https://phototoss-server-01.appspot.com/api/');
 
   static final ApiClient instance = ApiClient();
 
   final http.Client _http;
   final Uri _baseUri;
-  String? _cookieHeader;
+  final Map<String, String> _cookies = {};
 
   Uri _resolve(String path, [Map<String, String>? query]) {
     final uri = _baseUri.resolve(path);
@@ -29,8 +31,10 @@ class ApiClient {
       'Accept': 'application/json',
       ...?extra,
     };
-    if (_cookieHeader != null) {
-      headers['Cookie'] = _cookieHeader!;
+    if (_cookies.isNotEmpty) {
+      headers['Cookie'] = _cookies.entries
+          .map((entry) => '${entry.key}=${entry.value}')
+          .join('; ');
     }
     return headers;
   }
@@ -38,7 +42,14 @@ class ApiClient {
   void _updateCookies(http.Response response) {
     final setCookie = response.headers['set-cookie'];
     if (setCookie != null && setCookie.isNotEmpty) {
-      _cookieHeader = setCookie;
+      for (final rawCookie in setCookie.split(RegExp(r', (?=[^ ;]+=)'))) {
+        try {
+          final cookie = Cookie.fromSetCookieValue(rawCookie);
+          _cookies[cookie.name] = cookie.value;
+        } catch (_) {
+          // ignore malformed cookies but keep any existing ones intact
+        }
+      }
     }
   }
 
@@ -99,7 +110,7 @@ class ApiClient {
     );
     _updateCookies(response);
     ApiErrors.throwOnFailure(response);
-    _cookieHeader = null;
+    _cookies.clear();
   }
 
   Future<String> getUploadUrl() async {
@@ -136,7 +147,7 @@ class ApiClient {
   Future<PhotoRecord> setImageCaption(int imageId, String caption) async {
     final response = await _http.put(
       _resolve('image', {'id': '$imageId', 'caption': caption}),
-      headers: _buildHeaders({'Content-Type': 'application/x-www-form-urlencoded'}),
+      headers: _buildHeaders(),
     );
     _updateCookies(response);
     ApiErrors.throwOnFailure(response);
@@ -151,7 +162,7 @@ class ApiClient {
   ) async {
     final response = await _http.post(
       _resolve('toss'),
-      headers: _buildHeaders({'Content-Type': 'application/x-www-form-urlencoded'}),
+      headers: _buildHeaders(),
       body: {
         'image': '$imageId',
         'game': '$gameType',
@@ -203,6 +214,7 @@ class ApiClient {
     List<int> fileBytes,
     double longitude,
     double latitude,
+    {MediaType contentType = const MediaType('image', 'jpeg')}
   ) async {
     final request = http.MultipartRequest('POST', uploadUrl)
       ..headers.addAll(_buildHeaders())
@@ -214,7 +226,7 @@ class ApiClient {
         'file',
         fileBytes,
         filename: 'file',
-        contentType: MediaType.parse('image/jpeg'),
+        contentType: contentType,
       ));
 
     return _http.send(request);
@@ -224,6 +236,7 @@ class ApiClient {
     Uri uploadUrl,
     List<int> fileBytes,
     int imageId,
+    {MediaType contentType = const MediaType('image', 'jpeg')}
   ) async {
     final request = http.MultipartRequest('POST', uploadUrl)
       ..headers.addAll(_buildHeaders())
@@ -235,7 +248,7 @@ class ApiClient {
         'file',
         fileBytes,
         filename: 'file',
-        contentType: MediaType.parse('image/jpeg'),
+        contentType: contentType,
       ));
 
     return _http.send(request);
@@ -249,6 +262,7 @@ class ApiClient {
     double latitude,
     {
     Map<String, String>? barcodeLocation,
+    MediaType contentType = const MediaType('image', 'jpeg'),
   }) async {
     final request = http.MultipartRequest('POST', catchUrl)
       ..headers.addAll(_buildHeaders({'Accept': '*/*'}))
@@ -262,7 +276,7 @@ class ApiClient {
         'file',
         fileBytes,
         filename: 'file',
-        contentType: MediaType.parse('image/jpeg'),
+        contentType: contentType,
       ));
 
     return _http.send(request);

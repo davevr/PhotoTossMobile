@@ -15,7 +15,7 @@ void main() {
       if (callCount == 1) {
         expect(
           request.url.toString(),
-          'http://phototoss-server-01.appspot.com/api/image/lineage?imageid=12',
+          'https://phototoss-server-01.appspot.com/api/image/lineage?imageid=12',
         );
         return http.Response(jsonEncode([
           _photoPayload(id: 12),
@@ -25,7 +25,7 @@ void main() {
       final fields = Uri.splitQueryString(request.body);
       expect(request.headers['Cookie'], contains('session=abc'));
       expect(request.url.toString(),
-          'http://phototoss-server-01.appspot.com/api/toss');
+          'https://phototoss-server-01.appspot.com/api/toss');
       expect(fields['image'], '42');
       expect(fields['game'], '1');
       expect(request.method, 'POST');

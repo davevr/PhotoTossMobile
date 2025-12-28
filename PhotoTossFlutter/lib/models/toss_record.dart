@@ -1,3 +1,4 @@
+import 'json_utils.dart';
 import 'photo_record.dart';
 
 class TossRecord {
@@ -25,41 +26,18 @@ class TossRecord {
 
   factory TossRecord.fromJson(Map<String, dynamic> json) {
     return TossRecord(
-      id: _asInt(json['id']),
-      ownerId: _asInt(json['ownerId']),
-      imageId: _asInt(json['imageId']),
-      gameType: _asInt(json['gameType']),
-      catchCount: _asInt(json['catchCount']),
-      shareTime: _asDateTime(json['shareTime']),
-      shareLongitude: _asDouble(json['shareLong']),
-      shareLatitude: _asDouble(json['shareLat']),
+      id: asInt(json['id']) ?? 0,
+      ownerId: asInt(json['ownerId']) ?? 0,
+      imageId: asInt(json['imageId']) ?? 0,
+      gameType: asInt(json['gameType']) ?? 0,
+      catchCount: asInt(json['catchCount']) ?? 0,
+      shareTime: asDateTime(json['shareTime']),
+      shareLongitude: asDouble(json['shareLong']),
+      shareLatitude: asDouble(json['shareLat']),
       catchList: (json['catchList'] as List<dynamic>? ?? const [])
           .map((value) =>
               PhotoRecord.fromJson(value as Map<String, dynamic>))
           .toList(),
     );
   }
-}
-
-int _asInt(dynamic value) {
-  if (value == null) return 0;
-  if (value is int) return value;
-  if (value is double) return value.toInt();
-  return int.tryParse(value.toString()) ?? 0;
-}
-
-double _asDouble(dynamic value) {
-  if (value == null) return 0;
-  if (value is double) return value;
-  if (value is int) return value.toDouble();
-  return double.tryParse(value.toString()) ?? 0;
-}
-
-DateTime _asDateTime(dynamic value) {
-  if (value == null) {
-    return DateTime.fromMillisecondsSinceEpoch(0);
-  }
-  if (value is DateTime) return value;
-  return DateTime.tryParse(value.toString()) ??
-      DateTime.fromMillisecondsSinceEpoch(0);
 }
